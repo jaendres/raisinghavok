@@ -1,4 +1,20 @@
 // Mad Ork Lands — app shell: auth, screen switching, socket, lobby.
+
+// Discord SSO hands the session token back in the URL fragment — capture it
+// before anything reads localStorage, then scrub it from the address bar.
+(() => {
+  const m = location.hash.match(/^#sso=([a-f0-9]+)$/);
+  if (m) {
+    localStorage.setItem('mol_token', m[1]);
+    history.replaceState(null, '', location.pathname);
+  }
+  const err = location.hash.match(/^#ssoerr=(.+)$/);
+  if (err) {
+    history.replaceState(null, '', location.pathname);
+    window.__ssoError = decodeURIComponent(err[1]).slice(0, 120);
+  }
+})();
+
 const MOL = {
   token: localStorage.getItem('mol_token') || null,
   name: null,
@@ -29,8 +45,10 @@ async function api(path, opts = {}) {
 // reCAPTCHA is optional: it activates only if the server has keys configured.
 let captchaWidget = null;
 (async () => {
+  if (window.__ssoError) $('#auth-error').textContent = window.__ssoError;
   try {
     const cfg = await api('/config');
+    if (cfg.discordEnabled) $('#btn-discord').classList.remove('hidden');
     if (!cfg.recaptchaSiteKey) return;
     window.__onCaptchaReady = () => {
       captchaWidget = grecaptcha.render('captcha-box', { sitekey: cfg.recaptchaSiteKey, theme: 'dark' });

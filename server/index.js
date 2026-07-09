@@ -25,7 +25,69 @@ app.get('/api/parts', (req, res) => {
 });
 
 app.get('/api/config', (req, res) => {
-  res.json({ recaptchaSiteKey: RECAPTCHA_SITE_KEY || null });
+  res.json({
+    recaptchaSiteKey: RECAPTCHA_SITE_KEY || null,
+    discordEnabled: !!process.env.DISCORD_CLIENT_ID,
+  });
+});
+
+// ---- Discord SSO ----
+// Config-gated: activates when DISCORD_CLIENT_ID/SECRET app settings are set
+// (same Discord application as the Blood Bowl bot). Flow: /api/auth/discord
+// redirects to Discord -> callback exchanges the code, upserts the account,
+// and hands the session token to the client in the URL fragment (fragments
+// never reach servers or logs).
+const ssoStates = new Map(); // state -> expiry, CSRF protection
+
+app.get('/api/auth/discord', (req, res) => {
+  if (!process.env.DISCORD_CLIENT_ID) return res.status(404).send('Discord SSO not configured');
+  const state = require('crypto').randomBytes(16).toString('hex');
+  ssoStates.set(state, Date.now() + 10 * 60 * 1000);
+  for (const [s, exp] of ssoStates) if (exp < Date.now()) ssoStates.delete(s);
+  const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/discord/callback`;
+  res.redirect('https://discord.com/oauth2/authorize?' + new URLSearchParams({
+    client_id: process.env.DISCORD_CLIENT_ID,
+    response_type: 'code',
+    scope: 'identify',
+    redirect_uri: redirectUri,
+    state,
+  }));
+});
+
+app.get('/api/auth/discord/callback', async (req, res) => {
+  const { code, state, error } = req.query;
+  if (error) return res.redirect('/play/#ssoerr=' + encodeURIComponent(String(error)));
+  if (!code || !state || !ssoStates.has(String(state))) {
+    return res.redirect('/play/#ssoerr=bad_state');
+  }
+  ssoStates.delete(String(state));
+  try {
+    const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/discord/callback`;
+    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: process.env.DISCORD_CLIENT_ID,
+        client_secret: process.env.DISCORD_CLIENT_SECRET || '',
+        grant_type: 'authorization_code',
+        code: String(code),
+        redirect_uri: redirectUri,
+      }),
+    });
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) throw new Error(tokenData.error_description || 'token exchange failed');
+    const meRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: 'Bearer ' + tokenData.access_token },
+    });
+    const me = await meRes.json();
+    if (!me.id) throw new Error('could not fetch Discord profile');
+    const user = db.upsertDiscordUser(me);
+    const token = db.issueToken(user.name);
+    res.redirect('/play/#sso=' + token);
+  } catch (e) {
+    console.error('discord sso:', e.message);
+    res.redirect('/play/#ssoerr=' + encodeURIComponent('Discord login failed, try again'));
+  }
 });
 
 app.post('/api/register', rateLimit('register', 5, 3600), async (req, res) => {

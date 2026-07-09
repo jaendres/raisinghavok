@@ -84,6 +84,26 @@ then re-run the deploy workflow. The signup form detects the key via
 `/api/config` and shows the checkbox automatically; with empty secrets
 everything works captcha-free.
 
+## Discord SSO
+
+"Log in wiv Discord" appears on the login screen once configured. Uses the
+same Discord application as the Blood Bowl bot:
+
+1. https://discord.com/developers/applications → your app → **OAuth2**
+2. Add redirect URLs (must match exactly):
+   - `https://raisinghavok.com/api/auth/discord/callback`
+   - `http://localhost:3040/api/auth/discord/callback` (local dev)
+3. Copy the Client ID and Client Secret into GitHub secrets:
+
+```
+gh secret set DISCORD_CLIENT_ID     --repo jaendres/raisinghavok --body <client id>
+gh secret set DISCORD_CLIENT_SECRET --repo jaendres/raisinghavok --body <client secret>
+```
+
+then re-run the deploy workflow. Discord accounts are matched by Discord user
+id (never auto-linked to a password account by name); first login creates a
+site account named after the Discord display name.
+
 ## Balancing
 
 All game balance lives in `server/parts.js` (costs, damage, ranges, speeds)

@@ -32,6 +32,13 @@ h1, h2, h3, .brand, .btn { font-family: 'Black Ops One', sans-serif; font-weight
 .btn.big { width: 100%; padding: 16px; font-size: 20px; margin-top: 12px; }
 .btn.link { background: none; border: none; box-shadow: none; color: var(--dust); font-family: 'Barlow Condensed'; text-transform: none; font-size: 15px; }
 .btn.link:hover { color: var(--rust); }
+.btn.discord {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; margin-top: 10px; text-decoration: none;
+  background: #5865F2; border-color: #7983f5;
+}
+.btn.discord:hover { background: #4752c4; }
+.btn.discord.hidden { display: none; }
 .error { color: #ff7b6b; min-height: 20px; font-size: 15px; margin-top: 6px; }
 
 /* ---- AUTH ---- */

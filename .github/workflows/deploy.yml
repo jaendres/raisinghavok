@@ -37,6 +37,8 @@ jobs:
               recaptchaSiteKey='${{ secrets.RECAPTCHA_SITE_KEY }}' \
               recaptchaSecret='${{ secrets.RECAPTCHA_SECRET }}' \
               leagueApiKey='${{ secrets.LEAGUE_API_KEY }}' \
+              discordClientId='${{ secrets.DISCORD_CLIENT_ID }}' \
+              discordClientSecret='${{ secrets.DISCORD_CLIENT_SECRET }}' \
             --output none
 
       - uses: actions/setup-node@v4

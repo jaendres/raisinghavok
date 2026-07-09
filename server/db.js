@@ -63,10 +63,34 @@ async function createUser(name, password) {
 
 async function checkLogin(name, password) {
   const user = db.users[(name || '').toLowerCase()];
-  if (!user) return null;
+  if (!user || !user.pass) return null; // Discord-only accounts have no password
   const hash = await hashPassword(password || '', user.salt);
   const ok = crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(user.pass));
   return ok ? user : null;
+}
+
+// Find-or-create an account from a Discord identity. Never auto-links to an
+// existing password account by name (that would allow account takeover via a
+// matching Discord display name) — collisions get a suffix instead.
+function upsertDiscordUser(discord) {
+  for (const user of Object.values(db.users)) {
+    if (user.discordId === discord.id) return user;
+  }
+  let base = String(discord.global_name || discord.username || 'Git')
+    .replace(/[^a-zA-Z0-9_\- ]/g, '').trim().slice(0, 20) || 'Git';
+  if (base.length < 2) base = 'Git ' + base;
+  let name = base;
+  if (db.users[name.toLowerCase()]) name = `${base.slice(0, 15)}-${discord.id.slice(-4)}`;
+  const user = {
+    name, discordId: discord.id, avatar: discord.avatar || null,
+    salt: null, pass: null,
+    createdAt: new Date().toISOString(),
+    stats: { games: 0, wins: 0, kills: 0, deaths: 0, damage: 0 },
+    garage: [],
+  };
+  db.users[name.toLowerCase()] = user;
+  save();
+  return user;
 }
 
 function issueToken(name) {
@@ -126,4 +150,4 @@ function leaderboard() {
 }
 
 load();
-module.exports = { createUser, checkLogin, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard, leagues, saveLeagues };
+module.exports = { createUser, checkLogin, upsertDiscordUser, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard, leagues, saveLeagues };

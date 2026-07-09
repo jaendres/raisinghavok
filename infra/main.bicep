@@ -26,6 +26,11 @@ param leagueApiKey string = ''
 // Comma-separated usernames with league admin rights (edit/delete anything).
 param adminUsers string = 'Jason'
 
+// Discord OAuth2 (SSO login) — same Discord application as the club bot.
+param discordClientId string = ''
+@secure()
+param discordClientSecret string = ''
+
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: planName
 }
@@ -74,6 +79,14 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'ADMIN_USERS'
           value: adminUsers
+        }
+        {
+          name: 'DISCORD_CLIENT_ID'
+          value: discordClientId
+        }
+        {
+          name: 'DISCORD_CLIENT_SECRET'
+          value: discordClientSecret
         }
       ]
     }
