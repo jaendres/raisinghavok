@@ -12,6 +12,13 @@ param appName string = 'raisinghavok'
 param planName string = 'tcg-business-plan'
 param location string = resourceGroup().location
 
+// reCAPTCHA v2 keys, injected from GitHub Actions secrets. IMPORTANT: this
+// template owns the app-settings list — anything set manually in the portal
+// gets wiped on the next deploy, so new settings must be added HERE.
+param recaptchaSiteKey string = ''
+@secure()
+param recaptchaSecret string = ''
+
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: planName
 }
@@ -44,6 +51,14 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'WEBSITE_NODE_DEFAULT_VERSION'
           value: '~20'
+        }
+        {
+          name: 'RECAPTCHA_SITE_KEY'
+          value: recaptchaSiteKey
+        }
+        {
+          name: 'RECAPTCHA_SECRET'
+          value: recaptchaSecret
         }
       ]
     }

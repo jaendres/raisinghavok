@@ -70,17 +70,19 @@ Signups/logins are protected by per-IP rate limits (5 signups/hour,
 10 login tries/10 min), a honeypot field, expiring session tokens (30 days,
 revoked on logout), and scrypt-hashed passwords (min 8 chars).
 
-**reCAPTCHA (optional, off by default):** create a reCAPTCHA v2 checkbox key
-pair at https://www.google.com/recaptcha/admin (domain: raisinghavok.com),
-then:
+**reCAPTCHA:** keys live as GitHub Actions secrets and flow through the Bicep
+deploy — do NOT set them in the portal, the pipeline owns app settings and
+wipes manual changes on every deploy. To rotate/change keys
+(https://www.google.com/recaptcha/admin, v2 checkbox, domain raisinghavok.com):
 
 ```
-az webapp config appsettings set -g tcg-business-rg -n raisinghavok \
-  --settings RECAPTCHA_SITE_KEY=<site key> RECAPTCHA_SECRET=<secret>
+gh secret set RECAPTCHA_SITE_KEY --repo jaendres/raisinghavok --body <site key>
+gh secret set RECAPTCHA_SECRET  --repo jaendres/raisinghavok --body <secret>
 ```
 
-The signup form detects the key via `/api/config` and shows the checkbox
-automatically; without keys everything works captcha-free.
+then re-run the deploy workflow. The signup form detects the key via
+`/api/config` and shows the checkbox automatically; with empty secrets
+everything works captcha-free.
 
 ## Balancing
 

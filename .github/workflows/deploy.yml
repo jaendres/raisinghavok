@@ -34,6 +34,8 @@ jobs:
             --resource-group $RESOURCE_GROUP \
             --template-file infra/main.bicep \
             --parameters appName=$APP_NAME \
+              recaptchaSiteKey='${{ secrets.RECAPTCHA_SITE_KEY }}' \
+              recaptchaSecret='${{ secrets.RECAPTCHA_SECRET }}' \
             --output none
 
       - uses: actions/setup-node@v4
