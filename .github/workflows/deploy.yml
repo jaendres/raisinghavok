@@ -52,13 +52,29 @@ jobs:
       - name: Package app
         run: zip -rq app.zip server public package.json node_modules
 
+      # Async + poll: the synchronous client often 504s at the gateway while
+      # Kudu keeps deploying, marking green runs red. Poll Kudu for the truth.
       - name: Deploy app
         run: |
           az webapp deploy \
             --resource-group $RESOURCE_GROUP \
             --name $APP_NAME \
-            --src-path app.zip --type zip \
+            --src-path app.zip --type zip --async true \
             --output none
+          echo "Polling deployment status..."
+          for i in $(seq 1 60); do
+            state=$(az rest --method get \
+              --url "https://$APP_NAME.scm.azurewebsites.net/api/deployments/latest" \
+              --resource "https://management.azure.com" -o json 2>/dev/null || echo '{}')
+            complete=$(echo "$state" | jq -r '.complete // false')
+            status=$(echo "$state" | jq -r '.status // 0')
+            if [ "$complete" = "true" ]; then
+              if [ "$status" = "4" ]; then echo "Deployment succeeded."; exit 0; fi
+              echo "Deployment failed (Kudu status $status)"; exit 1
+            fi
+            sleep 10
+          done
+          echo "Timed out waiting for deployment."; exit 1
 
       - name: Smoke test
         run: |
