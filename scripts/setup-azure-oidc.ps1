@@ -43,9 +43,11 @@ if ($existing -eq '0') {
   Write-Host "Added federated credential for $RepoFullName (main)"
 }
 
-# Contributor on the resource group (needed for bicep deploy + zip deploy)
-az role assignment create --assignee $appId --role Contributor `
-  --scope "/subscriptions/$sub/resourceGroups/$ResourceGroup" --output none 2>$null
+# Contributor on the resource group (needed for bicep deploy + zip deploy).
+# Use the object id — assigning by appId right after SP creation can fail on
+# Graph propagation delay.
+az role assignment create --assignee-object-id $spId --assignee-principal-type ServicePrincipal `
+  --role Contributor --scope "/subscriptions/$sub/resourceGroups/$ResourceGroup" --output none
 
 # GitHub Actions secrets
 gh secret set AZURE_CLIENT_ID --repo $RepoFullName --body $appId
