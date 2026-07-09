@@ -20,7 +20,13 @@ function load() {
   }
   if (!db.users) db.users = {};
   if (!db.tokens) db.tokens = {};
+  if (!db.leagues) db.leagues = {};
 }
+
+// League data lives in the same store; callers mutate the returned object and
+// then call saveLeagues() to persist.
+function leagues() { return db.leagues; }
+function saveLeagues() { save(); }
 
 function save() {
   if (saveTimer) return;
@@ -120,4 +126,4 @@ function leaderboard() {
 }
 
 load();
-module.exports = { createUser, checkLogin, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard };
+module.exports = { createUser, checkLogin, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard, leagues, saveLeagues };

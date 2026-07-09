@@ -81,6 +81,102 @@ app.post('/api/garage', (req, res) => {
 
 app.get('/api/leaderboard', (req, res) => res.json(db.leaderboard()));
 
+// ---- League tracker API ----
+const league = require('./league');
+
+// Writers must be logged-in users, or the Discord bot presenting the shared
+// LEAGUE_API_KEY (so match results posted in Discord flow straight in).
+function leagueWriter(req, res, next) {
+  const user = authed(req);
+  if (user) { req.reporter = user.name; return next(); }
+  const key = req.headers['x-league-key'];
+  if (process.env.LEAGUE_API_KEY && key === process.env.LEAGUE_API_KEY) {
+    req.reporter = String(req.body.reportedBy || 'discord').slice(0, 40);
+    return next();
+  }
+  res.status(401).json({ error: 'log in first' });
+}
+
+// Admins (comma-separated ADMIN_USERS app setting) may delete/edit.
+function isAdmin(name) {
+  return (process.env.ADMIN_USERS || '').toLowerCase().split(',').map(s => s.trim())
+    .includes((name || '').toLowerCase());
+}
+
+app.get('/api/league', (req, res) => {
+  res.json(Object.values(db.leagues()).map(league.summary));
+});
+
+app.get('/api/league/:id', (req, res) => {
+  const l = db.leagues()[req.params.id];
+  if (!l) return res.status(404).json({ error: 'no such league' });
+  res.json(league.full(l));
+});
+
+app.post('/api/league', leagueWriter, (req, res) => {
+  const { name, game, season } = req.body || {};
+  if (!name || String(name).trim().length < 2) return res.status(400).json({ error: 'league needs a name' });
+  const l = league.makeLeague({ name: String(name).trim(), game, season });
+  db.leagues()[l.id] = l;
+  db.saveLeagues();
+  res.json(league.summary(l));
+});
+
+app.post('/api/league/:id/team', leagueWriter, (req, res) => {
+  const l = db.leagues()[req.params.id];
+  if (!l) return res.status(404).json({ error: 'no such league' });
+  const { name, coach, race, rosterText } = req.body || {};
+  if (!name || String(name).trim().length < 2) return res.status(400).json({ error: 'team needs a name' });
+  if (Object.keys(l.teams).length >= 30) return res.status(400).json({ error: 'league is full' });
+  const t = league.makeTeam({ name: String(name).trim(), coach: coach || req.reporter, race, rosterText });
+  l.teams[t.id] = t;
+  db.saveLeagues();
+  res.json(t);
+});
+
+app.put('/api/league/:id/team/:tid', leagueWriter, (req, res) => {
+  const l = db.leagues()[req.params.id];
+  const t = l && l.teams[req.params.tid];
+  if (!t) return res.status(404).json({ error: 'no such team' });
+  // coaches may edit their own team; admins may edit any
+  if (t.coach.toLowerCase() !== req.reporter.toLowerCase() && !isAdmin(req.reporter)) {
+    return res.status(403).json({ error: 'not your team (admins can edit any)' });
+  }
+  const { name, race, rosterText } = req.body || {};
+  if (name && String(name).trim().length >= 2) t.name = String(name).trim().slice(0, 60);
+  if (race !== undefined) t.race = String(race).slice(0, 40);
+  if (rosterText !== undefined) {
+    t.rosterText = String(rosterText).slice(0, 8000);
+    t.roster = league.parseRoster(t.rosterText);
+  }
+  db.saveLeagues();
+  res.json(t);
+});
+
+app.post('/api/league/:id/match', leagueWriter, (req, res) => {
+  const l = db.leagues()[req.params.id];
+  if (!l) return res.status(404).json({ error: 'no such league' });
+  if (l.matches.length >= 500) return res.status(400).json({ error: 'match limit reached' });
+  const result = league.makeMatch(l, { ...req.body, reportedBy: req.reporter });
+  if (result.error) return res.status(400).json({ error: result.error });
+  l.matches.push(result.match);
+  db.saveLeagues();
+  res.json(result.match);
+});
+
+app.delete('/api/league/:id/match/:mid', leagueWriter, (req, res) => {
+  const l = db.leagues()[req.params.id];
+  if (!l) return res.status(404).json({ error: 'no such league' });
+  const m = l.matches.find(x => x.id === req.params.mid);
+  if (!m) return res.status(404).json({ error: 'no such match' });
+  if (m.reportedBy.toLowerCase() !== req.reporter.toLowerCase() && !isAdmin(req.reporter)) {
+    return res.status(403).json({ error: 'only the reporter or an admin can delete' });
+  }
+  l.matches = l.matches.filter(x => x.id !== req.params.mid);
+  db.saveLeagues();
+  res.json({ ok: true });
+});
+
 // ---- Multiplayer lobby ----
 // One global queue: countdown starts when the first player joins, match
 // launches with humans + bots filling to MATCH_SIZE.
