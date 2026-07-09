@@ -7,6 +7,7 @@ const { Server } = require('socket.io');
 
 const db = require('./db');
 const parts = require('./parts');
+const { rateLimit, verifyCaptcha, RECAPTCHA_SITE_KEY } = require('./security');
 const { Match } = require('./game');
 
 const PORT = process.env.PORT || 3040;
@@ -14,7 +15,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.json());
+app.set('trust proxy', 1); // Azure front end — req.ip = real client IP for rate limiting
+app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // ---- REST API ----
@@ -22,20 +24,35 @@ app.get('/api/parts', (req, res) => {
   res.json({ budget: parts.BUDGET, hulls: parts.HULLS, weapons: parts.WEAPONS, upgrades: parts.UPGRADES });
 });
 
-app.post('/api/register', (req, res) => {
-  const { name, password } = req.body || {};
-  const result = db.createUser(name, password);
+app.get('/api/config', (req, res) => {
+  res.json({ recaptchaSiteKey: RECAPTCHA_SITE_KEY || null });
+});
+
+app.post('/api/register', rateLimit('register', 5, 3600), async (req, res) => {
+  const { name, password, captcha, email } = req.body || {};
+  // honeypot: real users never see the "email" field; bots autofill it
+  if (email) return res.status(400).json({ error: 'Nice try, bot.' });
+  if (!await verifyCaptcha(captcha, req.ip)) {
+    return res.status(400).json({ error: "Captcha says you'z a grot. Try again." });
+  }
+  const result = await db.createUser(name, password);
   if (result.error) return res.status(400).json({ error: result.error });
   const token = db.issueToken(result.user.name);
   res.json({ token, name: result.user.name, stats: result.user.stats, garage: result.user.garage });
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', rateLimit('login', 10, 600), async (req, res) => {
   const { name, password } = req.body || {};
-  const user = db.checkLogin(name, password);
+  const user = await db.checkLogin(name, password);
   if (!user) return res.status(401).json({ error: 'Wrong name or password, git.' });
   const token = db.issueToken(user.name);
   res.json({ token, name: user.name, stats: user.stats, garage: user.garage });
+});
+
+app.post('/api/logout', (req, res) => {
+  const token = (req.headers.authorization || '').replace('Bearer ', '');
+  if (token) db.revokeToken(token);
+  res.json({ ok: true });
 });
 
 function authed(req) {

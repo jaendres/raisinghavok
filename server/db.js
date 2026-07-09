@@ -31,18 +31,22 @@ function save() {
   }, 250);
 }
 
-function hashPassword(password, salt) {
-  return crypto.scryptSync(password, salt, 32).toString('hex');
+const scrypt = require('util').promisify(crypto.scrypt);
+const TOKEN_TTL_MS = 30 * 24 * 3600 * 1000; // 30 days
+
+// async so a burst of login attempts can't stall the match loop
+async function hashPassword(password, salt) {
+  return (await scrypt(password, salt, 32)).toString('hex');
 }
 
-function createUser(name, password) {
-  const key = name.toLowerCase();
+async function createUser(name, password) {
+  const key = (name || '').toLowerCase();
   if (db.users[key]) return { error: 'Dat name is taken, ya git.' };
   if (!/^[a-zA-Z0-9_\- ]{2,20}$/.test(name)) return { error: 'Name: 2-20 letters/numbers.' };
-  if (typeof password !== 'string' || password.length < 4) return { error: 'Password too puny (min 4).' };
+  if (typeof password !== 'string' || password.length < 8) return { error: 'Password too puny (min 8).' };
   const salt = crypto.randomBytes(16).toString('hex');
   db.users[key] = {
-    name, salt, pass: hashPassword(password, salt),
+    name, salt, pass: await hashPassword(password, salt),
     createdAt: new Date().toISOString(),
     stats: { games: 0, wins: 0, kills: 0, deaths: 0, damage: 0 },
     garage: [],
@@ -51,24 +55,41 @@ function createUser(name, password) {
   return { user: db.users[key] };
 }
 
-function checkLogin(name, password) {
+async function checkLogin(name, password) {
   const user = db.users[(name || '').toLowerCase()];
   if (!user) return null;
-  const hash = hashPassword(password || '', user.salt);
+  const hash = await hashPassword(password || '', user.salt);
   const ok = crypto.timingSafeEqual(Buffer.from(hash), Buffer.from(user.pass));
   return ok ? user : null;
 }
 
 function issueToken(name) {
   const token = crypto.randomBytes(24).toString('hex');
-  db.tokens[token] = name.toLowerCase();
+  db.tokens[token] = { u: name.toLowerCase(), exp: Date.now() + TOKEN_TTL_MS };
+  pruneTokens();
   save();
   return token;
 }
 
 function userByToken(token) {
-  const key = db.tokens[token];
-  return key ? db.users[key] : null;
+  const entry = db.tokens[token];
+  // pre-expiry entries were plain strings — treat as expired (forces re-login)
+  if (!entry || typeof entry !== 'object' || entry.exp < Date.now()) {
+    if (entry) { delete db.tokens[token]; save(); }
+    return null;
+  }
+  return db.users[entry.u] || null;
+}
+
+function revokeToken(token) {
+  if (db.tokens[token]) { delete db.tokens[token]; save(); }
+}
+
+function pruneTokens() {
+  const now = Date.now();
+  for (const [t, entry] of Object.entries(db.tokens)) {
+    if (typeof entry !== 'object' || entry.exp < now) delete db.tokens[t];
+  }
 }
 
 function getUser(name) {
@@ -99,4 +120,4 @@ function leaderboard() {
 }
 
 load();
-module.exports = { createUser, checkLogin, issueToken, userByToken, getUser, saveGarage, recordStats, leaderboard };
+module.exports = { createUser, checkLogin, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard };

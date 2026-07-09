@@ -26,12 +26,33 @@ async function api(path, opts = {}) {
 }
 
 // ---- auth ----
+// reCAPTCHA is optional: it activates only if the server has keys configured.
+let captchaWidget = null;
+(async () => {
+  try {
+    const cfg = await api('/config');
+    if (!cfg.recaptchaSiteKey) return;
+    window.__onCaptchaReady = () => {
+      captchaWidget = grecaptcha.render('captcha-box', { sitekey: cfg.recaptchaSiteKey, theme: 'dark' });
+    };
+    const s = document.createElement('script');
+    s.src = 'https://www.google.com/recaptcha/api.js?onload=__onCaptchaReady&render=explicit';
+    s.async = true;
+    document.head.appendChild(s);
+  } catch { /* config endpoint is best-effort */ }
+})();
+
 async function doAuth(kind) {
   const name = $('#auth-name').value.trim();
   const password = $('#auth-pass').value;
   $('#auth-error').textContent = '';
   try {
-    const data = await api('/' + kind, { method: 'POST', body: JSON.stringify({ name, password }) });
+    const body = { name, password, email: $('#auth-email').value };
+    if (kind === 'register' && captchaWidget !== null) {
+      body.captcha = grecaptcha.getResponse(captchaWidget);
+      grecaptcha.reset(captchaWidget);
+    }
+    const data = await api('/' + kind, { method: 'POST', body: JSON.stringify(body) });
     MOL.token = data.token; MOL.name = data.name; MOL.guest = false;
     MOL.garage = data.garage || [];
     localStorage.setItem('mol_token', data.token);
@@ -51,6 +72,7 @@ $('#btn-guest').onclick = () => {
   enterGarage(null);
 };
 $('#btn-logout').onclick = () => {
+  if (MOL.token) api('/logout', { method: 'POST', body: '{}' }).catch(() => { }); // revoke server-side
   localStorage.removeItem('mol_token');
   MOL.token = null; MOL.guest = false;
   if (MOL.socket) MOL.socket.emit('leaveQueue');
