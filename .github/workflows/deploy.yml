@@ -56,11 +56,19 @@ jobs:
       # Kudu keeps deploying, marking green runs red. Poll Kudu for the truth.
       - name: Deploy app
         run: |
-          az webapp deploy \
-            --resource-group $RESOURCE_GROUP \
-            --name $APP_NAME \
-            --src-path app.zip --type zip --async true \
-            --output none
+          # Kudu 429s if a prior deployment is still settling — retry the submit.
+          for attempt in 1 2 3 4; do
+            if az webapp deploy \
+              --resource-group $RESOURCE_GROUP \
+              --name $APP_NAME \
+              --src-path app.zip --type zip --async true \
+              --output none; then
+              break
+            fi
+            if [ "$attempt" = "4" ]; then echo "Submit failed after 4 attempts"; exit 1; fi
+            echo "Submit failed (attempt $attempt), retrying in 60s..."
+            sleep 60
+          done
           echo "Polling deployment status..."
           for i in $(seq 1 60); do
             state=$(az rest --method get \
