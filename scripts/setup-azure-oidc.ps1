@@ -1,7 +1,7 @@
 # One-time bootstrap: lets GitHub Actions deploy via OIDC (no stored passwords).
 # Creates an Entra app registration + federated credential for this repo,
 # grants it Contributor on the resource group, and stores the three IDs as
-# GitHub Actions secrets. Idempotent — safe to re-run.
+# GitHub Actions secrets. Idempotent -- safe to re-run.
 #
 #   .\scripts\setup-azure-oidc.ps1
 
@@ -44,7 +44,7 @@ if ($existing -eq '0') {
 }
 
 # Contributor on the resource group (needed for bicep deploy + zip deploy).
-# Use the object id — assigning by appId right after SP creation can fail on
+# Use the object id -- assigning by appId right after SP creation can fail on
 # Graph propagation delay.
 az role assignment create --assignee-object-id $spId --assignee-principal-type ServicePrincipal `
   --role Contributor --scope "/subscriptions/$sub/resourceGroups/$ResourceGroup" --output none
