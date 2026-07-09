@@ -19,6 +19,13 @@ param recaptchaSiteKey string = ''
 @secure()
 param recaptchaSecret string = ''
 
+// Shared secret letting the Blood Bowl Discord bot post league match results.
+@secure()
+param leagueApiKey string = ''
+
+// Comma-separated usernames with league admin rights (edit/delete anything).
+param adminUsers string = 'Jason'
+
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: planName
 }
@@ -59,6 +66,14 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'RECAPTCHA_SECRET'
           value: recaptchaSecret
+        }
+        {
+          name: 'LEAGUE_API_KEY'
+          value: leagueApiKey
+        }
+        {
+          name: 'ADMIN_USERS'
+          value: adminUsers
         }
       ]
     }

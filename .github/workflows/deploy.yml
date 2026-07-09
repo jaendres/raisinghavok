@@ -36,6 +36,7 @@ jobs:
             --parameters appName=$APP_NAME \
               recaptchaSiteKey='${{ secrets.RECAPTCHA_SITE_KEY }}' \
               recaptchaSecret='${{ secrets.RECAPTCHA_SECRET }}' \
+              leagueApiKey='${{ secrets.LEAGUE_API_KEY }}' \
             --output none
 
       - uses: actions/setup-node@v4
