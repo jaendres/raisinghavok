@@ -1,0 +1,63 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write # OIDC federated login — no stored credentials
+  contents: read
+
+concurrency: deploy
+
+env:
+  RESOURCE_GROUP: tcg-business-rg
+  APP_NAME: raisinghavok
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy infrastructure (Bicep)
+        run: |
+          az deployment group create \
+            --resource-group $RESOURCE_GROUP \
+            --template-file infra/main.bicep \
+            --parameters appName=$APP_NAME \
+            --output none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install production dependencies
+        run: npm ci --omit=dev
+
+      - name: Package app
+        run: zip -rq app.zip server public package.json node_modules
+
+      - name: Deploy app
+        run: |
+          az webapp deploy \
+            --resource-group $RESOURCE_GROUP \
+            --name $APP_NAME \
+            --src-path app.zip --type zip \
+            --output none
+
+      - name: Smoke test
+        run: |
+          sleep 20
+          curl -sSf --retry 5 --retry-delay 10 --retry-all-errors \
+            "https://$APP_NAME.azurewebsites.net/api/parts" > /dev/null
+          echo "Site is up: https://$APP_NAME.azurewebsites.net"

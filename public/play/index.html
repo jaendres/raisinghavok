@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mad Ork Lands — A Raising Havok Production</title>
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="screen-auth" class="screen active">
+  <div class="auth-box">
+    <img src="/assets/logo.svg" class="auth-logo" alt="Raising Havok">
+    <h1>Mad <span>Ork</span> Lands</h1>
+    <div class="kicker">A Raising Havok Production</div>
+    <div class="auth-form">
+      <input id="auth-name" maxlength="20" placeholder="Yer name, git">
+      <input id="auth-pass" type="password" maxlength="64" placeholder="Sekrit word">
+      <div class="row">
+        <button id="btn-login" class="btn">Log In</button>
+        <button id="btn-register" class="btn ghost">Sign Up</button>
+      </div>
+      <button id="btn-guest" class="btn link">...or krump as a guest (no stats)</button>
+      <div id="auth-error" class="error"></div>
+    </div>
+    <a class="backlink" href="/">&larr; back to raisinghavok.com</a>
+  </div>
+</div>
+
+<!-- GARAGE / MEK SHOP -->
+<div id="screen-garage" class="screen">
+  <div class="topbar">
+    <img src="/assets/logo.svg" alt="">
+    <span class="brand">Da Mek Shop</span>
+    <span id="whoami" class="who"></span>
+    <button id="btn-logout" class="btn small ghost">Leg it</button>
+  </div>
+  <div class="garage-wrap">
+    <div class="garage-col">
+      <h2>1. Pick a Hull</h2>
+      <div id="hull-list" class="part-list"></div>
+    </div>
+    <div class="garage-col">
+      <h2>2. Bolt on Dakka</h2>
+      <div id="weapon-list" class="part-list"></div>
+      <h2 style="margin-top:18px">3. Kustom Gubbinz</h2>
+      <div id="upgrade-list" class="part-list"></div>
+    </div>
+    <div class="garage-col rig-panel">
+      <h2>Yer Rig</h2>
+      <input id="rig-name" maxlength="24" placeholder="Name yer rig">
+      <canvas id="rig-preview" width="260" height="180"></canvas>
+      <div class="meters">
+        <div class="meter"><span>Teef</span><div class="bar"><div id="bar-teef"></div></div><b id="lbl-teef"></b></div>
+        <div class="meter"><span>Slots</span><div class="bar"><div id="bar-slots"></div></div><b id="lbl-slots"></b></div>
+        <div class="meter"><span>Hull</span><b id="lbl-hull" style="margin-left:auto"></b></div>
+        <div class="meter"><span>Speed</span><b id="lbl-speed" style="margin-left:auto"></b></div>
+      </div>
+      <div id="loadout" class="loadout"></div>
+      <div id="build-error" class="error"></div>
+      <button id="btn-save" class="btn ghost small">Save Build</button>
+      <div id="saved-builds" class="saved-builds"></div>
+      <button id="btn-play" class="btn big">⚔ JOIN DA BATTLE</button>
+      <div id="queue-status" class="queue-status"></div>
+      <div class="stats-box">
+        <h3>Yer Record</h3>
+        <div id="my-stats" class="statline">—</div>
+        <h3>Top Warbosses</h3>
+        <div id="leaderboard"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="screen-game" class="screen">
+  <canvas id="game-canvas"></canvas>
+  <div id="hud">
+    <div id="hud-hp"><div id="hud-hp-fill"></div><span id="hud-hp-text"></span></div>
+    <div id="hud-ammo"></div>
+    <div id="hud-alive"></div>
+    <div id="hud-boost"></div>
+  </div>
+  <div id="killfeed"></div>
+  <div id="game-msg"></div>
+  <div id="results" class="hidden">
+    <h2 id="results-title">SCRAP!</h2>
+    <div id="results-list"></div>
+    <button id="btn-back-garage" class="btn">Back to da Mek Shop</button>
+  </div>
+  <div id="controls-hint">W/S drive &bull; A/D steer &bull; SPACE dakka &bull; SHIFT drop &bull; E boost</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="main.js"></script>
+<script src="garage.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

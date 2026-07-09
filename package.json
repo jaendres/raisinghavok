@@ -1,0 +1,13 @@
+{
+  "name": "raisinghavok",
+  "version": "1.0.0",
+  "description": "Raising Havok Gaming Club site + Mad Ork Lands vehicular battle royale",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  }
+}

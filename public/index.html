@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raising Havok Gaming Club</title>
+<meta name="description" content="Raising Havok Gaming Club — miniature wargaming crew. Warhammer 40k, Marvel Crisis Protocol, Blood Bowl, Trench Crusade, Gaslands and more.">
+<link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0c0a08;
+    --panel: #161210;
+    --panel2: #1d1815;
+    --rust: #ff6a1a;
+    --rust-dk: #b8480d;
+    --blood: #a3231f;
+    --bone: #e8e0d0;
+    --dust: #9b8f7d;
+    --hazard: repeating-linear-gradient(-45deg, #ff6a1a 0 16px, #0c0a08 16px 32px);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--bone);
+    font-family: 'Barlow Condensed', Impact, sans-serif;
+    font-size: 19px;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  /* grit overlay */
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: .5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+  }
+  h1, h2, h3, .brand { font-family: 'Black Ops One', 'Barlow Condensed', sans-serif; font-weight: 400; letter-spacing: .04em; text-transform: uppercase; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; gap: 28px; padding: 10px 28px;
+    background: linear-gradient(#0c0a08f2, #0c0a08d8);
+    border-bottom: 2px solid #2b221b;
+  }
+  nav img { height: 42px; filter: drop-shadow(0 0 6px #000); }
+  nav .brand { font-size: 20px; color: var(--rust); margin-right: auto; }
+  nav a { color: var(--bone); text-decoration: none; text-transform: uppercase; font-weight: 700; letter-spacing: .1em; font-size: 15px; }
+  nav a:hover { color: var(--rust); }
+  nav a.play-btn { background: var(--blood); padding: 7px 16px; border: 1px solid #ff8b4a; box-shadow: 3px 3px 0 #000; }
+  nav a.play-btn:hover { background: var(--rust-dk); color: #fff; }
+
+  header {
+    min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 110px 20px 60px; position: relative;
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 108%, #b8480d55 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 50% 115%, #ff6a1a33 0%, transparent 55%),
+      linear-gradient(#0c0a08 55%, #14100c);
+  }
+  header .logo { width: min(380px, 70vw); filter: drop-shadow(0 0 24px #ff6a1a2e); animation: idle 6s ease-in-out infinite; }
+  @keyframes idle { 50% { transform: translateY(-8px); } }
+  header h1 {
+    font-size: clamp(38px, 7vw, 84px); margin-top: 18px; line-height: 1;
+    color: var(--bone); text-shadow: 4px 4px 0 #000, 0 0 40px #ff6a1a40;
+  }
+  header h1 span { color: var(--rust); }
+  header .tag { font-size: clamp(18px, 2.6vw, 26px); letter-spacing: .35em; text-transform: uppercase; color: var(--dust); margin-top: 14px; }
+  header .cta-row { margin-top: 38px; display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+  .btn {
+    display: inline-block; text-decoration: none; text-transform: uppercase; letter-spacing: .12em;
+    font-family: 'Black Ops One', sans-serif; font-size: 17px; padding: 14px 30px;
+    color: #fff; background: var(--blood); border: 2px solid #ff8b4a; box-shadow: 5px 5px 0 #000;
+    transition: transform .08s, box-shadow .08s;
+  }
+  .btn:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 #000; background: var(--rust-dk); }
+  .btn.ghost { background: transparent; border-color: #4a3d31; color: var(--bone); }
+  .btn.ghost:hover { border-color: var(--rust); color: var(--rust); }
+
+  .hazard-strip { height: 14px; background: var(--hazard); border-top: 2px solid #000; border-bottom: 2px solid #000; }
+
+  .marquee { background: #14100c; border-bottom: 2px solid #2b221b; overflow: hidden; white-space: nowrap; padding: 10px 0; }
+  .marquee-inner { display: inline-block; animation: scroll 30s linear infinite; font-family: 'Black Ops One'; letter-spacing: .2em; font-size: 15px; color: var(--dust); text-transform: uppercase; }
+  .marquee-inner b { color: var(--rust); }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  section { max-width: 1100px; margin: 0 auto; padding: 90px 24px; }
+  section > h2 {
+    font-size: clamp(30px, 4.5vw, 46px); color: var(--rust); margin-bottom: 8px;
+    text-shadow: 3px 3px 0 #000;
+  }
+  section > .sub { color: var(--dust); text-transform: uppercase; letter-spacing: .25em; font-size: 15px; margin-bottom: 40px; }
+  section p.lede { font-size: 22px; max-width: 780px; }
+
+  .games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .game-card {
+    background: var(--panel); border: 1px solid #2b221b; border-top: 4px solid var(--rust-dk);
+    padding: 24px 22px; position: relative; transition: transform .12s, border-color .12s;
+  }
+  .game-card:hover { transform: translateY(-4px); border-top-color: var(--rust); }
+  .game-card h3 { font-size: 21px; color: var(--bone); margin-bottom: 8px; }
+  .game-card .sys { color: var(--rust); font-size: 13px; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 10px; }
+  .game-card p { color: var(--dust); font-size: 17px; }
+
+  .molands {
+    background: linear-gradient(120deg, #1a0f06, #241205 55%, #170c04), var(--panel);
+    border: 2px solid var(--rust-dk); box-shadow: 8px 8px 0 #000;
+    padding: 48px 40px; display: grid; grid-template-columns: 1.2fr .8fr; gap: 36px; align-items: center;
+  }
+  .molands h3 { font-size: clamp(28px, 4vw, 44px); color: var(--rust); text-shadow: 3px 3px 0 #000; line-height: 1.05; }
+  .molands .kicker { color: var(--dust); letter-spacing: .3em; text-transform: uppercase; font-size: 13px; margin-bottom: 10px; }
+  .molands p { margin: 16px 0 26px; font-size: 19px; }
+  .molands ul { list-style: none; margin: 0 0 26px; }
+  .molands li { padding-left: 22px; position: relative; margin-bottom: 7px; color: var(--bone); }
+  .molands li::before { content: '⚙'; position: absolute; left: 0; color: var(--rust); }
+  .rig-art { text-align: center; font-size: 110px; filter: drop-shadow(6px 6px 0 #000); }
+  .rig-art .sk { font-size: 60px; display: block; margin-top: -18px; }
+
+  .nights { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .night { background: var(--panel2); border-left: 5px solid var(--blood); padding: 22px; }
+  .night h3 { color: var(--bone); font-size: 19px; margin-bottom: 6px; }
+  .night p { color: var(--dust); font-size: 17px; }
+
+  footer { border-top: 2px solid #2b221b; background: #0a0806; padding: 40px 24px; text-align: center; color: var(--dust); }
+  footer img { height: 90px; opacity: .9; margin-bottom: 12px; }
+  footer .small { font-size: 14px; margin-top: 14px; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+  .reveal.on { opacity: 1; transform: none; }
+
+  @media (max-width: 760px) {
+    nav { gap: 14px; padding: 10px 14px; } nav .navlinks a:not(.play-btn) { display: none; }
+    .molands { grid-template-columns: 1fr; padding: 32px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <img src="/assets/logo.svg" alt="Raising Havok skull emblem">
+  <span class="brand">Raising Havok</span>
+  <span class="navlinks" style="display:flex;gap:24px;align-items:center">
+    <a href="#about">Da Club</a>
+    <a href="#games">Games</a>
+    <a href="#nights">Club Nights</a>
+    <a href="#join">Join</a>
+    <a class="play-btn" href="/play/">⚔ Play Mad Ork Lands</a>
+  </span>
+</nav>
+
+<header>
+  <img class="logo" src="/assets/logo.svg" alt="Raising Havok Gaming Club — cracked skull ringed in chain">
+  <h1>Raising <span>Havok</span></h1>
+  <div class="tag">Gaming Club &bull; Forged in dice, fueled by guzzolene</div>
+  <div class="cta-row">
+    <a class="btn" href="/play/">Play Mad Ork Lands</a>
+    <a class="btn ghost" href="#about">Enter da Wasteland</a>
+  </div>
+</header>
+
+<div class="hazard-strip"></div>
+<div class="marquee"><div class="marquee-inner" id="marquee">
+  &nbsp;WARHAMMER 40,000 <b>//</b> MARVEL CRISIS PROTOCOL <b>//</b> BLOOD BOWL <b>//</b> TRENCH CRUSADE <b>//</b> GASLANDS <b>//</b> KILL TEAM <b>//</b> BRING YER DICE <b>//</b>
+</div></div>
+
+<section id="about" class="reveal">
+  <h2>Who Rides With Us</h2>
+  <div class="sub">Shiny and chrome. Also glued and primed.</div>
+  <p class="lede">
+    Raising Havok is a miniature wargaming club for people who like their tabletops grim, their dice
+    mean, and their paint jobs at least three thin coats deep. We push plastic across battlefields,
+    talk trash across the table, and occasionally remember the actual rules. New blood always welcome —
+    whether you're a tournament veteran or you just cracked your first starter box, there's a seat
+    at the table and someone who'll teach you the game.
+  </p>
+</section>
+
+<div class="hazard-strip"></div>
+
+<section id="games" class="reveal">
+  <h2>What We Play</h2>
+  <div class="sub">Pick yer poison</div>
+  <div class="games-grid">
+    <div class="game-card">
+      <div class="sys">Games Workshop</div>
+      <h3>Warhammer 40,000</h3>
+      <p>In the grim darkness of the far future, there is only war — and arguing about terrain rules. Crusades, matched play, and the occasional Waaagh.</p>
+    </div>
+    <div class="game-card">
+      <div class="sys">Atomic Mass Games</div>
+      <h3>Marvel Crisis Protocol</h3>
+      <p>Superpowered scraps over collapsing city blocks. Throw a car at a god. It's encouraged.</p>
+    </div>
+    <div class="game-card">
+      <div class="sys">Games Workshop</div>
+      <h3>Blood Bowl</h3>
+      <p>Fantasy football where the fouls are the strategy. Casualties expected, apothecary optional.</p>
+    </div>
+    <div class="game-card">
+      <div class="sys">Grimdark Skirmish</div>
+      <h3>Trench Crusade</h3>
+      <p>Heretics, martyrs, and mud. A grim alternate-history crusade fought one trench at a time.</p>
+    </div>
+    <div class="game-card">
+      <div class="sys">Osprey Games</div>
+      <h3>Gaslands</h3>
+      <p>Post-apocalyptic vehicular mayhem with Hot Wheels and bad intentions. The inspiration for our own Mad Ork Lands.</p>
+    </div>
+    <div class="game-card">
+      <div class="sys">And more</div>
+      <h3>Whatever Hits da Table</h3>
+      <p>Kill Team, Necromunda, board game nights, escalation leagues — if it has dice and minis, someone here plays it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="molands" class="reveal">
+  <div class="molands">
+    <div>
+      <div class="kicker">A Raising Havok Production</div>
+      <h3>Mad Ork Lands</h3>
+      <p>
+        Our own web game: an orky vehicular battle royale, loosely bolted together from Gaslands-style
+        rules. Build a rig in da Mek Shop — 50 teef, spend 'em on hulls, dakka, and dubious upgrades —
+        then roll out into the Scrap Storm against the rest of the club. Last rig rollin' wins.
+      </p>
+      <ul>
+        <li>7 hulls from Warbike to War Rig</li>
+        <li>Shootas, rokkits, skorchas, mines, oil slicks &amp; a wreckin' ball</li>
+        <li>Multiplayer arenas with bot reinforcements</li>
+        <li>Club accounts — wins, kills an' damage tracked forever</li>
+      </ul>
+      <a class="btn" href="/play/">Roll Out ⚔</a>
+    </div>
+    <div class="rig-art">🛻<span class="sk">💀🔥</span></div>
+  </div>
+</section>
+
+<div class="hazard-strip"></div>
+
+<section id="nights" class="reveal">
+  <h2>Club Nights</h2>
+  <div class="sub">Where da havok gets raised</div>
+  <div class="nights">
+    <div class="night"><h3>Game Night</h3><p>Weekly pickup games — bring an army, find an opponent, roll dice until close.</p></div>
+    <div class="night"><h3>League Play</h3><p>Escalation leagues and narrative campaigns across our main systems.</p></div>
+    <div class="night"><h3>Hobby Nights</h3><p>Building, priming, painting, and pretending your pile of shame is "a queue."</p></div>
+  </div>
+  <p style="margin-top:26px;color:var(--dust)">Schedule and location details posted in the club Discord.</p>
+</section>
+
+<section id="join" class="reveal" style="text-align:center">
+  <h2>Join da Waaagh</h2>
+  <div class="sub">No gatekeeping. Some gate-ramming.</div>
+  <p class="lede" style="margin:0 auto 30px">
+    Want in? Hop into the Discord, say hi, and tell us what you play. Loaner armies and demo
+    games available for anyone new to the hobby.
+  </p>
+  <a class="btn" href="#" onclick="alert('Discord invite link goes here — update index.html');return false">Join the Discord</a>
+</section>
+
+<footer>
+  <img src="/assets/logo.svg" alt="">
+  <div class="brand" style="color:var(--rust)">Raising Havok Gaming Club</div>
+  <div class="small">
+    raisinghavok.com &bull; <a href="/play/" style="color:var(--rust)">Mad Ork Lands</a><br>
+    Not affiliated with Games Workshop, Atomic Mass Games, or Osprey Games. All trademarks belong to their owners.<br>
+    Mediocre dice rolls belong to us.
+  </div>
+</footer>
+
+<script>
+  // duplicate marquee content for seamless loop
+  const m = document.getElementById('marquee');
+  m.innerHTML += m.innerHTML;
+  // scroll reveal
+  const obs = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('on')), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
