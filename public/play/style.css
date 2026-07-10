@@ -68,6 +68,8 @@ h1, h2, h3, .brand, .btn { font-family: 'Black Ops One', sans-serif; font-weight
 }
 .topbar img { height: 34px; }
 .topbar .brand { color: var(--rust); font-size: 18px; }
+.topbar .navlink { color: var(--dust); text-decoration: none; font-size: 15px; text-transform: uppercase; letter-spacing: .08em; }
+.topbar .navlink:hover { color: var(--rust); }
 .topbar .who { margin-left: auto; color: var(--dust); }
 .garage-wrap {
   flex: 1; display: grid; grid-template-columns: 1fr 1fr 340px; gap: 14px;

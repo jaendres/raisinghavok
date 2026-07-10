@@ -146,6 +146,7 @@
     <a href="#nights">Club Nights</a>
     <a href="/league/">Leagues</a>
     <a href="#join">Join</a>
+    <span id="nav-auth"></span>
     <a class="play-btn" href="/play/">⚔ Play Mad Ork Lands</a>
   </span>
 </nav>
@@ -277,6 +278,41 @@
   // scroll reveal
   const obs = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('on')), { threshold: .12 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // ---- account widget (shared token with Mad Ork Lands + League Tracker) ----
+  (async () => {
+    // capture a Discord SSO token handed back via URL fragment
+    const sso = location.hash.match(/^#sso=([a-f0-9]+)$/);
+    if (sso) { localStorage.setItem('mol_token', sso[1]); history.replaceState(null, '', location.pathname); }
+
+    const el = document.getElementById('nav-auth');
+    const token = localStorage.getItem('mol_token');
+    const esc = s => { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; };
+
+    let me = null;
+    if (token) {
+      try {
+        const r = await fetch('/api/me', { headers: { Authorization: 'Bearer ' + token } });
+        if (r.ok) me = await r.json(); else localStorage.removeItem('mol_token');
+      } catch { }
+    }
+    if (me) {
+      el.innerHTML = `<a href="/play/" title="Your garage, stats an' account">👤 ${esc(me.name)}</a>
+        <a href="#" id="nav-logout" style="color:var(--dust)">Log out</a>`;
+      document.getElementById('nav-logout').onclick = async (e) => {
+        e.preventDefault();
+        try { await fetch('/api/logout', { method: 'POST', headers: { Authorization: 'Bearer ' + token } }); } catch { }
+        localStorage.removeItem('mol_token');
+        location.reload();
+      };
+    } else {
+      let discord = false;
+      try { discord = (await (await fetch('/api/config')).json()).discordEnabled; } catch { }
+      el.innerHTML = discord
+        ? `<a href="/api/auth/discord?return=/">Log in</a>`
+        : `<a href="/play/">Log in</a>`;
+    }
+  })();
 </script>
 </body>
 </html>

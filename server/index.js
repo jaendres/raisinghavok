@@ -37,13 +37,15 @@ app.get('/api/config', (req, res) => {
 // redirects to Discord -> callback exchanges the code, upserts the account,
 // and hands the session token to the client in the URL fragment (fragments
 // never reach servers or logs).
-const ssoStates = new Map(); // state -> expiry, CSRF protection
+const ssoStates = new Map(); // state -> { exp, ret }, CSRF protection + return target
+const SSO_RETURNS = ['/play/', '/league/', '/'];
 
 app.get('/api/auth/discord', (req, res) => {
   if (!process.env.DISCORD_CLIENT_ID) return res.status(404).send('Discord SSO not configured');
   const state = require('crypto').randomBytes(16).toString('hex');
-  ssoStates.set(state, Date.now() + 10 * 60 * 1000);
-  for (const [s, exp] of ssoStates) if (exp < Date.now()) ssoStates.delete(s);
+  const ret = SSO_RETURNS.includes(req.query.return) ? req.query.return : '/play/';
+  ssoStates.set(state, { exp: Date.now() + 10 * 60 * 1000, ret });
+  for (const [s, v] of ssoStates) if (v.exp < Date.now()) ssoStates.delete(s);
   const redirectUri = `${req.protocol}://${req.get('host')}/api/auth/discord/callback`;
   res.redirect('https://discord.com/oauth2/authorize?' + new URLSearchParams({
     client_id: process.env.DISCORD_CLIENT_ID,
@@ -56,9 +58,11 @@ app.get('/api/auth/discord', (req, res) => {
 
 app.get('/api/auth/discord/callback', async (req, res) => {
   const { code, state, error } = req.query;
-  if (error) return res.redirect('/play/#ssoerr=' + encodeURIComponent(String(error)));
-  if (!code || !state || !ssoStates.has(String(state))) {
-    return res.redirect('/play/#ssoerr=bad_state');
+  const known = ssoStates.get(String(state));
+  const ret = known ? known.ret : '/play/';
+  if (error) return res.redirect(ret + '#ssoerr=' + encodeURIComponent(String(error)));
+  if (!code || !known) {
+    return res.redirect(ret + '#ssoerr=bad_state');
   }
   ssoStates.delete(String(state));
   try {
@@ -83,10 +87,10 @@ app.get('/api/auth/discord/callback', async (req, res) => {
     if (!me.id) throw new Error('could not fetch Discord profile');
     const user = db.upsertDiscordUser(me);
     const token = db.issueToken(user.name);
-    res.redirect('/play/#sso=' + token);
+    res.redirect(ret + '#sso=' + token);
   } catch (e) {
     console.error('discord sso:', e.message);
-    res.redirect('/play/#ssoerr=' + encodeURIComponent('Discord login failed, try again'));
+    res.redirect(ret + '#ssoerr=' + encodeURIComponent('Discord login failed, try again'));
   }
 });
 
@@ -150,7 +154,15 @@ const league = require('./league');
 // LEAGUE_API_KEY (so match results posted in Discord flow straight in).
 function leagueWriter(req, res, next) {
   const user = authed(req);
-  if (user) { req.reporter = user.name; return next(); }
+  if (user) {
+    // League identity is club Discord identity — password/guest accounts can
+    // play the game but league actions need a Discord-linked account.
+    if (!user.discordId && process.env.DISCORD_CLIENT_ID) {
+      return res.status(403).json({ error: 'League actions need a Discord login — use "Log in wiv Discord".' });
+    }
+    req.reporter = user.name;
+    return next();
+  }
   const key = req.headers['x-league-key'];
   if (process.env.LEAGUE_API_KEY && key === process.env.LEAGUE_API_KEY) {
     req.reporter = String(req.body.reportedBy || 'discord').slice(0, 40);

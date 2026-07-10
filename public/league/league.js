@@ -1,8 +1,19 @@
 // League tracker SPA — hash-routed report pages with drill-down.
 // Reuses the Mad Ork Lands account (same localStorage token, same API).
+
+// Discord SSO hands the session token back in the URL fragment.
+(() => {
+  const m = location.hash.match(/^#sso=([a-f0-9]+)$/);
+  if (m) {
+    localStorage.setItem('mol_token', m[1]);
+    history.replaceState(null, '', location.pathname);
+  }
+})();
+
 const $app = document.getElementById('app');
 const token = localStorage.getItem('mol_token');
 let me = null;
+let discordSso = false;
 
 function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
 
@@ -16,7 +27,9 @@ async function api(path, opts = {}) {
 }
 
 function loginNote() {
-  return me ? '' : `<p class="muted">Viewing as a spectator — <a href="/play/">log in</a> with your club account to add teams or report matches.</p>`;
+  if (me) return '';
+  const href = discordSso ? '/api/auth/discord?return=/league/' : '/play/';
+  return `<p class="muted">Viewing as a spectator — <a href="${href}">log in with Discord</a> to add teams or report matches.</p>`;
 }
 
 // ---- views ----
@@ -333,9 +346,21 @@ async function route() {
 window.addEventListener('hashchange', route);
 
 (async () => {
+  try { discordSso = (await api('/config')).discordEnabled; } catch { }
   if (token) {
     try { me = (await api('/me')).name; } catch { me = null; }
   }
-  document.getElementById('whoami').textContent = me ? `Coach ${me}` : '';
+  const who = document.getElementById('whoami');
+  if (me) {
+    who.innerHTML = `Coach ${esc(me)} &nbsp;<a href="#" id="nav-logout">log out</a>`;
+    document.getElementById('nav-logout').onclick = async (e) => {
+      e.preventDefault();
+      try { await api('/logout', { method: 'POST', body: '{}' }); } catch { }
+      localStorage.removeItem('mol_token');
+      location.reload();
+    };
+  } else {
+    who.innerHTML = `<a href="${discordSso ? '/api/auth/discord?return=/league/' : '/play/'}">Log in</a>`;
+  }
   route();
 })();
