@@ -30,6 +30,9 @@ const $ = (sel) => document.querySelector(sel);
 function show(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   $('#' + screenId).classList.add('active');
+  // reCAPTCHA renders 0x0 if created inside a hidden container, so the widget
+  // is created lazily here — only once the auth screen is actually visible.
+  if (screenId === 'screen-auth') ensureCaptcha();
 }
 
 async function api(path, opts = {}) {
@@ -43,16 +46,27 @@ async function api(path, opts = {}) {
 
 // ---- auth ----
 // reCAPTCHA is optional: it activates only if the server has keys configured.
+// The widget must NOT be rendered while the auth screen is hidden (it lays
+// out at 0x0 and never recovers), so rendering is deferred to ensureCaptcha(),
+// called whenever the auth screen becomes visible.
 let captchaWidget = null;
+let captchaSiteKey = null;
+let captchaScriptReady = false;
+
+function ensureCaptcha() {
+  if (captchaWidget !== null || !captchaSiteKey || !captchaScriptReady) return;
+  if (!$('#screen-auth').classList.contains('active')) return;
+  captchaWidget = grecaptcha.render('captcha-box', { sitekey: captchaSiteKey, theme: 'dark' });
+}
+
 (async () => {
   if (window.__ssoError) $('#auth-error').textContent = window.__ssoError;
   try {
     const cfg = await api('/config');
     if (cfg.discordEnabled) $('#btn-discord').classList.remove('hidden');
     if (!cfg.recaptchaSiteKey) return;
-    window.__onCaptchaReady = () => {
-      captchaWidget = grecaptcha.render('captcha-box', { sitekey: cfg.recaptchaSiteKey, theme: 'dark' });
-    };
+    captchaSiteKey = cfg.recaptchaSiteKey;
+    window.__onCaptchaReady = () => { captchaScriptReady = true; ensureCaptcha(); };
     const s = document.createElement('script');
     s.src = 'https://www.google.com/recaptcha/api.js?onload=__onCaptchaReady&render=explicit';
     s.async = true;
