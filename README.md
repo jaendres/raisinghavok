@@ -70,10 +70,12 @@ Signups/logins are protected by per-IP rate limits (5 signups/hour,
 10 login tries/10 min), a honeypot field, expiring session tokens (30 days,
 revoked on logout), and scrypt-hashed passwords (min 8 chars).
 
-**reCAPTCHA:** keys live as GitHub Actions secrets and flow through the Bicep
-deploy — do NOT set them in the portal, the pipeline owns app settings and
-wipes manual changes on every deploy. To rotate/change keys
-(https://www.google.com/recaptcha/admin, v2 checkbox, domain raisinghavok.com):
+**reCAPTCHA v3 (invisible, score-based):** no checkbox — signups are scored
+silently and the server rejects below 0.3 (`MIN_SCORE` in server/security.js).
+Keys live as GitHub Actions secrets and flow through the Bicep deploy — do NOT
+set them in the portal, the pipeline owns app settings and wipes manual
+changes on every deploy. To rotate/change keys
+(https://www.google.com/recaptcha/admin, **v3**, domain raisinghavok.com):
 
 ```
 gh secret set RECAPTCHA_SITE_KEY --repo jaendres/raisinghavok --body <site key>

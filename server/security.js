@@ -33,7 +33,10 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
 const RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY || '';
 
 // Returns true when the captcha passes, or when reCAPTCHA isn't configured
-// (rate limiting + honeypot still apply either way).
+// (rate limiting + honeypot still apply either way). Handles both v3
+// (score-based, what the club's keys are) and v2 (no score field).
+const MIN_SCORE = 0.3; // v3 scores: ~0.9 human, ~0.1 bot
+
 async function verifyCaptcha(token, ip) {
   if (!RECAPTCHA_SECRET) return true;
   if (!token) return false;
@@ -44,7 +47,10 @@ async function verifyCaptcha(token, ip) {
       body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: token, remoteip: ip || '' }),
     });
     const data = await res.json();
-    return !!data.success;
+    if (!data.success) return false;
+    if (typeof data.score === 'number' && data.score < MIN_SCORE) return false;
+    if (data.action && data.action !== 'register') return false;
+    return true;
   } catch {
     return false; // Google unreachable -> fail closed on signups
   }

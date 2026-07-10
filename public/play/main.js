@@ -30,9 +30,6 @@ const $ = (sel) => document.querySelector(sel);
 function show(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   $('#' + screenId).classList.add('active');
-  // reCAPTCHA renders 0x0 if created inside a hidden container, so the widget
-  // is created lazily here — only once the auth screen is actually visible.
-  if (screenId === 'screen-auth') ensureCaptcha();
 }
 
 async function api(path, opts = {}) {
@@ -45,19 +42,10 @@ async function api(path, opts = {}) {
 }
 
 // ---- auth ----
-// reCAPTCHA is optional: it activates only if the server has keys configured.
-// The widget must NOT be rendered while the auth screen is hidden (it lays
-// out at 0x0 and never recovers), so rendering is deferred to ensureCaptcha(),
-// called whenever the auth screen becomes visible.
-let captchaWidget = null;
+// reCAPTCHA v3 (invisible, score-based): activates only if the server has
+// keys configured. No widget — a token is minted at the moment of signup.
 let captchaSiteKey = null;
-let captchaScriptReady = false;
-
-function ensureCaptcha() {
-  if (captchaWidget !== null || !captchaSiteKey || !captchaScriptReady) return;
-  if (!$('#screen-auth').classList.contains('active')) return;
-  captchaWidget = grecaptcha.render('captcha-box', { sitekey: captchaSiteKey, theme: 'dark' });
-}
+let captchaReady = null;
 
 (async () => {
   if (window.__ssoError) $('#auth-error').textContent = window.__ssoError;
@@ -66,11 +54,14 @@ function ensureCaptcha() {
     if (cfg.discordEnabled) $('#btn-discord').classList.remove('hidden');
     if (!cfg.recaptchaSiteKey) return;
     captchaSiteKey = cfg.recaptchaSiteKey;
-    window.__onCaptchaReady = () => { captchaScriptReady = true; ensureCaptcha(); };
-    const s = document.createElement('script');
-    s.src = 'https://www.google.com/recaptcha/api.js?onload=__onCaptchaReady&render=explicit';
-    s.async = true;
-    document.head.appendChild(s);
+    captchaReady = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://www.google.com/recaptcha/api.js?render=' + encodeURIComponent(captchaSiteKey);
+      s.async = true;
+      s.onload = () => grecaptcha.ready(resolve);
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
   } catch { /* config endpoint is best-effort */ }
 })();
 
@@ -80,9 +71,11 @@ async function doAuth(kind) {
   $('#auth-error').textContent = '';
   try {
     const body = { name, password, email: $('#auth-email').value };
-    if (kind === 'register' && captchaWidget !== null) {
-      body.captcha = grecaptcha.getResponse(captchaWidget);
-      grecaptcha.reset(captchaWidget);
+    if (kind === 'register' && captchaSiteKey) {
+      try {
+        await captchaReady;
+        body.captcha = await grecaptcha.execute(captchaSiteKey, { action: 'register' });
+      } catch { /* no token -> server rejects with a clear message */ }
     }
     const data = await api('/' + kind, { method: 'POST', body: JSON.stringify(body) });
     MOL.token = data.token; MOL.name = data.name; MOL.guest = false;
