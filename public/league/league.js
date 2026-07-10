@@ -22,7 +22,7 @@ function loginNote() {
 // ---- views ----
 
 async function viewHome() {
-  const leagues = await api('/league');
+  const [leagues, games] = await Promise.all([api('/league'), api('/games')]);
   $app.innerHTML = `
     <h1>League Tracker</h1>
     <div class="sub">Raising Havok — seasons, standings an' grudges</div>
@@ -40,7 +40,7 @@ async function viewHome() {
     <div class="card">
       <div class="form-grid">
         <label>Name <input id="nl-name" maxlength="60" placeholder="RH Blood Bowl League"></label>
-        <label>Game <select id="nl-game"><option value="bloodbowl">Blood Bowl</option></select></label>
+        <label>Game <select id="nl-game">${games.map(g => `<option value="${g.id}">${esc(g.name)}</option>`).join('')}</select></label>
         <label>Season <input id="nl-season" maxlength="20" value="1"></label>
       </div>
       <div style="margin-top:12px"><button class="btn" id="nl-create">Create League</button></div>

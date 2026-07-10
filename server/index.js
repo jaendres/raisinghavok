@@ -169,6 +169,10 @@ app.get('/api/league', (req, res) => {
   res.json(Object.values(db.leagues()).map(league.summary));
 });
 
+app.get('/api/games', (req, res) => {
+  res.json(Object.entries(league.GAME_STATS).map(([id, g]) => ({ id, name: g.name })));
+});
+
 app.get('/api/league/:id', (req, res) => {
   const l = db.leagues()[req.params.id];
   if (!l) return res.status(404).json({ error: 'no such league' });

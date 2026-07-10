@@ -19,6 +19,17 @@ const GAME_STATS = {
     spp: { td: 3, cas: 2, comp: 1, int: 2, mvp: 4 },
     races: ['Amazon', 'Black Orc', 'Chaos Chosen', 'Chaos Dwarf', 'Dark Elf', 'Dwarf', 'Elven Union', 'Gnome', 'Goblin', 'Halfling', 'High Elf', 'Human', 'Imperial Nobility', 'Khorne', 'Lizardmen', 'Necromantic Horror', 'Norse', 'Nurgle', 'Ogre', 'Old World Alliance', 'Orc', 'Shambling Undead', 'Skaven', 'Snotling', 'Tomb Kings', 'Underworld Denizens', 'Vampire', 'Wood Elf'],
   },
+  trenchcrusade: {
+    name: 'Trench Crusade',
+    score: 'vp',
+    stats: [
+      { id: 'vp', name: 'Victory Points' },
+      { id: 'cas', name: 'Casualties' },
+    ],
+    // per-warband-member credit -> "glory": VP 1, CAS 2, MVP 4
+    spp: { vp: 1, cas: 2, mvp: 4 },
+    races: ['Heretic Legion', 'Trench Pilgrims', 'New Antioch', 'The Iron Sultanate', 'The Cult of the Black Grail', 'Court of the Seven-Headed Serpent', 'Mercenaries'],
+  },
 };
 
 function id() { return crypto.randomBytes(6).toString('hex'); }
