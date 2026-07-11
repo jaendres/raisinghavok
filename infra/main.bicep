@@ -31,6 +31,9 @@ param discordClientId string = ''
 @secure()
 param discordClientSecret string = ''
 
+// Only members of this Discord server may log in (empty disables the check).
+param discordGuildId string = '963268059362103376'
+
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: planName
 }
@@ -87,6 +90,10 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'DISCORD_CLIENT_SECRET'
           value: discordClientSecret
+        }
+        {
+          name: 'DISCORD_GUILD_ID'
+          value: discordGuildId
         }
       ]
     }

@@ -50,7 +50,7 @@ app.get('/api/auth/discord', (req, res) => {
   res.redirect('https://discord.com/oauth2/authorize?' + new URLSearchParams({
     client_id: process.env.DISCORD_CLIENT_ID,
     response_type: 'code',
-    scope: 'identify',
+    scope: 'identify guilds', // guilds: verify club-server membership
     redirect_uri: redirectUri,
     state,
   }));
@@ -85,6 +85,20 @@ app.get('/api/auth/discord/callback', async (req, res) => {
     });
     const me = await meRes.json();
     if (!me.id) throw new Error('could not fetch Discord profile');
+
+    // Membership gate: only members of the club's Discord server get in.
+    if (process.env.DISCORD_GUILD_ID) {
+      const guildsRes = await fetch('https://discord.com/api/users/@me/guilds', {
+        headers: { Authorization: 'Bearer ' + tokenData.access_token },
+      });
+      const guilds = await guildsRes.json();
+      const isMember = Array.isArray(guilds)
+        && guilds.some(g => g.id === process.env.DISCORD_GUILD_ID);
+      if (!isMember) {
+        return res.redirect(ret + '#ssoerr=' + encodeURIComponent(
+          'Members only — dis Discord ain\'t in da Raising Havok server.'));
+      }
+    }
     const user = db.upsertDiscordUser(me);
     const token = db.issueToken(user.name);
     res.redirect(ret + '#sso=' + token);
