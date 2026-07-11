@@ -145,10 +145,19 @@ app.post('/api/garage', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/api/leaderboard', (req, res) => res.json(db.leaderboard()));
-
 // ---- League tracker API ----
 const league = require('./league');
+
+// Reads are members-only: any logged-in account, or the bot's shared key.
+// (League data lists club members by name — not for the public internet.)
+function memberReader(req, res, next) {
+  if (authed(req)) return next();
+  const key = req.headers['x-league-key'];
+  if (process.env.LEAGUE_API_KEY && key === process.env.LEAGUE_API_KEY) return next();
+  res.status(401).json({ error: 'Members only — log in to see da league.' });
+}
+
+app.get('/api/leaderboard', memberReader, (req, res) => res.json(db.leaderboard()));
 
 // Writers must be logged-in users, or the Discord bot presenting the shared
 // LEAGUE_API_KEY (so match results posted in Discord flow straight in).
@@ -177,7 +186,7 @@ function isAdmin(name) {
     .includes((name || '').toLowerCase());
 }
 
-app.get('/api/league', (req, res) => {
+app.get('/api/league', memberReader, (req, res) => {
   res.json(Object.values(db.leagues()).map(league.summary));
 });
 
@@ -185,7 +194,7 @@ app.get('/api/games', (req, res) => {
   res.json(Object.entries(league.GAME_STATS).map(([id, g]) => ({ id, name: g.name })));
 });
 
-app.get('/api/league/:id', (req, res) => {
+app.get('/api/league/:id', memberReader, (req, res) => {
   const l = db.leagues()[req.params.id];
   if (!l) return res.status(404).json({ error: 'no such league' });
   res.json(league.full(l));

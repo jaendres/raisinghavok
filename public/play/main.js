@@ -130,7 +130,10 @@ async function refreshLeaderboard() {
       ? rows.slice(0, 8).map((r, i) =>
           `<div class="lb-row"><span>${i + 1}. <b>${esc(r.name)}</b></span><span>${r.wins}W / ${r.kills}K</span></div>`).join('')
       : '<div class="lb-row">No warbosses yet. Be da first.</div>';
-  } catch { /* leaderboard is decorative */ }
+  } catch {
+    // members-only: guests get a nudge instead of the board
+    $('#leaderboard').innerHTML = '<div class="lb-row">Log in to see da leaderboard.</div>';
+  }
 }
 
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }

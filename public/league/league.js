@@ -27,9 +27,19 @@ async function api(path, opts = {}) {
 }
 
 function loginNote() {
-  if (me) return '';
+  return ''; // reads are members-only now; the login wall handles logged-out users
+}
+
+function loginWall() {
   const href = discordSso ? '/api/auth/discord?return=/league/' : '/play/';
-  return `<p class="muted">Viewing as a spectator — <a href="${href}">log in with Discord</a> to add teams or report matches.</p>`;
+  $app.innerHTML = `
+    <h1>League Tracker</h1>
+    <div class="sub">Members only</div>
+    <div class="card" style="text-align:center;padding:40px">
+      <p class="muted" style="margin-bottom:20px">League standings an' records are for club members.<br>
+      Log in wiv yer Discord to get in.</p>
+      <a class="btn" href="${href}">Log in with Discord</a>
+    </div>`;
 }
 
 // ---- views ----
@@ -332,6 +342,7 @@ async function viewPlayer(id, tid, name) {
 
 // ---- router ----
 async function route() {
+  if (!me) { loginWall(); return; }
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   try {
     if (parts[0] === 'l' && parts[1] && parts[2] === 't' && parts[3]) await viewTeam(parts[1], parts[3]);
