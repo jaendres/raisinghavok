@@ -108,3 +108,29 @@ tr.detail.hidden { display: none; }
 .score-big { font-family: 'Black Ops One'; font-size: 20px; color: var(--bone); white-space: nowrap; }
 .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; align-items: start; }
 @media (max-width: 800px) { .two-col, .match-sides { grid-template-columns: 1fr; } }
+
+/* ---- print-friendly team sheet (light "paper" panel, printable) ---- */
+.printsheet {
+  background: #fff; color: #111; padding: 28px 32px; border-radius: 2px;
+  font-family: Georgia, 'Times New Roman', serif; line-height: 1.4;
+  box-shadow: 0 0 30px #00000088; max-width: 900px; margin: 0 auto;
+}
+.printsheet h1 { color: #111; text-shadow: none; font-family: 'Black Ops One', serif; font-size: 30px; margin-bottom: 6px; }
+.printsheet h2 { color: #111; text-shadow: none; font-size: 17px; border-bottom: 2px solid #111; padding-bottom: 3px; margin: 22px 0 8px; }
+.ps-actions { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 10px; }
+.ps-meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 14px; margin-top: 4px; }
+.ps-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 13px; }
+.ps-table th { color: #111; border-bottom: 2px solid #111; border-top: 2px solid #111; padding: 4px 6px; font-family: Georgia, serif; font-size: 12px; }
+.ps-table td { border-bottom: 1px solid #999; padding: 4px 6px; color: #111; }
+.ps-table small { color: #555; }
+.ps-rule { font-size: 12.5px; margin-bottom: 6px; page-break-inside: avoid; }
+.ps-rules { column-count: 2; column-gap: 26px; }
+.ps-foot { margin-top: 18px; font-size: 11px; color: #666; border-top: 1px solid #999; padding-top: 6px; }
+
+@media print {
+  nav, footer, .noprint { display: none !important; }
+  body { background: #fff; }
+  main { margin: 0; width: 100%; }
+  .printsheet { box-shadow: none; padding: 0; max-width: none; }
+}
+@media (max-width: 800px) { .ps-rules { column-count: 1; } }

@@ -608,6 +608,7 @@ async function viewBBTeam(l, tid, editMode = false) {
     <h2 style="display:flex;align-items:center;gap:12px">Roster
       ${canEdit && !editMode ? '<button class="btn small" id="bb-edit">✎ Edit Roster</button>' : ''}
       ${editMode ? '<button class="btn small" id="bb-saveall">💾 Save All</button><button class="btn small ghost" id="bb-cancel">Cancel</button>' : ''}
+      ${!editMode ? `<a class="btn small ghost" href="#/l/${l.id}/t/${tid}/print">🖨 Print Sheet</a>` : ''}
       <span class="error" id="bb-err" style="margin:0"></span>
     </h2>
     <div class="card" style="overflow-x:auto">
@@ -765,6 +766,86 @@ async function viewBBTeam(l, tid, editMode = false) {
   });
 }
 
+// print-friendly team sheet: roster + every special rule spelled out
+async function viewPrintSheet(id, tid) {
+  const [l, cat] = await Promise.all([api('/league/' + id), catalog()]);
+  const t = l.teams[tid];
+  if (!t || !t.bb) { $app.innerHTML = '<p class="muted">No drafted team here.</p>'; return; }
+  const sheet = await api(`/league/${l.id}/team/${tid}/bb`);
+  const race = cat.teams[sheet.race];
+  const row = l.standings.find(r => r.teamId === tid) || {};
+  const normKey = (s) => String(s).replace(/\([^)]*\)/g, '').replace(/\*/g, '').replace(/’/g, "'").replace(/\s+/g, ' ').trim().toUpperCase();
+  const desc = (name) => cat.descriptions[normKey(name)] || '';
+
+  const alive = sheet.players.filter(p => !p.injuries.dead && !p.retired).sort((a, b) => a.num - b.num);
+  const statTxt = (p, k) => {
+    const v = p.stats[k];
+    if (v == null) return '-';
+    return (k === 'ag' || k === 'pa' || k === 'av') ? v + '+' : v;
+  };
+  const injTxt = (p) => [
+    p.injuries.mng ? 'MNG' : '',
+    p.injuries.ng ? `NG×${p.injuries.ng}` : '',
+    ...Object.entries(p.injuries.stats || {}).filter(([, n]) => n > 0).map(([k, n]) => `-${n} ${k.toUpperCase()}`),
+  ].filter(Boolean).join(', ');
+
+  // every distinct skill/trait on the roster, with rules text
+  const allNames = [...new Set(alive.flatMap(p => p.skills))].sort((a, b) => a.localeCompare(b));
+  const skillEntries = allNames.map(s => ({ name: s, text: desc(s) }));
+
+  $app.innerHTML = `
+  <div class="printsheet">
+    <div class="ps-actions noprint">
+      <a class="btn ghost small" href="#/l/${l.id}/t/${tid}">&larr; back to team</a>
+      <button class="btn small" onclick="window.print()">🖨 Print</button>
+    </div>
+    <div class="ps-head">
+      <h1>${esc(t.name)}</h1>
+      <div class="ps-meta">
+        <span><b>${esc(sheet.raceName)}</b> — Tier ${esc(race.tier || '?')}</span>
+        <span>Coach: <b>${esc(t.coach)}</b></span>
+        <span>${esc(l.name)} (S${esc(l.season)})</span>
+        <span>Record: ${row.w || 0}W ${row.d || 0}D ${row.l || 0}L</span>
+      </div>
+      <div class="ps-meta">
+        <span>TV <b>${gold(sheet.tv)}</b></span><span>CTV <b>${gold(sheet.ctv)}</b></span>
+        <span>Treasury <b>${gold(sheet.treasury)}</b></span>
+        <span>Re-rolls <b>${sheet.rerolls}</b> (${gold(sheet.rerollCost)})</span>
+        <span>Apothecary <b>${sheet.apothecary ? 'yes' : 'no'}</b></span>
+        <span>Coaches <b>${sheet.coaches}</b></span><span>Cheerleaders <b>${sheet.cheerleaders}</b></span>
+        <span>Dedicated Fans <b>${sheet.fans}</b></span>
+      </div>
+    </div>
+
+    <table class="ps-table">
+      <tr><th>#</th><th>Player</th><th>Position</th><th>MA</th><th>ST</th><th>AG</th><th>PA</th><th>AV</th><th>Skills & Traits</th><th>Injuries</th><th>SPP</th><th>Value</th></tr>
+      ${alive.map(p => `
+        <tr>
+          <td>${p.num}</td>
+          <td><b>${esc(p.name)}</b>${p.nickname ? ` “${esc(p.nickname)}”` : ''}<br><small>${esc(p.level)}</small></td>
+          <td>${esc(p.position)}</td>
+          <td>${statTxt(p, 'ma')}</td><td>${statTxt(p, 'st')}</td><td>${statTxt(p, 'ag')}</td><td>${statTxt(p, 'pa')}</td><td>${statTxt(p, 'av')}</td>
+          <td>${p.skills.map(esc).join(', ') || '—'}</td>
+          <td>${injTxt(p) || '—'}</td>
+          <td>${p.sppAvailable}/${p.sppEarned}</td>
+          <td>${gold(p.value)}</td>
+        </tr>`).join('')}
+    </table>
+
+    ${race.specialRules.length ? `
+    <h2>Team Special Rules</h2>
+    ${race.specialRules.map(sr => `
+      <div class="ps-rule"><b>${esc(sr)}.</b> ${esc(desc(sr) || 'See rulebook.')}</div>`).join('')}` : ''}
+
+    <h2>Skills & Traits Reference</h2>
+    <div class="ps-rules">
+      ${skillEntries.map(e => `
+        <div class="ps-rule"><b>${esc(e.name)}.</b> ${esc(e.text || 'See rulebook.')}</div>`).join('') || '<p>No skills on this roster yet.</p>'}
+    </div>
+    <div class="ps-foot">raisinghavok.com/league — printed team sheet • ${esc(l.name)}</div>
+  </div>`;
+}
+
 async function viewPlayer(id, tid, name) {
   const l = await api('/league/' + id);
   const t = l.teams[tid];
@@ -805,6 +886,7 @@ async function route() {
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   try {
     if (parts[0] === 'l' && parts[1] && parts[2] === 'draft') await viewDraft(parts[1]);
+    else if (parts[0] === 'l' && parts[1] && parts[2] === 't' && parts[3] && parts[4] === 'print') await viewPrintSheet(parts[1], parts[3]);
     else if (parts[0] === 'l' && parts[1] && parts[2] === 't' && parts[3]) await viewTeam(parts[1], parts[3]);
     else if (parts[0] === 'l' && parts[1] && parts[2] === 'p' && parts[3] && parts[4]) await viewPlayer(parts[1], parts[3], decodeURIComponent(parts[4]));
     else if (parts[0] === 'l' && parts[1]) await viewLeague(parts[1]);
