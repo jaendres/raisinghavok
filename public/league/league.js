@@ -184,6 +184,11 @@ async function viewLeague(id) {
     </div>
 
     <h2>Add a Team</h2>
+    ${l.game === 'bloodbowl' ? `
+    <div class="card" style="text-align:center;padding:26px">
+      <p class="muted" style="margin-bottom:14px">Blood Bowl teams get drafted proper — official BB2025 rosters, 1,000k budget, positional limits, da lot.</p>
+      <a class="btn" href="#/l/${l.id}/draft">🏈 Open da List Builder</a>
+    </div>` : `
     <div class="card">
       <div class="form-grid">
         <label>Team name <input id="t-name" maxlength="60"></label>
@@ -196,7 +201,7 @@ async function viewLeague(id) {
       <div style="margin-top:8px"><input type="file" id="t-file" accept=".txt,.csv"> <span class="muted">or upload a .txt/.csv</span></div>
       <div style="margin-top:12px"><button class="btn" id="t-save">Add Team</button></div>
       <div class="error" id="t-err"></div>
-    </div>` : ''}
+    </div>`}` : ''}
   `;
 
   if (!me) return;
@@ -231,22 +236,167 @@ async function viewLeague(id) {
     } catch (e) { document.getElementById('m-err').textContent = e.message; }
   };
 
-  document.getElementById('t-file').onchange = async (ev) => {
-    const f = ev.target.files[0];
-    if (f) document.getElementById('t-roster').value = (await f.text()).slice(0, 8000);
-  };
-  document.getElementById('t-save').onclick = async () => {
-    try {
-      await api(`/league/${l.id}/team`, { method: 'POST', body: JSON.stringify({ name: document.getElementById('t-name').value, coach: document.getElementById('t-coach').value, race: document.getElementById('t-race').value, rosterText: document.getElementById('t-roster').value }) });
-      route();
-    } catch (e) { document.getElementById('t-err').textContent = e.message; }
-  };
+  const tFile = document.getElementById('t-file'); // absent on Blood Bowl leagues (list builder instead)
+  if (tFile) {
+    tFile.onchange = async (ev) => {
+      const f = ev.target.files[0];
+      if (f) document.getElementById('t-roster').value = (await f.text()).slice(0, 8000);
+    };
+    document.getElementById('t-save').onclick = async () => {
+      try {
+        await api(`/league/${l.id}/team`, { method: 'POST', body: JSON.stringify({ name: document.getElementById('t-name').value, coach: document.getElementById('t-coach').value, race: document.getElementById('t-race').value, rosterText: document.getElementById('t-roster').value }) });
+        route();
+      } catch (e) { document.getElementById('t-err').textContent = e.message; }
+    };
+  }
+}
+
+// ---- Blood Bowl list builder ----
+let bbCatalog = null;
+async function catalog() {
+  if (!bbCatalog) bbCatalog = await api('/bb/catalog');
+  return bbCatalog;
+}
+const gold = (n) => (n / 1000) + 'k';
+
+async function viewDraft(id) {
+  const [l, cat] = await Promise.all([api('/league/' + id), catalog()]);
+  const races = Object.entries(cat.teams).sort((a, b) => a[1].name.localeCompare(b[1].name));
+  const R = cat.rules;
+  const state = { race: races[0][0], counts: {}, names: {}, rerolls: 0, apothecary: false, coaches: 0, cheerleaders: 0, fans: 1, teamName: '' };
+
+  function render() {
+    const race = cat.teams[state.race];
+    let cost = 0, playerCount = 0;
+    for (const p of race.positions) {
+      const n = state.counts[p.name] || 0;
+      cost += n * p.cost; playerCount += n;
+    }
+    cost += state.rerolls * race.rerollCost
+      + state.coaches * (race.staff.coach || 10000)
+      + state.cheerleaders * (race.staff.cheerleader || 10000)
+      + (state.fans - 1) * R.fans.cost
+      + (state.apothecary ? (race.staff.apothecary || 50000) : 0);
+    const left = R.draftBudget - cost;
+    const ok = playerCount >= R.minPlayers && playerCount <= R.maxPlayers && left >= 0;
+
+    $app.innerHTML = `
+      <div class="crumb"><a href="#/">Leagues</a> / <a href="#/l/${id}">${esc(l.name)}</a> / Draft a team</div>
+      <h1>Draft a Team</h1>
+      <div class="sub">${esc(race.name)} — Tier ${esc(race.tier || '?')} • official BB2025 rules, validated server-side</div>
+      <div class="two-col">
+        <div>
+          <div class="card">
+            <div class="form-grid">
+              <label>Team name <input id="d-name" maxlength="60" value="${esc(state.teamName)}"></label>
+              <label>Race <select id="d-race">${races.map(([k, r]) => `<option value="${k}" ${k === state.race ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select></label>
+            </div>
+            ${race.specialRules.length ? `<p class="muted" style="margin-top:8px">Special rules: ${race.specialRules.map(esc).join(', ')}</p>` : ''}
+          </div>
+          <h2>Positionals</h2>
+          <div class="card" style="overflow-x:auto">
+            <table>
+              <tr><th></th><th>Position</th><th class="num">MA</th><th class="num">ST</th><th class="num">AG</th><th class="num">PA</th><th class="num">AV</th><th>Skills</th><th>Pri</th><th>Sec</th><th class="num">Cost</th><th class="num">Max</th></tr>
+              ${race.positions.map(p => {
+                const n = state.counts[p.name] || 0;
+                return `<tr>
+                  <td class="counter"><button data-pos="${esc(p.name)}" data-d="-1" class="cbtn">−</button><b>${n}</b><button data-pos="${esc(p.name)}" data-d="1" class="cbtn">+</button></td>
+                  <td>${esc(p.name)}</td>
+                  <td class="num">${p.ma}</td><td class="num">${p.st}</td><td class="num">${p.ag}+</td><td class="num">${p.pa ? p.pa + '+' : '-'}</td><td class="num">${p.av}+</td>
+                  <td class="muted" style="font-size:13px">${p.skills.map(esc).join(', ') || '—'}</td>
+                  <td class="muted">${p.primary.join('')}</td><td class="muted">${p.secondary.join('')}</td>
+                  <td class="num">${gold(p.cost)}</td><td class="num">${p.max}</td>
+                </tr>`;
+              }).join('')}
+            </table>
+          </div>
+          <h2>Names & Numbers <span class="muted" style="font-size:13px;text-transform:none">(optional — blank = position name)</span></h2>
+          <div class="card" id="d-players">
+            ${draftPlayers(race).map((p, i) => `
+              <div class="scorer-row" style="grid-template-columns:60px 2fr 1fr">
+                <input value="${p.num}" data-i="${i}" class="d-num" type="number" min="1" max="16">
+                <input placeholder="${esc(p.position)}" value="${esc(state.names[i] || '')}" data-i="${i}" class="d-pname" maxlength="24">
+                <span class="muted" style="line-height:34px">${esc(p.position)}</span>
+              </div>`).join('') || '<p class="muted">Add players above.</p>'}
+          </div>
+        </div>
+        <div>
+          <h2>Sideline & Extras</h2>
+          <div class="card">
+            <div class="stafrow">Re-rolls (${gold(race.rerollCost)}) <span class="counter"><button class="cbtn" data-k="rerolls" data-d="-1">−</button><b>${state.rerolls}</b><button class="cbtn" data-k="rerolls" data-d="1">+</button></span></div>
+            <div class="stafrow">Assistant coaches (10k) <span class="counter"><button class="cbtn" data-k="coaches" data-d="-1">−</button><b>${state.coaches}</b><button class="cbtn" data-k="coaches" data-d="1">+</button></span></div>
+            <div class="stafrow">Cheerleaders (10k) <span class="counter"><button class="cbtn" data-k="cheerleaders" data-d="-1">−</button><b>${state.cheerleaders}</b><button class="cbtn" data-k="cheerleaders" data-d="1">+</button></span></div>
+            <div class="stafrow">Dedicated fans (5k, max 3) <span class="counter"><button class="cbtn" data-k="fans" data-d="-1">−</button><b>${state.fans}</b><button class="cbtn" data-k="fans" data-d="1">+</button></span></div>
+            ${race.apothecary ? `<div class="stafrow">Apothecary (${gold(race.staff.apothecary || 50000)}) <label style="flex-direction:row;align-items:center"><input type="checkbox" id="d-apo" ${state.apothecary ? 'checked' : ''}></label></div>` : '<div class="stafrow muted">No apothecary for this team</div>'}
+          </div>
+          <h2>Budget</h2>
+          <div class="card">
+            <div class="stafrow">Players <b>${playerCount} <span class="muted">(${R.minPlayers}–${R.maxPlayers})</span></b></div>
+            <div class="stafrow">Spent <b>${gold(cost)}</b></div>
+            <div class="stafrow">Treasury left <b class="${left < 0 ? 'loss' : 'win'}">${gold(left)}</b></div>
+            <button class="btn big" id="d-submit" ${ok ? '' : 'disabled style="opacity:.5"'}>Draft Dis Team</button>
+            <div class="error" id="d-err">${playerCount < R.minPlayers ? `Need at least ${R.minPlayers} players.` : ''}</div>
+          </div>
+        </div>
+      </div>`;
+    bindDraft(race);
+  }
+
+  function draftPlayers(race) {
+    const out = [];
+    let num = 1;
+    for (const p of race.positions) {
+      for (let i = 0; i < (state.counts[p.name] || 0); i++) out.push({ position: p.name, num: num++ });
+    }
+    return out;
+  }
+
+  function bindDraft(race) {
+    $app.querySelectorAll('.cbtn').forEach(b => b.onclick = () => {
+      const d = +b.dataset.d;
+      if (b.dataset.pos) {
+        const pos = race.positions.find(p => p.name === b.dataset.pos);
+        const cur = state.counts[pos.name] || 0;
+        state.counts[pos.name] = Math.max(0, Math.min(pos.max, cur + d));
+      } else {
+        const limits = { rerolls: 8, coaches: 6, cheerleaders: 12, fans: 3 };
+        const min = b.dataset.k === 'fans' ? 1 : 0;
+        state[b.dataset.k] = Math.max(min, Math.min(limits[b.dataset.k], state[b.dataset.k] + d));
+      }
+      state.teamName = $app.querySelector('#d-name').value;
+      render();
+    });
+    $app.querySelector('#d-race').onchange = (e) => { state.race = e.target.value; state.counts = {}; state.names = {}; render(); };
+    $app.querySelectorAll('.d-pname').forEach(inp => inp.oninput = () => { state.names[+inp.dataset.i] = inp.value; });
+    const apo = $app.querySelector('#d-apo');
+    if (apo) apo.onchange = () => { state.apothecary = apo.checked; state.teamName = $app.querySelector('#d-name').value; render(); };
+    $app.querySelector('#d-submit').onclick = async () => {
+      state.teamName = $app.querySelector('#d-name').value;
+      const nums = [...$app.querySelectorAll('.d-num')].map(i => +i.value);
+      const players = draftPlayers(race).map((p, i) => ({
+        position: p.position, num: nums[i] || p.num, name: state.names[i] || '',
+      }));
+      try {
+        const t = await api(`/league/${id}/team`, {
+          method: 'POST',
+          body: JSON.stringify({
+            name: state.teamName, race: state.race,
+            draft: { players, rerolls: state.rerolls, apothecary: state.apothecary, coaches: state.coaches, cheerleaders: state.cheerleaders, fans: state.fans },
+          }),
+        });
+        location.hash = `#/l/${id}/t/${t.id}`;
+      } catch (e) { $app.querySelector('#d-err').textContent = e.message; }
+    };
+  }
+
+  render();
 }
 
 async function viewTeam(id, tid) {
   const l = await api('/league/' + id);
   const t = l.teams[tid];
   if (!t) { $app.innerHTML = '<p class="muted">No such team.</p>'; return; }
+  if (t.bb) return viewBBTeam(l, tid);
   const row = l.standings.find(r => r.teamId === tid) || {};
   const matches = l.matches.filter(m => m.home.teamId === tid || m.away.teamId === tid);
   const players = l.playerStats.filter(p => p.teamId === tid);
@@ -306,6 +456,195 @@ async function viewTeam(id, tid) {
   }
 }
 
+async function viewBBTeam(l, tid) {
+  const t = l.teams[tid];
+  const [sheet, cat] = await Promise.all([api(`/league/${l.id}/team/${tid}/bb`), catalog()]);
+  const canEdit = me && (me.toLowerCase() === (t.coach || '').toLowerCase());
+  const row = l.standings.find(r => r.teamId === tid) || {};
+  const matches = l.matches.filter(m => m.home.teamId === tid || m.away.teamId === tid);
+  const race = cat.teams[sheet.race];
+  const R = cat.rules;
+
+  const statCell = (p, k) => {
+    const pos = race.positions.find(x => x.name === p.position);
+    const base = pos ? pos[k] : null;
+    const v = p.stats[k];
+    const suffix = (k === 'ag' || k === 'pa' || k === 'av') ? '+' : '';
+    if (v == null || base == null) return '-';
+    const better = (k === 'ag' || k === 'pa') ? v < base : v > base;
+    const worse = (k === 'ag' || k === 'pa') ? v > base : v < base;
+    return `<span class="${better ? 'win' : worse ? 'loss' : ''}">${v}${suffix}</span>`;
+  };
+  const badges = (p) =>
+    (p.injuries.dead ? '<span class="badge dead">DEAD</span>' : '')
+    + (p.retired ? '<span class="badge">RETIRED</span>' : '')
+    + (p.injuries.mng ? '<span class="badge mng">MNG</span>' : '')
+    + (p.injuries.ng ? `<span class="badge ng">NG×${p.injuries.ng}</span>` : '');
+
+  $app.innerHTML = `
+    <div class="crumb"><a href="#/">Leagues</a> / <a href="#/l/${l.id}">${esc(l.name)}</a> / ${esc(t.name)}</div>
+    <h1>${esc(t.name)}</h1>
+    <div class="sub">${esc(sheet.raceName)} • Coach ${esc(t.coach)} • ${row.w || 0}W ${row.d || 0}D ${row.l || 0}L
+      • TV ${gold(sheet.tv)} • CTV ${gold(sheet.ctv)}</div>
+
+    <h2>Roster</h2>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <tr><th class="num">#</th><th>Player</th><th>Position</th>
+          <th class="num">MA</th><th class="num">ST</th><th class="num">AG</th><th class="num">PA</th><th class="num">AV</th>
+          <th>Skills</th><th>Level</th><th class="num">SPP</th><th class="num">Value</th>${canEdit ? '<th></th>' : ''}</tr>
+        ${sheet.players.sort((a, b) => a.num - b.num).map(p => `
+          <tr class="${p.injuries.dead || p.retired ? 'gone' : ''}">
+            <td class="num">${p.num}</td>
+            <td>${esc(p.name)} ${badges(p)}</td>
+            <td class="muted">${esc(p.position)}</td>
+            <td class="num">${statCell(p, 'ma')}</td><td class="num">${statCell(p, 'st')}</td>
+            <td class="num">${statCell(p, 'ag')}</td><td class="num">${statCell(p, 'pa')}</td><td class="num">${statCell(p, 'av')}</td>
+            <td style="font-size:13px">${p.skills.map(s => `<span class="${p.advancements.some(a => a.skill === s) ? 'win' : 'muted'}">${esc(s)}</span>`).join(', ') || '—'}</td>
+            <td class="muted" style="font-size:13px">${esc(p.level)}</td>
+            <td class="num" title="earned ${p.sppEarned}, spent ${p.sppSpent}"><b>${p.sppAvailable}</b><span class="muted">/${p.sppEarned}</span></td>
+            <td class="num">${gold(p.value)}</td>
+            ${canEdit ? `<td class="rowbtns">
+              ${!p.injuries.dead && !p.retired && p.nextCosts ? `<button class="btn small" data-adv="${p.id}">Advance</button>` : ''}
+              <button class="btn small ghost" data-inj="${p.id}">…</button>
+            </td>` : ''}
+          </tr>
+          <tr class="detail hidden" id="panel-${p.id}"><td colspan="${canEdit ? 13 : 12}"></td></tr>
+        `).join('')}
+      </table>
+      <p class="muted" style="margin-top:6px">SPP shown as available/earned — earned comes from named scorers an' MVPs in match reports. Green stats/skills = advancements.</p>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h2>Matches</h2>
+        <div class="card" style="overflow-x:auto">
+          <table>${[...matches].reverse().map(m => matchRow(l, m, tid)).join('') || '<tr><td class="muted">No matches yet.</td></tr>'}</table>
+        </div>
+      </div>
+      <div>
+        <h2>Club</h2>
+        <div class="card">
+          <div class="stafrow">Treasury <b>${gold(sheet.treasury)}</b></div>
+          <div class="stafrow">Re-rolls <b>${sheet.rerolls}</b>${canEdit ? ` <button class="btn small ghost" data-buy="reroll">buy ${gold(sheet.rerollCost * 2)}</button>` : ''}</div>
+          <div class="stafrow">Apothecary <b>${sheet.apothecary ? 'yes' : 'no'}</b>${canEdit && !sheet.apothecary && race.apothecary ? ` <button class="btn small ghost" data-buy="apothecary">hire ${gold(race.staff.apothecary || 50000)}</button>` : ''}</div>
+          <div class="stafrow">Coaches <b>${sheet.coaches}</b>${canEdit ? ` <button class="btn small ghost" data-buy="coach">+</button>` : ''}</div>
+          <div class="stafrow">Cheerleaders <b>${sheet.cheerleaders}</b>${canEdit ? ` <button class="btn small ghost" data-buy="cheerleader">+</button>` : ''}</div>
+          <div class="stafrow">Dedicated fans <b>${sheet.fans}</b>${canEdit ? ` <button class="btn small ghost" data-fans="1">+</button><button class="btn small ghost" data-fans="-1">−</button>` : ''}</div>
+          ${canEdit ? `
+          <div class="stafrow" style="margin-top:10px">
+            <input id="tr-delta" type="number" step="10000" placeholder="±gold (winnings...)" style="width:150px">
+            <input id="tr-note" placeholder="note" maxlength="60" style="flex:1">
+            <button class="btn small" id="tr-apply">apply</button>
+          </div>
+          <div class="stafrow">
+            <select id="h-pos">${race.positions.map(p => `<option value="${esc(p.name)}">${esc(p.name)} (${gold(p.cost)})</option>`).join('')}</select>
+            <input id="h-name" placeholder="name" maxlength="24" style="width:110px">
+            <input id="h-num" type="number" min="1" max="16" placeholder="#" style="width:52px">
+            <button class="btn small" id="h-hire">hire</button>
+          </div>` : ''}
+          <div class="error" id="bb-err"></div>
+        </div>
+        <h2>Team Log</h2>
+        <div class="card" style="max-height:260px;overflow-y:auto;font-size:14px">
+          ${sheet.log.slice().reverse().map(e => `<div class="muted">${esc(e.date)} — ${esc(e.text)}</div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  if (!canEdit) return;
+  const err = (m) => { $app.querySelector('#bb-err').textContent = m; };
+  const act = async (action, body) => {
+    try { await api(`/league/${l.id}/team/${tid}/bb/${action}`, { method: 'POST', body: JSON.stringify(body) }); route(); }
+    catch (e) { err(e.message); }
+  };
+
+  // advancement panel
+  $app.querySelectorAll('[data-adv]').forEach(b => b.onclick = () => {
+    const p = sheet.players.find(x => x.id === b.dataset.adv);
+    const pos = race.positions.find(x => x.name === p.position);
+    const panel = $app.querySelector(`#panel-${p.id}`);
+    const catsFor = (letters) => letters.map(ltr => R.categories[ltr]).filter(Boolean);
+    const skillOpts = (cats) => cats.flatMap(c =>
+      cat.skills.byCategory[c].filter(s => !p.skills.includes(s))
+        .map(s => `<option value="${esc(s)}">${esc(s)}${cat.skills.elite.includes(s) ? ' ★elite' : ''} (${c})</option>`)).join('');
+    panel.classList.remove('hidden');
+    panel.firstElementChild.innerHTML = `
+      <div class="advpanel">
+        <b>${esc(p.name)}</b> — ${p.sppAvailable} SPP available •
+        <select id="a-mode">
+          <option value="randomPrimary">Random primary (rolled at da table) — ${p.nextCosts.randomPrimary} SPP</option>
+          <option value="choosePrimary">Choose primary — ${p.nextCosts.choosePrimary} SPP</option>
+          <option value="chooseSecondary">Choose secondary — ${p.nextCosts.chooseSecondary} SPP</option>
+          <option value="characteristic">Characteristic — ${p.nextCosts.characteristic} SPP</option>
+        </select>
+        <span id="a-pick"></span>
+        <button class="btn small" id="a-go">Spend SPP</button>
+        <button class="btn small ghost" id="a-x">✕</button>
+      </div>`;
+    const pick = panel.querySelector('#a-pick');
+    const renderPick = () => {
+      const mode = panel.querySelector('#a-mode').value;
+      if (mode === 'characteristic') {
+        pick.innerHTML = `<select id="a-stat"><option value="ma">+1 MA</option><option value="st">+1 ST</option><option value="ag">+1 AG</option><option value="pa">+1 PA</option><option value="av">+1 AV</option></select>
+          <span class="muted">or skill instead:</span> <select id="a-skill"><option value="">(take da stat)</option>${skillOpts(catsFor([...pos.primary, ...pos.secondary]))}</select>`;
+      } else {
+        const cats = mode === 'chooseSecondary' ? catsFor(pos.secondary) : catsFor(pos.primary);
+        pick.innerHTML = `<select id="a-skill">${skillOpts(cats)}</select>`;
+      }
+    };
+    renderPick();
+    panel.querySelector('#a-mode').onchange = renderPick;
+    panel.querySelector('#a-x').onclick = () => panel.classList.add('hidden');
+    panel.querySelector('#a-go').onclick = () => {
+      const mode = panel.querySelector('#a-mode').value;
+      const skillEl = panel.querySelector('#a-skill');
+      const statEl = panel.querySelector('#a-stat');
+      const body = { playerId: p.id, mode };
+      if (mode === 'characteristic' && statEl && !(skillEl && skillEl.value)) body.stat = statEl.value;
+      else body.skill = skillEl.value;
+      act('advance', body);
+    };
+  });
+
+  // injury / admin panel
+  $app.querySelectorAll('[data-inj]').forEach(b => b.onclick = () => {
+    const p = sheet.players.find(x => x.id === b.dataset.inj);
+    const panel = $app.querySelector(`#panel-${p.id}`);
+    panel.classList.remove('hidden');
+    panel.firstElementChild.innerHTML = `
+      <div class="advpanel">
+        <b>${esc(p.name)}</b>:
+        <button class="btn small ghost" data-k="mng">${p.injuries.mng ? 'clear MNG' : 'miss next game'}</button>
+        <button class="btn small ghost" data-k="ng">+niggling</button>
+        <select id="i-stat"><option value="">stat injury…</option><option value="ma">-1 MA</option><option value="st">-1 ST</option><option value="ag">-1 AG</option><option value="pa">-1 PA</option><option value="av">-1 AV</option></select>
+        <span style="flex:1"></span>
+        <input id="i-spp" type="number" min="-20" max="20" placeholder="±SPP" style="width:70px" title="manual SPP correction">
+        <button class="btn small ghost" id="i-sppgo">adj</button>
+        <button class="btn small ghost" data-k="retire">${p.retired ? 'unretire' : 'retire'}</button>
+        <button class="btn small ghost" data-k="dead">${p.injuries.dead ? 'not dead' : '💀 dead'}</button>
+        <button class="btn small ghost" id="i-fire">fire</button>
+        <button class="btn small ghost" id="i-x">✕</button>
+      </div>`;
+    panel.querySelectorAll('[data-k]').forEach(x => x.onclick = () => act('injury', { playerId: p.id, kind: x.dataset.k }));
+    panel.querySelector('#i-stat').onchange = (e) => e.target.value && act('injury', { playerId: p.id, kind: 'stat', stat: e.target.value });
+    panel.querySelector('#i-sppgo').onclick = () => act('spp', { playerId: p.id, delta: +panel.querySelector('#i-spp').value });
+    panel.querySelector('#i-fire').onclick = () => confirm(`Fire ${p.name}? No refunds.`) && act('fire', { playerId: p.id });
+    panel.querySelector('#i-x').onclick = () => panel.classList.add('hidden');
+  });
+
+  $app.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => act('buy', { item: b.dataset.buy }));
+  $app.querySelectorAll('[data-fans]').forEach(b => b.onclick = () => act('fans', { delta: +b.dataset.fans }));
+  const trBtn = $app.querySelector('#tr-apply');
+  if (trBtn) trBtn.onclick = () => act('treasury', { delta: +$app.querySelector('#tr-delta').value, note: $app.querySelector('#tr-note').value });
+  const hireBtn = $app.querySelector('#h-hire');
+  if (hireBtn) hireBtn.onclick = () => act('hire', {
+    position: $app.querySelector('#h-pos').value,
+    name: $app.querySelector('#h-name').value,
+    num: +$app.querySelector('#h-num').value,
+  });
+}
+
 async function viewPlayer(id, tid, name) {
   const l = await api('/league/' + id);
   const t = l.teams[tid];
@@ -345,7 +684,8 @@ async function route() {
   if (!me) { loginWall(); return; }
   const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
   try {
-    if (parts[0] === 'l' && parts[1] && parts[2] === 't' && parts[3]) await viewTeam(parts[1], parts[3]);
+    if (parts[0] === 'l' && parts[1] && parts[2] === 'draft') await viewDraft(parts[1]);
+    else if (parts[0] === 'l' && parts[1] && parts[2] === 't' && parts[3]) await viewTeam(parts[1], parts[3]);
     else if (parts[0] === 'l' && parts[1] && parts[2] === 'p' && parts[3] && parts[4]) await viewPlayer(parts[1], parts[3], decodeURIComponent(parts[4]));
     else if (parts[0] === 'l' && parts[1]) await viewLeague(parts[1]);
     else await viewHome();

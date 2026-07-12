@@ -223,16 +223,184 @@ app.post('/api/league', leagueWriter, (req, res) => {
   res.json(league.summary(l));
 });
 
+// Blood Bowl list builder engine + catalog (generated from the BB2025 rules)
+const bb = require('./bb');
+
+app.get('/api/bb/catalog', memberReader, (req, res) => res.json(bb.CATALOG));
+
 app.post('/api/league/:id/team', leagueWriter, (req, res) => {
   const l = db.leagues()[req.params.id];
   if (!l) return res.status(404).json({ error: 'no such league' });
-  const { name, coach, race, rosterText } = req.body || {};
+  const { name, coach, race, rosterText, draft } = req.body || {};
   if (!name || String(name).trim().length < 2) return res.status(400).json({ error: 'team needs a name' });
   if (Object.keys(l.teams).length >= 30) return res.status(400).json({ error: 'league is full' });
+
+  // Blood Bowl leagues use the list builder: a validated draft, not a paste
+  if (l.game === 'bloodbowl' && draft) {
+    const v = bb.validateDraft(String(race || ''), draft);
+    if (v.error) return res.status(400).json({ error: v.error });
+    const raceName = bb.CATALOG.teams[race].name;
+    const t = league.makeTeam({ name: String(name).trim(), coach: coach || req.reporter, race: raceName, rosterText: '' });
+    t.bbRace = race; // catalog key ('orc'); t.race keeps the display name for standings
+    t.bb = v.bb;
+    t.roster = v.bb.players.map(p => ({ num: p.num, name: p.name, position: p.position, raw: '' }));
+    l.teams[t.id] = t;
+    db.saveLeagues();
+    return res.json(t);
+  }
+
   const t = league.makeTeam({ name: String(name).trim(), coach: coach || req.reporter, race, rosterText });
   l.teams[t.id] = t;
   db.saveLeagues();
   res.json(t);
+});
+
+// ---- Blood Bowl team management (advance / injuries / hire / fire / buy) ----
+function bbTeam(req, res) {
+  const l = db.leagues()[req.params.id];
+  const t = l && l.teams[req.params.tid];
+  if (!t || !t.bb) { res.status(404).json({ error: 'no such drafted team' }); return null; }
+  if (t.coach.toLowerCase() !== req.reporter.toLowerCase() && !isAdmin(req.reporter)) {
+    res.status(403).json({ error: "not your team (admins can manage any)" }); return null;
+  }
+  return { l, t };
+}
+
+function sppEarnedLookup(l, teamId) {
+  const stats = league.full(l).playerStats.filter(p => p.teamId === teamId);
+  return (name) => {
+    const row = stats.find(p => p.player.toLowerCase() === String(name).toLowerCase());
+    return row ? row.spp : 0;
+  };
+}
+
+app.get('/api/league/:id/team/:tid/bb', memberReader, (req, res) => {
+  const l = db.leagues()[req.params.id];
+  const t = l && l.teams[req.params.tid];
+  if (!t || !t.bb) return res.status(404).json({ error: 'no such drafted team' });
+  res.json(bb.serializeTeam(t, sppEarnedLookup(l, t.id)));
+});
+
+app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
+  const ctx = bbTeam(req, res);
+  if (!ctx) return;
+  const { l, t } = ctx;
+  const body = req.body || {};
+  const player = body.playerId && t.bb.players.find(p => p.id === body.playerId);
+  const race = bb.CATALOG.teams[t.bbRace];
+  const log = (text) => t.bb.log.push({ date: new Date().toISOString().slice(0, 10), text });
+  const today = new Date().toISOString().slice(0, 10);
+
+  switch (req.params.action) {
+    case 'advance': {
+      if (!player) return res.status(404).json({ error: 'no such player' });
+      const earned = sppEarnedLookup(l, t.id)(player.name) + (player.sppExtra || 0);
+      const r = bb.applyAdvancement(t, player, body, Math.max(0, earned - player.sppSpent));
+      if (r.error) return res.status(400).json({ error: r.error });
+      break;
+    }
+    case 'injury': {
+      if (!player) return res.status(404).json({ error: 'no such player' });
+      const kind = String(body.kind || '');
+      if (kind === 'mng') player.injuries.mng = !player.injuries.mng;
+      else if (kind === 'ng') player.injuries.ng = Math.max(0, (player.injuries.ng || 0) + (body.remove ? -1 : 1));
+      else if (kind === 'dead') player.injuries.dead = !player.injuries.dead;
+      else if (kind === 'retire') player.retired = !player.retired;
+      else if (kind === 'stat') {
+        const stat = String(body.stat || '').toLowerCase();
+        if (!['ma', 'st', 'ag', 'pa', 'av'].includes(stat)) return res.status(400).json({ error: 'bad stat' });
+        player.injuries.stats[stat] = Math.max(0, (player.injuries.stats[stat] || 0) + (body.remove ? -1 : 1));
+      } else return res.status(400).json({ error: 'unknown injury kind' });
+      log(`${player.name}: ${body.remove ? 'removed ' : ''}${kind}${body.stat ? ' -' + body.stat.toUpperCase() : ''}`);
+      break;
+    }
+    case 'hire': {
+      const pos = bb.positionOf(t.bbRace, String(body.position || ''));
+      if (!pos) return res.status(400).json({ error: 'unknown position' });
+      const alive = t.bb.players.filter(p => !p.injuries.dead && !p.retired);
+      if (alive.length >= bb.RULES.maxPlayers) return res.status(400).json({ error: 'roster is full (16)' });
+      if (alive.filter(p => p.position === pos.name).length >= pos.max) {
+        return res.status(400).json({ error: `too many ${pos.name} (max ${pos.max})` });
+      }
+      if (t.bb.treasury < pos.cost) return res.status(400).json({ error: `not enough gold (${pos.cost / 1000}k needed)` });
+      const num = parseInt(body.num, 10);
+      if (!(num >= 1 && num <= 16) || alive.some(p => p.num === num)) {
+        return res.status(400).json({ error: 'pick a free number 1-16' });
+      }
+      t.bb.treasury -= pos.cost;
+      t.bb.players.push({
+        id: bb.id(), num, name: bb.clampName(body.name) || pos.name, position: pos.name,
+        advancements: [], sppSpent: 0, sppExtra: 0,
+        injuries: { ng: 0, mng: false, dead: false, stats: {} }, retired: false,
+      });
+      log(`Hired ${body.name || pos.name} (${pos.name}, ${pos.cost / 1000}k)`);
+      break;
+    }
+    case 'fire': {
+      if (!player) return res.status(404).json({ error: 'no such player' });
+      t.bb.players = t.bb.players.filter(p => p.id !== player.id);
+      log(`Fired ${player.name} (${player.position})`);
+      break;
+    }
+    case 'buy': {
+      const item = String(body.item || '');
+      if (item === 'reroll') {
+        if (t.bb.rerolls >= bb.RULES.maxRerolls) return res.status(400).json({ error: 'max 8 re-rolls' });
+        const cost = race.rerollCost * (bb.RULES.rerollDoubleAfterDraft ? 2 : 1);
+        if (t.bb.treasury < cost) return res.status(400).json({ error: `not enough gold (${cost / 1000}k)` });
+        t.bb.treasury -= cost; t.bb.rerolls++;
+        log(`Bought re-roll (${cost / 1000}k, double price after drafting)`);
+      } else if (item === 'apothecary') {
+        if (!race.apothecary) return res.status(400).json({ error: 'this team cannot hire an apothecary' });
+        if (t.bb.apothecary) return res.status(400).json({ error: 'already have one' });
+        const cost = race.staff.apothecary || 50000;
+        if (t.bb.treasury < cost) return res.status(400).json({ error: 'not enough gold' });
+        t.bb.treasury -= cost; t.bb.apothecary = true;
+        log(`Hired apothecary (${cost / 1000}k)`);
+      } else if (item === 'coach' || item === 'cheerleader') {
+        const max = item === 'coach' ? bb.RULES.staff.coach.max : bb.RULES.staff.cheerleader.max;
+        const key = item === 'coach' ? 'coaches' : 'cheerleaders';
+        if (t.bb[key] >= max) return res.status(400).json({ error: `max ${max}` });
+        const cost = race.staff[item] || 10000;
+        if (t.bb.treasury < cost) return res.status(400).json({ error: 'not enough gold' });
+        t.bb.treasury -= cost; t.bb[key]++;
+        log(`Hired ${item} (${cost / 1000}k)`);
+      } else return res.status(400).json({ error: 'unknown item' });
+      break;
+    }
+    case 'treasury': {
+      const delta = Math.round(parseInt(body.delta, 10) || 0);
+      if (!delta || Math.abs(delta) > 500000) return res.status(400).json({ error: 'delta must be ±1-500k gold' });
+      if (t.bb.treasury + delta < 0) return res.status(400).json({ error: 'treasury cannot go negative' });
+      t.bb.treasury += delta;
+      log(`Treasury ${delta > 0 ? '+' : ''}${delta / 1000}k${body.note ? ' — ' + bb.clampName(body.note, 80) : ''}`);
+      break;
+    }
+    case 'fans': {
+      const delta = body.delta > 0 ? 1 : -1;
+      const next = t.bb.fans + delta;
+      if (next < 1 || next > bb.RULES.fans.leagueMax) return res.status(400).json({ error: 'fans stay between 1 and 7' });
+      t.bb.fans = next;
+      log(`Dedicated fans ${delta > 0 ? '+' : '-'}1 (now ${next})`);
+      break;
+    }
+    case 'spp': {
+      if (!player) return res.status(404).json({ error: 'no such player' });
+      const delta = Math.round(parseInt(body.delta, 10) || 0);
+      if (!delta || Math.abs(delta) > 20) return res.status(400).json({ error: 'delta must be ±1-20' });
+      player.sppExtra = (player.sppExtra || 0) + delta;
+      log(`${player.name}: manual SPP ${delta > 0 ? '+' : ''}${delta}`);
+      break;
+    }
+    default:
+      return res.status(400).json({ error: 'unknown action' });
+  }
+
+  // keep the legacy roster view in sync for the standings drill-down pages
+  t.roster = t.bb.players.filter(p => !p.injuries.dead && !p.retired)
+    .map(p => ({ num: p.num, name: p.name, position: p.position, raw: '' }));
+  db.saveLeagues();
+  res.json(bb.serializeTeam(t, sppEarnedLookup(l, t.id)));
 });
 
 app.put('/api/league/:id/team/:tid', leagueWriter, (req, res) => {

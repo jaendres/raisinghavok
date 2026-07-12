@@ -78,6 +78,28 @@ textarea { min-height: 120px; resize: vertical; }
 .muted { color: var(--dust); font-size: 14px; }
 .hidden { display: none; }
 
+/* Blood Bowl list builder / roster sheet */
+.counter { display: inline-flex; align-items: center; gap: 8px; }
+.cbtn {
+  width: 26px; height: 26px; background: var(--panel2); color: var(--bone);
+  border: 1px solid #3a2f26; cursor: pointer; font-size: 15px; line-height: 1;
+}
+.cbtn:hover { border-color: var(--rust); color: var(--rust); }
+.stafrow { display: flex; align-items: center; gap: 8px; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #2b221b; font-size: 15px; }
+.badge {
+  display: inline-block; font-size: 10.5px; font-family: 'Black Ops One';
+  padding: 1px 6px; margin-left: 5px; background: var(--panel2);
+  border: 1px solid #4a3d31; color: var(--dust); vertical-align: 1px;
+}
+.badge.dead { background: #3a1210; border-color: #a3231f; color: #ff7b6b; }
+.badge.mng { border-color: #b8860b; color: #ffd23f; }
+.badge.ng { border-color: #7a5c2e; color: #d8b46a; }
+tr.gone td { opacity: .45; text-decoration: line-through; }
+tr.detail td { background: #100d0a; padding: 10px 12px; }
+tr.detail.hidden { display: none; }
+.advpanel { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rowbtns { white-space: nowrap; }
+
 .match-sides { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .scorer-row { display: grid; grid-template-columns: 2fr 1fr 60px 26px; gap: 6px; margin-bottom: 6px; }
 .scorer-row .rm { cursor: pointer; color: #ff7b6b; text-align: center; line-height: 34px; }
