@@ -171,7 +171,7 @@ async function viewLeague(id) {
           <div class="form-grid" style="margin-top:8px">
             ${cols.map(c => `<label>${esc(c.name)} <input id="${side}-${c.id}" type="number" min="0" max="99" value="0"></label>`).join('')}
           </div>
-          <label style="margin-top:8px">MVP (player name) <input id="${side}-mvp" maxlength="40"></label>
+          <label style="margin-top:8px">MVP <span id="${side}-mvp-slot"></span></label>
           <div style="margin-top:8px">
             <div class="muted" style="margin-bottom:4px">Scorers (for player stats — optional)</div>
             <div id="${side}-scorers"></div>
@@ -207,11 +207,31 @@ async function viewLeague(id) {
 
   if (!me) return;
 
-  // scorer row helpers
+  // scorer/MVP pickers — dropdown of the selected team's roster, free text
+  // only when the team has no roster on file
+  const rosterNames = (tid) => {
+    const t = l.teams[tid];
+    if (!t) return [];
+    if (t.bb) return t.bb.players.map(p => ({ v: p.name, label: p.nickname ? `${p.name} "${p.nickname}"` : p.name }));
+    return (t.roster || []).filter(p => p.name).map(p => ({ v: p.name, label: p.name }));
+  };
+  const playerPicker = (attr, tid, blankLabel) => {
+    const names = rosterNames(tid);
+    if (!names.length) return `<input placeholder="player name" maxlength="40" ${attr}>`;
+    return `<select ${attr}><option value="">${esc(blankLabel)}</option>${names.map(n => `<option value="${esc(n.v)}">${esc(n.label)}</option>`).join('')}</select>`;
+  };
+  const syncSide = (side) => {
+    const tid = document.getElementById(side + '-team').value;
+    document.getElementById(side + '-mvp-slot').innerHTML = playerPicker(`id="${side}-mvp" maxlength="40"`, tid, '— no MVP —');
+    document.querySelectorAll(`#${side}-scorers .sc-player`).forEach(el => {
+      el.outerHTML = playerPicker('class="sc-player" maxlength="40"', tid, 'pick a player…');
+    });
+  };
   const addScorer = (side) => {
+    const tid = document.getElementById(side + '-team').value;
     const div = document.createElement('div');
     div.className = 'scorer-row';
-    div.innerHTML = `<input placeholder="player name" maxlength="40" class="sc-player">
+    div.innerHTML = `${playerPicker('class="sc-player" maxlength="40"', tid, 'pick a player…')}
       <select class="sc-stat">${cols.map(c => `<option value="${c.id}">${esc(c.name)}</option>`).join('')}</select>
       <input type="number" class="sc-count" min="1" max="20" value="1">
       <span class="rm">✕</span>`;
@@ -219,6 +239,10 @@ async function viewLeague(id) {
     document.getElementById(side + '-scorers').appendChild(div);
   };
   document.querySelectorAll('[data-add-scorer]').forEach(b => b.onclick = () => addScorer(b.dataset.addScorer));
+  for (const side of ['home', 'away']) {
+    document.getElementById(side + '-team').onchange = () => syncSide(side);
+    syncSide(side);
+  }
 
   document.getElementById('m-save').onclick = async () => {
     const side = (s) => ({
