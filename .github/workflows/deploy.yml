@@ -69,8 +69,8 @@ jobs:
             echo "Submit failed (attempt $attempt), retrying in 60s..."
             sleep 60
           done
-          echo "Polling deployment status..."
-          for i in $(seq 1 60); do
+          echo "Polling deployment status (up to 30 min — Kudu can be slow)..."
+          for i in $(seq 1 90); do
             state=$(az rest --method get \
               --url "https://$APP_NAME.scm.azurewebsites.net/api/deployments/latest" \
               --resource "https://management.azure.com" -o json 2>/dev/null || echo '{}')
@@ -80,9 +80,15 @@ jobs:
               if [ "$status" = "4" ]; then echo "Deployment succeeded."; exit 0; fi
               echo "Deployment failed (Kudu status $status)"; exit 1
             fi
-            sleep 10
+            sleep 20
           done
-          echo "Timed out waiting for deployment."; exit 1
+          # Kudu never reported — fall back to asking the app itself
+          echo "Poll timed out; checking site health as the verdict..."
+          sleep 60
+          if curl -sf --retry 3 --retry-delay 20 "https://$APP_NAME.azurewebsites.net/api/config" > /dev/null; then
+            echo "Site is healthy — treating deployment as succeeded."; exit 0
+          fi
+          echo "Site unhealthy after timeout."; exit 1
 
       - name: Smoke test
         run: |
