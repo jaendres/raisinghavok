@@ -95,6 +95,7 @@ textarea { min-height: 120px; resize: vertical; }
 .badge.mng { border-color: #b8860b; color: #ffd23f; }
 .badge.ng { border-color: #7a5c2e; color: #d8b46a; }
 tr.gone td { opacity: .45; text-decoration: line-through; }
+.nick { color: var(--rust); font-style: italic; font-size: 14px; }
 tr.detail td { background: #100d0a; padding: 10px 12px; }
 tr.detail.hidden { display: none; }
 .advpanel { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }

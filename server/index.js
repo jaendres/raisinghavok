@@ -268,9 +268,10 @@ function bbTeam(req, res) {
 
 function sppEarnedLookup(l, teamId) {
   const stats = league.full(l).playerStats.filter(p => p.teamId === teamId);
-  return (name) => {
-    const row = stats.find(p => p.player.toLowerCase() === String(name).toLowerCase());
-    return row ? row.spp : 0;
+  return (player) => {
+    const names = [player.name, player.nickname].filter(Boolean).map(n => n.toLowerCase());
+    return stats.filter(p => names.includes(p.player.toLowerCase()))
+      .reduce((s, p) => s + p.spp, 0);
   };
 }
 
@@ -304,7 +305,10 @@ app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
       const kind = String(body.kind || '');
       if (kind === 'mng') player.injuries.mng = !player.injuries.mng;
       else if (kind === 'ng') player.injuries.ng = Math.max(0, (player.injuries.ng || 0) + (body.remove ? -1 : 1));
-      else if (kind === 'dead') player.injuries.dead = !player.injuries.dead;
+      else if (kind === 'dead') {
+        player.injuries.dead = !player.injuries.dead;
+        player.diedAt = player.injuries.dead ? today : null;
+      }
       else if (kind === 'retire') player.retired = !player.retired;
       else if (kind === 'stat') {
         const stat = String(body.stat || '').toLowerCase();
@@ -382,6 +386,21 @@ app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
       if (next < 1 || next > bb.RULES.fans.leagueMax) return res.status(400).json({ error: 'fans stay between 1 and 7' });
       t.bb.fans = next;
       log(`Dedicated fans ${delta > 0 ? '+' : '-'}1 (now ${next})`);
+      break;
+    }
+    case 'nickname': {
+      if (!player) return res.status(404).json({ error: 'no such player' });
+      player.nickname = bb.clampName(body.nickname, 20);
+      log(`${player.name} is now known as "${player.nickname || '(no nickname)'}"`);
+      break;
+    }
+    case 'counter': {
+      if (!player) return res.status(404).json({ error: 'no such player' });
+      const key = String(body.key || '');
+      if (!['ko', 'games'].includes(key)) return res.status(400).json({ error: 'unknown counter' });
+      player.counters = player.counters || {};
+      player.counters[key] = Math.max(0, (player.counters[key] || 0) + (body.delta > 0 ? 1 : -1));
+      log(`${player.name}: ${key.toUpperCase()} ${body.delta > 0 ? '+' : '-'}1 (now ${player.counters[key]})`);
       break;
     }
     case 'spp': {

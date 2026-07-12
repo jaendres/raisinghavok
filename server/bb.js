@@ -139,9 +139,11 @@ function validateDraft(raceKey, draft) {
         id: id(),
         num: parseInt(p.num, 10),
         name: clampName(p.name) || p.position,
+        nickname: clampName(p.nickname, 20),
         position: p.position,
         advancements: [],
         sppSpent: 0, sppExtra: 0,
+        counters: {},
         injuries: { ng: 0, mng: false, dead: false, stats: {} },
         retired: false,
       })),
@@ -211,7 +213,7 @@ function applyAdvancement(team, player, body, sppAvailable) {
 
 // ---- serialization for the UI ----
 
-function serializeTeam(team, sppEarnedByName) {
+function serializeTeam(team, sppEarnedFor) {
   const bb = team.bb;
   const race = CATALOG.teams[team.bbRace];
   return {
@@ -223,9 +225,10 @@ function serializeTeam(team, sppEarnedByName) {
     rerollCost: race ? race.rerollCost : 0,
     log: bb.log.slice(-30),
     players: bb.players.map(p => {
-      const earned = sppEarnedByName(p.name) + (p.sppExtra || 0);
+      const earned = sppEarnedFor(p) + (p.sppExtra || 0);
       return {
-        id: p.id, num: p.num, name: p.name, position: p.position,
+        id: p.id, num: p.num, name: p.name, nickname: p.nickname || '', position: p.position,
+        counters: p.counters || {}, diedAt: p.diedAt || null,
         stats: effectiveStats(team.bbRace, p),
         skills: allSkills(team.bbRace, p),
         advancements: p.advancements,

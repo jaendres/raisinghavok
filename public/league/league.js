@@ -251,6 +251,58 @@ async function viewLeague(id) {
   }
 }
 
+// ---- Name Forge: race-flavored player/nickname/team-name generators ----
+const NameForge = (() => {
+  const pick = (a) => a[Math.floor(Math.random() * a.length)];
+  const GROUPS = {
+    orky: ['orc', 'black_orc', 'goblin', 'snotling', 'ogre', 'underworld_denizens'],
+    dwarfy: ['dwarf', 'chaos_dwarf'],
+    elfy: ['elven_union', 'dark_elf', 'high_elf', 'wood_elf'],
+    ratty: ['skaven'],
+    grave: ['shambling_undead', 'necromantic_horror', 'tomb_kings', 'vampire'],
+    chaos: ['chaos_chosen', 'khorne', 'nurgle', 'chaos_renegades'],
+    human: ['human', 'imperial_nobility', 'norse', 'amazon', 'old_world_alliance', 'bretonnian', 'halfling', 'gnome', 'lizardmen'],
+  };
+  const groupOf = (race) => Object.keys(GROUPS).find(g => GROUPS[g].includes(race)) || 'human';
+  const N = {
+    orky: { a: ['Grak', 'Zog', 'Mork', 'Snag', 'Urg', 'Wazz', 'Gob', 'Skab', 'Drog', 'Nub', 'Ruk', 'Thrug'], b: ['gob', 'fang', 'tusk', 'basha', 'snik', 'zag', 'nash', 'grim', 'lug', 'rot'] },
+    dwarfy: { a: ['Thorgrim', 'Baragor', 'Durin', 'Grimm', 'Okri', 'Zharruk', 'Morgrim', 'Khazek', 'Drong', 'Balik'], b: ['sson', 'gard', 'grund', 'nir', 'bek', 'dur', 'zad', 'rik'] },
+    elfy: { a: ['Aeth', 'Lor', 'Syl', 'Fael', 'Ithil', 'Cal', 'Thal', 'Elar', 'Vael', 'Nim'], b: ['andor', 'ien', 'wing', 'anel', 'ael', 'oril', 'las', 'ion', 'aris'] },
+    ratty: { a: ['Skree', 'Vrisk', 'Snik', 'Queek', 'Fes', 'Skab', 'Ratch', 'Vek', 'Pesk', 'Krit'], b: ['tail', 'fang', 'nik', 'sqeek', 'claw', 'gnaw', 'itch', 'vex'] },
+    grave: { a: ['Mort', 'Vlad', 'Kha', 'Ner', 'Set', 'Dreg', 'Ossu', 'Barrow', 'Grimm', 'Amen'], b: ['emhet', 'ath', 'akh', 'ula', 'gor', 'crypt', 'mor', 'ankh'] },
+    chaos: { a: ['Khar', 'Vor', 'Skul', 'Mal', 'Gore', 'Thar', 'Bael', 'Drax', 'Vex', 'Ruin'], b: ['gath', 'thak', 'doom', 'maw', 'rend', 'gore', 'oth', 'us'] },
+    human: { a: ['Franz', 'Kurt', 'Hilda', 'Bruno', 'Greta', 'Otto', 'Elsa', 'Marcus', 'Astrid', 'Klaus', 'Sigrid', 'Bjorn'], b: [' Steinhammer', ' von Bock', ' Griffbane', ' Altdorfer', ' the Younger', ' Brandt', ' Snowmane', ' of Nuln', ' Half-Pint', ' Ironboot'] },
+  };
+  const NICKS = {
+    orky: ['da Crusha', 'Bonebreaka', 'Skullsplitta', 'da Sneaky', 'Squig-Breath', 'Two-Teef', 'da Ballhog', 'Wazzock', 'Face-Stompa', 'da Unstoppable'],
+    dwarfy: ['the Anvil', 'Grudgebearer', 'Stonefist', 'the Immovable', 'Beardsplitter', 'One-Eye', 'the Slayer', 'Oathkeeper'],
+    elfy: ['the Swift', 'Winddancer', 'the Untouchable', 'Silverstep', 'the Show-Off', 'Leafblade', 'the Flawless'],
+    ratty: ['the Sneak', 'Nine-Lives', 'Cheese-Thief', 'the Twitchy', 'Tunnel-Rat', 'Quick-Quick', 'the Expendable'],
+    grave: ['the Twice-Dead', 'Gravewalker', 'the Cold', 'Bonefinger', 'the Patient', 'Tomb-Born', 'the Returned'],
+    chaos: ['the Defiler', 'Skulltaker', 'the Blessed', 'Doomhand', 'the Marked', 'Bloodfist', 'the Hungering'],
+    human: ['the Hammer', 'Three-Fingers', 'the Turnip', 'Ironboot', 'the Lucky', 'Ballhawk', 'the Wall', 'Mad-Eye', 'the Reliable'],
+    any: ['the Ref\'s Nightmare', 'Two-Deaths', 'the Fumbler', 'Golden Boots', 'the Insurance Risk', 'One-More-Game', 'the Contract Dispute'],
+  };
+  const TEAMS = {
+    orky: [['Da', ['Skull', 'Iron', 'Rust', 'Mud', 'Blood'], ['Krushas', 'Stompas', 'Splittas', 'Renegadez', 'Boyz']], [['Badlandz', 'Gouged Eye', 'Broken Fang', 'Scrap Heap'], ['Maraudaz', 'Wreckas', 'Raidaz']]],
+    dwarfy: [[['Zharr-Naggrund', 'Karak', 'Iron Peak', 'Grudgeford'], ['Smog', 'Hammerers', 'Anvils', 'Longbeards', 'Grudges']], [['Da'], ['Anvil Splitters', 'Tall Hats', 'Furnace Kings']]],
+    elfy: [[['Silvermoon', 'Gladewind', 'Starfall', 'Loren'], ['Arrows', 'Dancers', 'Spires', 'Wardens']]],
+    ratty: [[['Under-City', 'Skavenblight', 'Sewer', 'Warp'], ['Scurriers', 'Gnawers', 'Stormvermin', 'Rats']]],
+    grave: [[['Crypt', 'Barrow', 'Khemri', 'Midnight'], ['Shamblers', 'Wraiths', 'Eternals', 'Kings']]],
+    chaos: [[['Doom', 'Gore', 'Plague', 'Skull'], ['Reavers', 'Chosen', 'Heralds', 'Legion']]],
+    human: [[['Altdorf', 'Reikland', 'Nuln', 'Middenheim', 'Bright Crusaders'], ['Eagles', 'Hammers', 'Reavers', 'Royals', 'Wanderers']]],
+  };
+  return {
+    player(race) { const g = groupOf(race); const n = N[g]; return pick(n.a) + pick(n.b); },
+    nickname(race) { const g = groupOf(race); return pick(Math.random() < 0.25 ? NICKS.any : NICKS[g]); },
+    team(race) {
+      const g = groupOf(race);
+      const pattern = pick(TEAMS[g]);
+      return pattern.map(part => Array.isArray(part) ? pick(part) : part).join(' ');
+    },
+  };
+})();
+
 // ---- Blood Bowl list builder ----
 let bbCatalog = null;
 async function catalog() {
@@ -288,7 +340,10 @@ async function viewDraft(id) {
         <div>
           <div class="card">
             <div class="form-grid">
-              <label>Team name <input id="d-name" maxlength="60" value="${esc(state.teamName)}"></label>
+              <label>Team name
+                <span style="display:flex;gap:6px"><input id="d-name" maxlength="60" value="${esc(state.teamName)}" style="flex:1">
+                <button class="cbtn" id="d-genteam" title="roll a team name" style="width:34px;height:34px">🎲</button></span>
+              </label>
               <label>Race <select id="d-race">${races.map(([k, r]) => `<option value="${k}" ${k === state.race ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select></label>
             </div>
             ${race.specialRules.length ? `<p class="muted" style="margin-top:8px">Special rules: ${race.specialRules.map(esc).join(', ')}</p>` : ''}
@@ -310,12 +365,14 @@ async function viewDraft(id) {
               }).join('')}
             </table>
           </div>
-          <h2>Names & Numbers <span class="muted" style="font-size:13px;text-transform:none">(optional — blank = position name)</span></h2>
+          <h2>Names & Numbers <span class="muted" style="font-size:13px;text-transform:none">(optional — blank = position name)</span>
+            <button class="btn small ghost" id="d-genall" style="margin-left:10px">🎲 name da lot</button></h2>
           <div class="card" id="d-players">
             ${draftPlayers(race).map((p, i) => `
-              <div class="scorer-row" style="grid-template-columns:60px 2fr 1fr">
+              <div class="scorer-row" style="grid-template-columns:60px 2fr 34px 1fr">
                 <input value="${p.num}" data-i="${i}" class="d-num" type="number" min="1" max="16">
                 <input placeholder="${esc(p.position)}" value="${esc(state.names[i] || '')}" data-i="${i}" class="d-pname" maxlength="24">
+                <button class="cbtn d-genname" data-i="${i}" title="roll a name">🎲</button>
                 <span class="muted" style="line-height:34px">${esc(p.position)}</span>
               </div>`).join('') || '<p class="muted">Add players above.</p>'}
           </div>
@@ -368,6 +425,17 @@ async function viewDraft(id) {
     });
     $app.querySelector('#d-race').onchange = (e) => { state.race = e.target.value; state.counts = {}; state.names = {}; render(); };
     $app.querySelectorAll('.d-pname').forEach(inp => inp.oninput = () => { state.names[+inp.dataset.i] = inp.value; });
+    $app.querySelector('#d-genteam').onclick = () => { $app.querySelector('#d-name').value = NameForge.team(state.race); };
+    $app.querySelectorAll('.d-genname').forEach(b => b.onclick = () => {
+      const i = +b.dataset.i;
+      state.names[i] = NameForge.player(state.race);
+      $app.querySelector(`.d-pname[data-i="${i}"]`).value = state.names[i];
+    });
+    $app.querySelector('#d-genall').onclick = () => {
+      $app.querySelectorAll('.d-pname').forEach(inp => {
+        if (!inp.value) { state.names[+inp.dataset.i] = NameForge.player(state.race); inp.value = state.names[+inp.dataset.i]; }
+      });
+    };
     const apo = $app.querySelector('#d-apo');
     if (apo) apo.onchange = () => { state.apothecary = apo.checked; state.teamName = $app.querySelector('#d-name').value; render(); };
     $app.querySelector('#d-submit').onclick = async () => {
@@ -492,16 +560,17 @@ async function viewBBTeam(l, tid) {
       <table>
         <tr><th class="num">#</th><th>Player</th><th>Position</th>
           <th class="num">MA</th><th class="num">ST</th><th class="num">AG</th><th class="num">PA</th><th class="num">AV</th>
-          <th>Skills</th><th>Level</th><th class="num">SPP</th><th class="num">Value</th>${canEdit ? '<th></th>' : ''}</tr>
+          <th>Skills</th><th>Level</th><th class="num" title="knockouts caused">KO</th><th class="num">SPP</th><th class="num">Value</th>${canEdit ? '<th></th>' : ''}</tr>
         ${sheet.players.sort((a, b) => a.num - b.num).map(p => `
           <tr class="${p.injuries.dead || p.retired ? 'gone' : ''}">
             <td class="num">${p.num}</td>
-            <td>${esc(p.name)} ${badges(p)}</td>
+            <td>${esc(p.name)}${p.nickname ? ` <span class="nick">“${esc(p.nickname)}”</span>` : ''} ${badges(p)}</td>
             <td class="muted">${esc(p.position)}</td>
             <td class="num">${statCell(p, 'ma')}</td><td class="num">${statCell(p, 'st')}</td>
             <td class="num">${statCell(p, 'ag')}</td><td class="num">${statCell(p, 'pa')}</td><td class="num">${statCell(p, 'av')}</td>
             <td style="font-size:13px">${p.skills.map(s => `<span class="${p.advancements.some(a => a.skill === s) ? 'win' : 'muted'}">${esc(s)}</span>`).join(', ') || '—'}</td>
             <td class="muted" style="font-size:13px">${esc(p.level)}</td>
+            <td class="num">${p.counters.ko || 0}</td>
             <td class="num" title="earned ${p.sppEarned}, spent ${p.sppSpent}"><b>${p.sppAvailable}</b><span class="muted">/${p.sppEarned}</span></td>
             <td class="num">${gold(p.value)}</td>
             ${canEdit ? `<td class="rowbtns">
@@ -509,11 +578,21 @@ async function viewBBTeam(l, tid) {
               <button class="btn small ghost" data-inj="${p.id}">…</button>
             </td>` : ''}
           </tr>
-          <tr class="detail hidden" id="panel-${p.id}"><td colspan="${canEdit ? 13 : 12}"></td></tr>
+          <tr class="detail hidden" id="panel-${p.id}"><td colspan="${canEdit ? 14 : 13}"></td></tr>
         `).join('')}
       </table>
-      <p class="muted" style="margin-top:6px">SPP shown as available/earned — earned comes from named scorers an' MVPs in match reports. Green stats/skills = advancements.</p>
+      <p class="muted" style="margin-top:6px">SPP shown as available/earned — earned comes from named scorers an' MVPs in match reports (nicknames count too). Green stats/skills = advancements.</p>
     </div>
+
+    ${sheet.players.some(p => p.injuries.dead) ? `
+    <h2>💀 Da Graveyard</h2>
+    <div class="card">
+      ${sheet.players.filter(p => p.injuries.dead).map(p => `
+        <div class="stafrow"><span>💀 <b>${esc(p.name)}</b>${p.nickname ? ` “${esc(p.nickname)}”` : ''}
+          <span class="muted">— ${esc(p.position)}, ${esc(p.level)}${p.diedAt ? `, died ${esc(p.diedAt)}` : ''}</span></span>
+          <span class="muted">${p.sppEarned} SPP earned • ${p.counters.ko || 0} KOs caused</span></div>`).join('')}
+      <p class="muted" style="margin-top:6px">Dey died doin' what dey loved: gettin' stomped for our entertainment.</p>
+    </div>` : ''}
 
     <div class="two-col">
       <div>
@@ -615,10 +694,15 @@ async function viewBBTeam(l, tid) {
     panel.firstElementChild.innerHTML = `
       <div class="advpanel">
         <b>${esc(p.name)}</b>:
+        <input id="i-nick" placeholder="nickname" maxlength="20" value="${esc(p.nickname)}" style="width:130px">
+        <button class="cbtn" id="i-nickgen" title="roll a nickname">🎲</button>
+        <button class="btn small ghost" id="i-nicksave">save</button>
+        <span class="muted">KO:</span>
+        <button class="cbtn" data-ko="-1">−</button><b>${p.counters.ko || 0}</b><button class="cbtn" data-ko="1">+</button>
+        <span style="flex:1"></span>
         <button class="btn small ghost" data-k="mng">${p.injuries.mng ? 'clear MNG' : 'miss next game'}</button>
         <button class="btn small ghost" data-k="ng">+niggling</button>
         <select id="i-stat"><option value="">stat injury…</option><option value="ma">-1 MA</option><option value="st">-1 ST</option><option value="ag">-1 AG</option><option value="pa">-1 PA</option><option value="av">-1 AV</option></select>
-        <span style="flex:1"></span>
         <input id="i-spp" type="number" min="-20" max="20" placeholder="±SPP" style="width:70px" title="manual SPP correction">
         <button class="btn small ghost" id="i-sppgo">adj</button>
         <button class="btn small ghost" data-k="retire">${p.retired ? 'unretire' : 'retire'}</button>
@@ -627,6 +711,9 @@ async function viewBBTeam(l, tid) {
         <button class="btn small ghost" id="i-x">✕</button>
       </div>`;
     panel.querySelectorAll('[data-k]').forEach(x => x.onclick = () => act('injury', { playerId: p.id, kind: x.dataset.k }));
+    panel.querySelectorAll('[data-ko]').forEach(x => x.onclick = () => act('counter', { playerId: p.id, key: 'ko', delta: +x.dataset.ko }));
+    panel.querySelector('#i-nickgen').onclick = () => { panel.querySelector('#i-nick').value = NameForge.nickname(sheet.race); };
+    panel.querySelector('#i-nicksave').onclick = () => act('nickname', { playerId: p.id, nickname: panel.querySelector('#i-nick').value });
     panel.querySelector('#i-stat').onchange = (e) => e.target.value && act('injury', { playerId: p.id, kind: 'stat', stat: e.target.value });
     panel.querySelector('#i-sppgo').onclick = () => act('spp', { playerId: p.id, delta: +panel.querySelector('#i-spp').value });
     panel.querySelector('#i-fire').onclick = () => confirm(`Fire ${p.name}? No refunds.`) && act('fire', { playerId: p.id });
