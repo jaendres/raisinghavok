@@ -24,7 +24,7 @@ param recaptchaSecret string = ''
 param leagueApiKey string = ''
 
 // Comma-separated usernames with league admin rights (edit/delete anything).
-param adminUsers string = 'Jason'
+param adminUsers string = 'hazrd,Hazrd-Jason'
 
 // Discord OAuth2 (SSO login) — same Discord application as the club bot.
 param discordClientId string = ''

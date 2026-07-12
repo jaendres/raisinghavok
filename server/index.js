@@ -143,7 +143,7 @@ function authed(req) {
 app.get('/api/me', (req, res) => {
   const user = authed(req);
   if (!user) return res.status(401).json({ error: 'not logged in' });
-  res.json({ name: user.name, stats: user.stats, garage: user.garage });
+  res.json({ name: user.name, stats: user.stats, garage: user.garage, admin: isAdmin(user.name) });
 });
 
 app.post('/api/garage', (req, res) => {
@@ -180,10 +180,12 @@ function leagueWriter(req, res, next) {
   if (user) {
     // League identity is club Discord identity — password/guest accounts can
     // play the game but league actions need a Discord-linked account.
-    if (!user.discordId && process.env.DISCORD_CLIENT_ID) {
+    // Admins are exempt so they can manage everything from any of their accounts.
+    if (!user.discordId && process.env.DISCORD_CLIENT_ID && !isAdmin(user.name)) {
       return res.status(403).json({ error: 'League actions need a Discord login — use "Log in wiv Discord".' });
     }
     req.reporter = user.name;
+    req.isAdmin = isAdmin(user.name);
     return next();
   }
   const key = req.headers['x-league-key'];
@@ -240,7 +242,9 @@ app.post('/api/league/:id/team', leagueWriter, (req, res) => {
     const v = bb.validateDraft(String(race || ''), draft);
     if (v.error) return res.status(400).json({ error: v.error });
     const raceName = bb.CATALOG.teams[race].name;
-    const t = league.makeTeam({ name: String(name).trim(), coach: coach || req.reporter, race: raceName, rosterText: '' });
+    // admins can draft on behalf of members who don't use the site
+    const coachName = (req.isAdmin && coach) ? String(coach).slice(0, 40) : req.reporter;
+    const t = league.makeTeam({ name: String(name).trim(), coach: coachName, race: raceName, rosterText: '' });
     t.bbRace = race; // catalog key ('orc'); t.race keeps the display name for standings
     t.bb = v.bb;
     t.roster = v.bb.players.map(p => ({ num: p.num, name: p.name, position: p.position, raw: '' }));

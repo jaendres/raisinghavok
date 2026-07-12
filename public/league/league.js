@@ -13,6 +13,7 @@
 const $app = document.getElementById('app');
 const token = localStorage.getItem('mol_token');
 let me = null;
+let meAdmin = false;
 let discordSso = false;
 
 function esc(s) { const d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
@@ -345,6 +346,8 @@ async function viewDraft(id) {
                 <button class="cbtn" id="d-genteam" title="roll a team name" style="width:34px;height:34px">🎲</button></span>
               </label>
               <label>Race <select id="d-race">${races.map(([k, r]) => `<option value="${k}" ${k === state.race ? 'selected' : ''}>${esc(r.name)}</option>`).join('')}</select></label>
+              ${meAdmin ? `<label>Coach <span class="muted" style="text-transform:none">(admin: draft for anyone)</span>
+                <input id="d-coach" maxlength="40" value="${esc(state.coach || me)}" placeholder="${esc(me)}"></label>` : ''}
             </div>
             ${race.specialRules.length ? `<p class="muted" style="margin-top:8px">Special rules: ${race.specialRules.map(esc).join(', ')}</p>` : ''}
           </div>
@@ -409,6 +412,12 @@ async function viewDraft(id) {
   }
 
   function bindDraft(race) {
+    // the whole screen re-renders on every change — stash free-text inputs first
+    const keepText = () => {
+      state.teamName = $app.querySelector('#d-name').value;
+      const c = $app.querySelector('#d-coach');
+      if (c) state.coach = c.value;
+    };
     $app.querySelectorAll('.cbtn').forEach(b => b.onclick = () => {
       const d = +b.dataset.d;
       if (b.dataset.pos) {
@@ -420,10 +429,10 @@ async function viewDraft(id) {
         const min = b.dataset.k === 'fans' ? 1 : 0;
         state[b.dataset.k] = Math.max(min, Math.min(limits[b.dataset.k], state[b.dataset.k] + d));
       }
-      state.teamName = $app.querySelector('#d-name').value;
+      keepText();
       render();
     });
-    $app.querySelector('#d-race').onchange = (e) => { state.race = e.target.value; state.counts = {}; state.names = {}; render(); };
+    $app.querySelector('#d-race').onchange = (e) => { keepText(); state.race = e.target.value; state.counts = {}; state.names = {}; render(); };
     $app.querySelectorAll('.d-pname').forEach(inp => inp.oninput = () => { state.names[+inp.dataset.i] = inp.value; });
     $app.querySelector('#d-genteam').onclick = () => { $app.querySelector('#d-name').value = NameForge.team(state.race); };
     $app.querySelectorAll('.d-genname').forEach(b => b.onclick = () => {
@@ -437,9 +446,9 @@ async function viewDraft(id) {
       });
     };
     const apo = $app.querySelector('#d-apo');
-    if (apo) apo.onchange = () => { state.apothecary = apo.checked; state.teamName = $app.querySelector('#d-name').value; render(); };
+    if (apo) apo.onchange = () => { state.apothecary = apo.checked; keepText(); render(); };
     $app.querySelector('#d-submit').onclick = async () => {
-      state.teamName = $app.querySelector('#d-name').value;
+      keepText();
       const nums = [...$app.querySelectorAll('.d-num')].map(i => +i.value);
       const players = draftPlayers(race).map((p, i) => ({
         position: p.position, num: nums[i] || p.num, name: state.names[i] || '',
@@ -449,6 +458,7 @@ async function viewDraft(id) {
           method: 'POST',
           body: JSON.stringify({
             name: state.teamName, race: state.race,
+            coach: meAdmin ? state.coach : undefined,
             draft: { players, rerolls: state.rerolls, apothecary: state.apothecary, coaches: state.coaches, cheerleaders: state.cheerleaders, fans: state.fans },
           }),
         });
@@ -901,7 +911,7 @@ window.addEventListener('hashchange', route);
 (async () => {
   try { discordSso = (await api('/config')).discordEnabled; } catch { }
   if (token) {
-    try { me = (await api('/me')).name; } catch { me = null; }
+    try { const info = await api('/me'); me = info.name; meAdmin = !!info.admin; } catch { me = null; }
   }
   const who = document.getElementById('whoami');
   if (me) {
