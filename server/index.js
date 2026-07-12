@@ -411,6 +411,51 @@ app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
       log(`${player.name}: manual SPP ${delta > 0 ? '+' : ''}${delta}`);
       break;
     }
+    // whole-roster edit: one call applies every changed field on every player
+    case 'batch': {
+      const edits = Array.isArray(body.edits) ? body.edits.slice(0, 32) : [];
+      const toFire = [];
+      for (const e of edits) {
+        const pl = t.bb.players.find(p => p.id === e.playerId);
+        if (!pl) continue;
+        pl.counters = pl.counters || {};
+        if (typeof e.nickname === 'string') {
+          const nick = bb.clampName(e.nickname, 20);
+          if (nick !== (pl.nickname || '')) { pl.nickname = nick; log(`${pl.name} is now known as "${nick || '(no nickname)'}"`); }
+        }
+        if (Number.isInteger(e.ko) && e.ko >= 0 && e.ko <= 99 && e.ko !== (pl.counters.ko || 0)) {
+          log(`${pl.name}: KO ${pl.counters.ko || 0} -> ${e.ko}`); pl.counters.ko = e.ko;
+        }
+        if (Number.isInteger(e.ng) && e.ng >= 0 && e.ng <= 9 && e.ng !== (pl.injuries.ng || 0)) {
+          log(`${pl.name}: niggling ${pl.injuries.ng || 0} -> ${e.ng}`); pl.injuries.ng = e.ng;
+        }
+        if (typeof e.mng === 'boolean' && e.mng !== !!pl.injuries.mng) {
+          pl.injuries.mng = e.mng; log(`${pl.name}: ${e.mng ? 'misses next game' : 'MNG cleared'}`);
+        }
+        if (Number.isInteger(e.sppExtra) && Math.abs(e.sppExtra) <= 50 && e.sppExtra !== (pl.sppExtra || 0)) {
+          log(`${pl.name}: SPP adjustment ${pl.sppExtra || 0} -> ${e.sppExtra}`); pl.sppExtra = e.sppExtra;
+        }
+        if (['active', 'retired', 'dead'].includes(e.status)) {
+          const was = pl.injuries.dead ? 'dead' : pl.retired ? 'retired' : 'active';
+          if (e.status !== was) {
+            pl.injuries.dead = e.status === 'dead';
+            pl.retired = e.status === 'retired';
+            pl.diedAt = pl.injuries.dead ? today : null;
+            log(`${pl.name}: ${was} -> ${e.status}`);
+          }
+        }
+        if (['ma', 'st', 'ag', 'pa', 'av'].includes(e.addStatInjury)) {
+          pl.injuries.stats[e.addStatInjury] = (pl.injuries.stats[e.addStatInjury] || 0) + 1;
+          log(`${pl.name}: lasting injury -1 ${e.addStatInjury.toUpperCase()}`);
+        }
+        if (e.fire === true) toFire.push(pl.id);
+      }
+      for (const pid of toFire) {
+        const pl = t.bb.players.find(p => p.id === pid);
+        if (pl) { t.bb.players = t.bb.players.filter(p => p.id !== pid); log(`Fired ${pl.name} (${pl.position})`); }
+      }
+      break;
+    }
     default:
       return res.status(400).json({ error: 'unknown action' });
   }

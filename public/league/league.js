@@ -524,7 +524,7 @@ async function viewTeam(id, tid) {
   }
 }
 
-async function viewBBTeam(l, tid) {
+async function viewBBTeam(l, tid, editMode = false) {
   const t = l.teams[tid];
   const [sheet, cat] = await Promise.all([api(`/league/${l.id}/team/${tid}/bb`), catalog()]);
   const canEdit = me && (me.toLowerCase() === (t.coach || '').toLowerCase());
@@ -532,6 +532,13 @@ async function viewBBTeam(l, tid) {
   const matches = l.matches.filter(m => m.home.teamId === tid || m.away.teamId === tid);
   const race = cat.teams[sheet.race];
   const R = cat.rules;
+
+  // re-render in place after any change, keeping scroll position
+  const refresh = async (keepEdit = false) => {
+    const y = window.scrollY;
+    await viewBBTeam(await api('/league/' + l.id), tid, keepEdit);
+    window.scrollTo(0, y);
+  };
 
   const statCell = (p, k) => {
     const pos = race.positions.find(x => x.name === p.position);
@@ -547,7 +554,50 @@ async function viewBBTeam(l, tid) {
     (p.injuries.dead ? '<span class="badge dead">DEAD</span>' : '')
     + (p.retired ? '<span class="badge">RETIRED</span>' : '')
     + (p.injuries.mng ? '<span class="badge mng">MNG</span>' : '')
-    + (p.injuries.ng ? `<span class="badge ng">NG×${p.injuries.ng}</span>` : '');
+    + (p.injuries.ng ? `<span class="badge ng">NG×${p.injuries.ng}</span>` : '')
+    + Object.entries(p.injuries.stats || {}).filter(([, n]) => n > 0)
+        .map(([k, n]) => `<span class="badge ng">-${n} ${k.toUpperCase()}</span>`).join('');
+
+  const players = sheet.players.sort((a, b) => a.num - b.num);
+
+  const viewRows = players.map(p => `
+    <tr class="${p.injuries.dead || p.retired ? 'gone' : ''}">
+      <td class="num">${p.num}</td>
+      <td>${esc(p.name)}${p.nickname ? ` <span class="nick">“${esc(p.nickname)}”</span>` : ''} ${badges(p)}</td>
+      <td class="muted">${esc(p.position)}</td>
+      <td class="num">${statCell(p, 'ma')}</td><td class="num">${statCell(p, 'st')}</td>
+      <td class="num">${statCell(p, 'ag')}</td><td class="num">${statCell(p, 'pa')}</td><td class="num">${statCell(p, 'av')}</td>
+      <td style="font-size:13px">${p.skills.map(s => `<span class="${p.advancements.some(a => a.skill === s) ? 'win' : 'muted'}">${esc(s)}</span>`).join(', ') || '—'}</td>
+      <td class="muted" style="font-size:13px">${esc(p.level)}</td>
+      <td class="num">${p.counters.ko || 0}</td>
+      <td class="num" title="earned ${p.sppEarned}, spent ${p.sppSpent}"><b>${p.sppAvailable}</b><span class="muted">/${p.sppEarned}</span></td>
+      <td class="num">${gold(p.value)}</td>
+      ${canEdit ? `<td class="rowbtns">${!p.injuries.dead && !p.retired && p.nextCosts
+        ? `<button class="btn small ${p.sppAvailable >= p.nextCosts.randomPrimary ? '' : 'ghost'}" data-adv="${p.id}">Advance</button>` : ''}</td>` : ''}
+    </tr>
+    <tr class="detail hidden" id="panel-${p.id}"><td colspan="${canEdit ? 14 : 13}"></td></tr>`).join('');
+
+  const editRows = players.map(p => `
+    <tr class="editrow ${p.injuries.dead || p.retired ? 'gone' : ''}" data-pid="${p.id}">
+      <td class="num">${p.num}</td>
+      <td><b>${esc(p.name)}</b><br><span style="display:inline-flex;gap:4px;margin-top:3px">
+        <input class="e-nick" placeholder="nickname" maxlength="20" value="${esc(p.nickname)}" style="width:130px">
+        <button class="cbtn e-nickgen" title="roll a nickname">🎲</button></span></td>
+      <td class="muted">${esc(p.position)}</td>
+      <td class="num"><input class="e-ko" type="number" min="0" max="99" value="${p.counters.ko || 0}" style="width:56px" title="knockouts caused"></td>
+      <td class="num"><input class="e-ng" type="number" min="0" max="9" value="${p.injuries.ng || 0}" style="width:50px" title="niggling injuries"></td>
+      <td style="text-align:center"><input class="e-mng" type="checkbox" ${p.injuries.mng ? 'checked' : ''} title="miss next game"></td>
+      <td><select class="e-inj" title="add a lasting injury">
+        <option value="">injury…</option><option value="ma">-1 MA</option><option value="st">-1 ST</option>
+        <option value="ag">-1 AG</option><option value="pa">-1 PA</option><option value="av">-1 AV</option></select>
+        ${badges(p)}</td>
+      <td><select class="e-status">
+        <option value="active" ${!p.injuries.dead && !p.retired ? 'selected' : ''}>active</option>
+        <option value="retired" ${p.retired ? 'selected' : ''}>retired</option>
+        <option value="dead" ${p.injuries.dead ? 'selected' : ''}>💀 dead</option></select></td>
+      <td class="num"><input class="e-sppx" type="number" min="-50" max="50" value="${p.sppExtra || 0}" style="width:56px" title="manual SPP adjustment (added to earned)"></td>
+      <td style="text-align:center"><input class="e-fire" type="checkbox" title="fire this player on save"> 🗑</td>
+    </tr>`).join('');
 
   $app.innerHTML = `
     <div class="crumb"><a href="#/">Leagues</a> / <a href="#/l/${l.id}">${esc(l.name)}</a> / ${esc(t.name)}</div>
@@ -555,36 +605,27 @@ async function viewBBTeam(l, tid) {
     <div class="sub">${esc(sheet.raceName)} • Coach ${esc(t.coach)} • ${row.w || 0}W ${row.d || 0}D ${row.l || 0}L
       • TV ${gold(sheet.tv)} • CTV ${gold(sheet.ctv)}</div>
 
-    <h2>Roster</h2>
+    <h2 style="display:flex;align-items:center;gap:12px">Roster
+      ${canEdit && !editMode ? '<button class="btn small" id="bb-edit">✎ Edit Roster</button>' : ''}
+      ${editMode ? '<button class="btn small" id="bb-saveall">💾 Save All</button><button class="btn small ghost" id="bb-cancel">Cancel</button>' : ''}
+      <span class="error" id="bb-err" style="margin:0"></span>
+    </h2>
     <div class="card" style="overflow-x:auto">
       <table>
+        ${editMode ? `
+        <tr><th class="num">#</th><th>Player / Nickname</th><th>Position</th><th class="num">KO</th><th class="num">NG</th><th>MNG</th><th>Injuries</th><th>Status</th><th class="num">SPP adj</th><th>Fire</th></tr>
+        ${editRows}` : `
         <tr><th class="num">#</th><th>Player</th><th>Position</th>
           <th class="num">MA</th><th class="num">ST</th><th class="num">AG</th><th class="num">PA</th><th class="num">AV</th>
           <th>Skills</th><th>Level</th><th class="num" title="knockouts caused">KO</th><th class="num">SPP</th><th class="num">Value</th>${canEdit ? '<th></th>' : ''}</tr>
-        ${sheet.players.sort((a, b) => a.num - b.num).map(p => `
-          <tr class="${p.injuries.dead || p.retired ? 'gone' : ''}">
-            <td class="num">${p.num}</td>
-            <td>${esc(p.name)}${p.nickname ? ` <span class="nick">“${esc(p.nickname)}”</span>` : ''} ${badges(p)}</td>
-            <td class="muted">${esc(p.position)}</td>
-            <td class="num">${statCell(p, 'ma')}</td><td class="num">${statCell(p, 'st')}</td>
-            <td class="num">${statCell(p, 'ag')}</td><td class="num">${statCell(p, 'pa')}</td><td class="num">${statCell(p, 'av')}</td>
-            <td style="font-size:13px">${p.skills.map(s => `<span class="${p.advancements.some(a => a.skill === s) ? 'win' : 'muted'}">${esc(s)}</span>`).join(', ') || '—'}</td>
-            <td class="muted" style="font-size:13px">${esc(p.level)}</td>
-            <td class="num">${p.counters.ko || 0}</td>
-            <td class="num" title="earned ${p.sppEarned}, spent ${p.sppSpent}"><b>${p.sppAvailable}</b><span class="muted">/${p.sppEarned}</span></td>
-            <td class="num">${gold(p.value)}</td>
-            ${canEdit ? `<td class="rowbtns">
-              ${!p.injuries.dead && !p.retired && p.nextCosts ? `<button class="btn small" data-adv="${p.id}">Advance</button>` : ''}
-              <button class="btn small ghost" data-inj="${p.id}">…</button>
-            </td>` : ''}
-          </tr>
-          <tr class="detail hidden" id="panel-${p.id}"><td colspan="${canEdit ? 14 : 13}"></td></tr>
-        `).join('')}
+        ${viewRows}`}
       </table>
-      <p class="muted" style="margin-top:6px">SPP shown as available/earned — earned comes from named scorers an' MVPs in match reports (nicknames count too). Green stats/skills = advancements.</p>
+      <p class="muted" style="margin-top:6px">${editMode
+        ? 'Change anything across da whole roster, then hit Save All once. Nothing is saved until you do.'
+        : 'SPP shown as available/earned — earned comes from named scorers an’ MVPs in match reports (nicknames count too). Green stats/skills = advancements.'}</p>
     </div>
 
-    ${sheet.players.some(p => p.injuries.dead) ? `
+    ${!editMode && sheet.players.some(p => p.injuries.dead) ? `
     <h2>💀 Da Graveyard</h2>
     <div class="card">
       ${sheet.players.filter(p => p.injuries.dead).map(p => `
@@ -622,7 +663,6 @@ async function viewBBTeam(l, tid) {
             <input id="h-num" type="number" min="1" max="16" placeholder="#" style="width:52px">
             <button class="btn small" id="h-hire">hire</button>
           </div>` : ''}
-          <div class="error" id="bb-err"></div>
         </div>
         <h2>Team Log</h2>
         <div class="card" style="max-height:260px;overflow-y:auto;font-size:14px">
@@ -633,16 +673,43 @@ async function viewBBTeam(l, tid) {
 
   if (!canEdit) return;
   const err = (m) => { $app.querySelector('#bb-err').textContent = m; };
-  const act = async (action, body) => {
-    try { await api(`/league/${l.id}/team/${tid}/bb/${action}`, { method: 'POST', body: JSON.stringify(body) }); route(); }
+  const act = async (action, body, keepEdit = false) => {
+    try { await api(`/league/${l.id}/team/${tid}/bb/${action}`, { method: 'POST', body: JSON.stringify(body) }); await refresh(keepEdit); }
     catch (e) { err(e.message); }
   };
 
-  // advancement panel
+  // ---- edit mode wiring ----
+  const editBtn = $app.querySelector('#bb-edit');
+  if (editBtn) editBtn.onclick = () => refresh(true);
+  const cancelBtn = $app.querySelector('#bb-cancel');
+  if (cancelBtn) cancelBtn.onclick = () => refresh(false);
+  const saveBtn = $app.querySelector('#bb-saveall');
+  if (saveBtn) saveBtn.onclick = async () => {
+    const edits = [...$app.querySelectorAll('.editrow')].map(r => ({
+      playerId: r.dataset.pid,
+      nickname: r.querySelector('.e-nick').value,
+      ko: +r.querySelector('.e-ko').value,
+      ng: +r.querySelector('.e-ng').value,
+      mng: r.querySelector('.e-mng').checked,
+      status: r.querySelector('.e-status').value,
+      sppExtra: +r.querySelector('.e-sppx').value,
+      addStatInjury: r.querySelector('.e-inj').value || undefined,
+      fire: r.querySelector('.e-fire').checked || undefined,
+    }));
+    const firing = edits.filter(e => e.fire).length;
+    if (firing && !confirm(`Dis will fire ${firing} player(s). No refunds. Sure?`)) return;
+    await act('batch', { edits }, false);
+  };
+  $app.querySelectorAll('.e-nickgen').forEach(b => b.onclick = () => {
+    b.parentElement.querySelector('.e-nick').value = NameForge.nickname(sheet.race);
+  });
+
+  // ---- view mode wiring ----
   $app.querySelectorAll('[data-adv]').forEach(b => b.onclick = () => {
     const p = sheet.players.find(x => x.id === b.dataset.adv);
     const pos = race.positions.find(x => x.name === p.position);
     const panel = $app.querySelector(`#panel-${p.id}`);
+    if (!panel.classList.contains('hidden')) { panel.classList.add('hidden'); return; }
     const catsFor = (letters) => letters.map(ltr => R.categories[ltr]).filter(Boolean);
     const skillOpts = (cats) => cats.flatMap(c =>
       cat.skills.byCategory[c].filter(s => !p.skills.includes(s))
@@ -684,40 +751,6 @@ async function viewBBTeam(l, tid) {
       else body.skill = skillEl.value;
       act('advance', body);
     };
-  });
-
-  // injury / admin panel
-  $app.querySelectorAll('[data-inj]').forEach(b => b.onclick = () => {
-    const p = sheet.players.find(x => x.id === b.dataset.inj);
-    const panel = $app.querySelector(`#panel-${p.id}`);
-    panel.classList.remove('hidden');
-    panel.firstElementChild.innerHTML = `
-      <div class="advpanel">
-        <b>${esc(p.name)}</b>:
-        <input id="i-nick" placeholder="nickname" maxlength="20" value="${esc(p.nickname)}" style="width:130px">
-        <button class="cbtn" id="i-nickgen" title="roll a nickname">🎲</button>
-        <button class="btn small ghost" id="i-nicksave">save</button>
-        <span class="muted">KO:</span>
-        <button class="cbtn" data-ko="-1">−</button><b>${p.counters.ko || 0}</b><button class="cbtn" data-ko="1">+</button>
-        <span style="flex:1"></span>
-        <button class="btn small ghost" data-k="mng">${p.injuries.mng ? 'clear MNG' : 'miss next game'}</button>
-        <button class="btn small ghost" data-k="ng">+niggling</button>
-        <select id="i-stat"><option value="">stat injury…</option><option value="ma">-1 MA</option><option value="st">-1 ST</option><option value="ag">-1 AG</option><option value="pa">-1 PA</option><option value="av">-1 AV</option></select>
-        <input id="i-spp" type="number" min="-20" max="20" placeholder="±SPP" style="width:70px" title="manual SPP correction">
-        <button class="btn small ghost" id="i-sppgo">adj</button>
-        <button class="btn small ghost" data-k="retire">${p.retired ? 'unretire' : 'retire'}</button>
-        <button class="btn small ghost" data-k="dead">${p.injuries.dead ? 'not dead' : '💀 dead'}</button>
-        <button class="btn small ghost" id="i-fire">fire</button>
-        <button class="btn small ghost" id="i-x">✕</button>
-      </div>`;
-    panel.querySelectorAll('[data-k]').forEach(x => x.onclick = () => act('injury', { playerId: p.id, kind: x.dataset.k }));
-    panel.querySelectorAll('[data-ko]').forEach(x => x.onclick = () => act('counter', { playerId: p.id, key: 'ko', delta: +x.dataset.ko }));
-    panel.querySelector('#i-nickgen').onclick = () => { panel.querySelector('#i-nick').value = NameForge.nickname(sheet.race); };
-    panel.querySelector('#i-nicksave').onclick = () => act('nickname', { playerId: p.id, nickname: panel.querySelector('#i-nick').value });
-    panel.querySelector('#i-stat').onchange = (e) => e.target.value && act('injury', { playerId: p.id, kind: 'stat', stat: e.target.value });
-    panel.querySelector('#i-sppgo').onclick = () => act('spp', { playerId: p.id, delta: +panel.querySelector('#i-spp').value });
-    panel.querySelector('#i-fire').onclick = () => confirm(`Fire ${p.name}? No refunds.`) && act('fire', { playerId: p.id });
-    panel.querySelector('#i-x').onclick = () => panel.classList.add('hidden');
   });
 
   $app.querySelectorAll('[data-buy]').forEach(b => b.onclick = () => act('buy', { item: b.dataset.buy }));
