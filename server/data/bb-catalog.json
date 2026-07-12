@@ -1,0 +1,5217 @@
+{
+ "rules": {
+  "draftBudget": 1000000,
+  "minPlayers": 11,
+  "maxPlayers": 16,
+  "maxRerolls": 8,
+  "staff": {
+   "cheerleader": {
+    "max": 12
+   },
+   "coach": {
+    "max": 6
+   }
+  },
+  "fans": {
+   "start": 1,
+   "draftMax": 3,
+   "leagueMax": 7,
+   "cost": 5000
+  },
+  "rerollDoubleAfterDraft": true,
+  "sppEarn": {
+   "td": 3,
+   "cas": 2,
+   "comp": 1,
+   "int": 2,
+   "ttm": 1,
+   "mvp": 4
+  },
+  "advancementCosts": {
+   "randomPrimary": [
+    3,
+    4,
+    6,
+    8,
+    10,
+    15
+   ],
+   "choosePrimary": [
+    6,
+    8,
+    12,
+    16,
+    20,
+    30
+   ],
+   "chooseSecondary": [
+    10,
+    12,
+    16,
+    20,
+    24,
+    34
+   ],
+   "characteristic": [
+    14,
+    16,
+    20,
+    24,
+    28,
+    38
+   ]
+  },
+  "levels": [
+   "Rookie",
+   "Experienced",
+   "Veteran",
+   "Emerging Star",
+   "Star",
+   "Superstar",
+   "Legend"
+  ],
+  "maxAdvancements": 6,
+  "valueIncrease": {
+   "primarySkill": 20000,
+   "secondarySkill": 40000,
+   "eliteExtra": 10000,
+   "av": 10000,
+   "ma": 20000,
+   "pa": 20000,
+   "ag": 30000,
+   "st": 60000
+  },
+  "statCaps": {
+   "ma": 9,
+   "st": 8,
+   "ag": 1,
+   "pa": 1,
+   "av": 11,
+   "maxImprovementsPerStat": 2
+  },
+  "categories": {
+   "A": "Agility",
+   "D": "Devious",
+   "G": "General",
+   "M": "Mutation",
+   "P": "Passing",
+   "S": "Strength"
+  }
+ },
+ "teams": {
+  "amazon": {
+   "name": "Amazon",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Eagle Warrior",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge"
+     ],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Python Warrior",
+     "keywords": [
+      "Thrower",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "On the Ball",
+      "Pass",
+      "Safe Pass"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Piranha Warrior",
+     "keywords": [
+      "Blitzer",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Hit and Run",
+      "Jump Up"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Jaguar Warrior",
+     "keywords": [
+      "Blocker",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 4,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Defensive",
+      "Dodge"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 110000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "black_orc": {
+   "name": "Black Orc",
+   "tier": "3",
+   "positions": [
+    {
+     "name": "Goblin Bruiser",
+     "keywords": [
+      "Lineman",
+      "Goblin"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty",
+      "Thick Skull"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G",
+      "P",
+      "S"
+     ],
+     "cost": 45000
+    },
+    {
+     "name": "Black Orc",
+     "keywords": [
+      "Blocker",
+      "Orc"
+     ],
+     "min": 0,
+     "max": 6,
+     "ma": 4,
+     "st": 4,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Brawler",
+      "Grab"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Trained Troll",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 115000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Bribery and Corruption",
+    "Brawlin' Brutes"
+   ]
+  },
+  "bretonnian": {
+   "name": "Bretonnian",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Bretonnian Squire",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Wrestle"
+     ],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Bretonnian Knight Catcher",
+     "keywords": [
+      "Catcher",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Catch",
+      "Dauntless",
+      "Nerves of Steel"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Bretonnian Knight Thrower",
+     "keywords": [
+      "Thrower",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Dauntless",
+      "Nerves of Steel",
+      "Pass"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Grail Knight",
+     "keywords": [
+      "Blitzer",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Dauntless",
+      "Steady Footing"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 95000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "chaos_chosen": {
+   "name": "Chaos Chosen",
+   "tier": "3",
+   "positions": [
+    {
+     "name": "Beastman Lineman",
+     "keywords": [
+      "Lineman",
+      "Beastman"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Horns",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "M"
+     ],
+     "secondary": [
+      "A",
+      "P",
+      "S",
+      "D"
+     ],
+     "cost": 55000
+    },
+    {
+     "name": "Chaos Chosen",
+     "keywords": [
+      "Blocker",
+      "Human"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 5,
+     "st": 4,
+     "ag": 3,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Arm Bar"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 100000
+    },
+    {
+     "name": "Troll*",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 115000
+    },
+    {
+     "name": "Ogre*",
+     "keywords": [
+      "Big Guy",
+      "Ogre"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 140000
+    },
+    {
+     "name": "Minotaur*",
+     "keywords": [
+      "Big Guy",
+      "Minotaur"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Frenzy",
+      "Horns",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Unchannelled Fury"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 150000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": [
+    "Favoured of..."
+   ]
+  },
+  "chaos_dwarf": {
+   "name": "Chaos Dwarf",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Hobgoblin Lineman",
+     "keywords": [
+      "Lineman",
+      "Goblin"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "-"
+     ],
+     "primary": [
+      "D"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Sneaky Stabba",
+     "keywords": [
+      "Special",
+      "Goblin"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 5,
+     "av": 8,
+     "skills": [
+      "Shadowing",
+      "Stab"
+     ],
+     "primary": [
+      "D",
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 60000
+    },
+    {
+     "name": "Chaos Dwarf Blocker",
+     "keywords": [
+      "Blocker",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 4,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Iron Hard Skin",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Flamesmith",
+     "keywords": [
+      "Special",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Brawler",
+      "Breathe Fire",
+      "Disturbing Presence",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Bull Centaur",
+     "keywords": [
+      "Blitzer",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 4,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Sprint",
+      "Sure Feet",
+      "Thick Skull",
+      "Unsteady"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "cost": 130000
+    },
+    {
+     "name": "Minotaur",
+     "keywords": [
+      "Big Guy",
+      "Minotaur"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Frenzy",
+      "Horns",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Unchannelled Fury"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 150000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": [
+    "Favoured of Hashut"
+   ]
+  },
+  "chaos_renegades": {
+   "name": "Chaos Renegades",
+   "tier": "3",
+   "positions": [
+    {
+     "name": "Renegade Human",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Animosity (All)"
+     ],
+     "primary": [
+      "D",
+      "G",
+      "M"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Renegade Goblin",
+     "keywords": [
+      "Goblin",
+      "Lineman"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Animosity (All)",
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "secondary": [
+      "G",
+      "P"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Renegade Orc",
+     "keywords": [
+      "Lineman",
+      "Orc"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 10,
+     "skills": [
+      "Animosity (All)"
+     ],
+     "primary": [
+      "D",
+      "G",
+      "M"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Renegade Skaven",
+     "keywords": [
+      "Lineman",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Animosity (All)"
+     ],
+     "primary": [
+      "D",
+      "G",
+      "M"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Renegade Dark Elf",
+     "keywords": [
+      "Elf",
+      "Lineman"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Animosity (All)"
+     ],
+     "primary": [
+      "A",
+      "D",
+      "G",
+      "M"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Renegade Human Thrower",
+     "keywords": [
+      "Human",
+      "Thrower"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Animosity (All)",
+      "Pass",
+      "Sure Hands"
+     ],
+     "primary": [
+      "D",
+      "G",
+      "M",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Troll*",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M",
+      "P"
+     ],
+     "cost": 115000
+    },
+    {
+     "name": "Ogre*",
+     "keywords": [
+      "Big Guy",
+      "Ogre"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Loner ( 4+ 3+ )",
+      "Mighty Blow",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 140000
+    },
+    {
+     "name": "Minotaur*",
+     "keywords": [
+      "Big Guy",
+      "Minotaur"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Frenzy",
+      "Horns",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Unchannelled Fury"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 150000
+    },
+    {
+     "name": "Rat Ogre*",
+     "keywords": [
+      "Big Guy",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Animal Savagery",
+      "Frenzy",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Prehensile Tail"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 150000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": [
+    "Favoured of Khorne",
+    "Favoured of Nurgle",
+    "Favoured of Slaanesh",
+    "Favoured of Tzeentch",
+    "Favoured of Undivided"
+   ]
+  },
+  "dark_elf": {
+   "name": "Dark Elf",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Dark Elf Lineman",
+     "keywords": [
+      "Lineman",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "-"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S",
+      "D"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Dark Elf Runner",
+     "keywords": [
+      "Runner",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dump-off",
+      "Punt"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "S",
+      "D"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Dark Elf Assassin",
+     "keywords": [
+      "Special",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Hit and Run",
+      "Shadowing",
+      "Stab"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G",
+      "S"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Dark Elf Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Block"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S",
+      "D"
+     ],
+     "cost": 105000
+    },
+    {
+     "name": "Witch Elf",
+     "keywords": [
+      "Special",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Frenzy",
+      "Jump Up"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S",
+      "D"
+     ],
+     "cost": 110000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "dwarf": {
+   "name": "Dwarf",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Dwarf Lineman",
+     "keywords": [
+      "Lineman",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 4,
+     "st": 3,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Defensive",
+      "Thick Skull"
+     ],
+     "primary": [
+      "D",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Dwarf Runner",
+     "keywords": [
+      "Runner",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Sprint",
+      "Sure Hands",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Dwarf Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 4,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Diving Tackle",
+      "Tackle",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "P"
+     ],
+     "cost": 100000
+    },
+    {
+     "name": "Troll Slayer",
+     "keywords": [
+      "Special",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 5,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Dauntless",
+      "Frenzy",
+      "Hatred (Troll)",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "D"
+     ],
+     "cost": 95000
+    },
+    {
+     "name": "Deathroller",
+     "keywords": [
+      "Big Guy",
+      "Dwarf",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 7,
+     "ag": 5,
+     "pa": null,
+     "av": 11,
+     "skills": [
+      "Break Tackle",
+      "Dirty Player",
+      "Juggernaut",
+      "Loner (4+)",
+      "Mighty Blow",
+      "No Ball",
+      "Secret Weapon",
+      "Stand Firm"
+     ],
+     "primary": [
+      "D",
+      "S"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 170000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Brawlin' Brutes",
+    "Bribery and Corruption"
+   ]
+  },
+  "elven_union": {
+   "name": "Elven Union",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Elf Lineman",
+     "keywords": [
+      "Lineman",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Fumblerooski"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Elf Thrower",
+     "keywords": [
+      "Thrower",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 2,
+     "pa": 2,
+     "av": 8,
+     "skills": [
+      "Hail Mary Pass",
+      "Pass"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Elf Catcher",
+     "keywords": [
+      "Catcher",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 2,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Catch",
+      "Diving Catch",
+      "Nerves of Steel"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 100000
+    },
+    {
+     "name": "Elf Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Sidestep"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 115000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "gnome": {
+   "name": "Gnome",
+   "tier": "4",
+   "positions": [
+    {
+     "name": "Gnome Lineman",
+     "keywords": [
+      "Lineman",
+      "Gnome"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 7,
+     "skills": [
+      "Jump Up",
+      "Right Stuff",
+      "Stunty",
+      "Wrestle"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "G",
+      "S",
+      "D"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Woodland Fox",
+     "keywords": [
+      "Runner",
+      "Animal"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 2,
+     "ag": 2,
+     "pa": null,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "My Ball",
+      "Sidestep",
+      "Stunty"
+     ],
+     "primary": [
+      "-"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Gnome Illusionist",
+     "keywords": [
+      "Special",
+      "Gnome"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 3,
+     "av": 7,
+     "skills": [
+      "Jump Up",
+      "Stunty",
+      "Trickster",
+      "Wrestle"
+     ],
+     "primary": [
+      "A",
+      "P"
+     ],
+     "secondary": [
+      "G",
+      "D"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Gnome Beastmaster",
+     "keywords": [
+      "Blocker",
+      "Gnome"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Guard",
+      "Jump Up",
+      "Stunty",
+      "Wrestle"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "D",
+      "G",
+      "S"
+     ],
+     "cost": 55000
+    },
+    {
+     "name": "Altern Forest Treeman",
+     "keywords": [
+      "Big Guy",
+      "Treeman"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 2,
+     "st": 6,
+     "ag": 5,
+     "pa": 5,
+     "av": 11,
+     "skills": [
+      "Mighty Blow",
+      "Stand Firm",
+      "Strong Arm",
+      "Take Root",
+      "Thick Skull",
+      "Throw Team-mate",
+      "Timmm-ber!"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 120000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "goblin": {
+   "name": "Goblin",
+   "tier": "4",
+   "positions": [
+    {
+     "name": "Goblin Lineman",
+     "keywords": [
+      "Goblin",
+      "Lineman"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G",
+      "P",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Looney",
+     "keywords": [
+      "Goblin",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": null,
+     "av": 8,
+     "skills": [
+      "Chainsaw",
+      "No Ball",
+      "Secret Weapon",
+      "Stunty"
+     ],
+     "primary": [
+      "D"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Bomma",
+     "keywords": [
+      "Goblin",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Bombardier",
+      "Dodge",
+      "Secret Weapon",
+      "Stunty"
+     ],
+     "primary": [
+      "D",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "S"
+     ],
+     "cost": 45000
+    },
+    {
+     "name": "'Ooligan",
+     "keywords": [
+      "Goblin",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 5,
+     "av": 8,
+     "skills": [
+      "Dirty Player (+1)",
+      "Disturbing Presence",
+      "Dodge",
+      "Right Stuff",
+      "Stunty",
+      "Taunt"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G",
+      "S"
+     ],
+     "cost": 60000
+    },
+    {
+     "name": "Doom Diver",
+     "keywords": [
+      "Goblin",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 6,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty",
+      "Swoop"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "D",
+      "G",
+      "S"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Fanatic",
+     "keywords": [
+      "Goblin",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 3,
+     "st": 7,
+     "ag": 3,
+     "pa": null,
+     "av": 8,
+     "skills": [
+      "Ball & Chain",
+      "No Ball",
+      "Secret Weapon",
+      "Stunty"
+     ],
+     "primary": [
+      "D",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Pogoer",
+     "keywords": [
+      "Goblin",
+      "Special"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 7,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Pogo",
+      "Stunty"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "D",
+      "G",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Trained Troll",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 115000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Bribery and Corruption"
+   ]
+  },
+  "halfling": {
+   "name": "Halfling",
+   "tier": "4",
+   "positions": [
+    {
+     "name": "Halfling Hopeful",
+     "keywords": [
+      "Lineman",
+      "Halfling"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 7,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "G",
+      "S",
+      "D"
+     ],
+     "cost": 30000
+    },
+    {
+     "name": "Halfling Hefty",
+     "keywords": [
+      "Blocker",
+      "Halfling"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Fend",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "P"
+     ],
+     "secondary": [
+      "G",
+      "S",
+      "D"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Halfling Catcher",
+     "keywords": [
+      "Catcher",
+      "Halfling"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 7,
+     "skills": [
+      "Catch",
+      "Dodge",
+      "Right Stuff",
+      "Sprint",
+      "Stunty"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "G",
+      "S",
+      "D"
+     ],
+     "cost": 55000
+    },
+    {
+     "name": "Athel Forest Treeman",
+     "keywords": [
+      "Big Guy",
+      "Treeman"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 2,
+     "st": 6,
+     "ag": 5,
+     "pa": 5,
+     "av": 11,
+     "skills": [
+      "Mighty Blow",
+      "Stand Firm",
+      "Strong Arm",
+      "Take Root",
+      "Thick Skull",
+      "Throw Team-mate",
+      "Timmm-ber!"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P",
+      "D"
+     ],
+     "cost": 120000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "high_elf": {
+   "name": "High Elf",
+   "tier": null,
+   "positions": [
+    {
+     "name": "High Elf Lineman",
+     "keywords": [
+      "Lineman",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 9,
+     "skills": [],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Phoenix Warrior",
+     "keywords": [
+      "Thrower",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 2,
+     "pa": 2,
+     "av": 9,
+     "skills": [
+      "Cloud Burster",
+      "Pass",
+      "Safe Pass"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Dragon Prince",
+     "keywords": [
+      "Blitzer",
+      "Elf",
+      "Runner"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 2,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Block",
+      "My Ball",
+      "Steady Footing"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 110000
+    },
+    {
+     "name": "White Lion",
+     "keywords": [
+      "Blitzer",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Claws",
+      "Wrestle"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 110000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "human": {
+   "name": "Human",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Human Lineman",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Halfling Hopeful",
+     "keywords": [
+      "Lineman",
+      "Halfling"
+     ],
+     "min": 0,
+     "max": 3,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 7,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "D",
+      "G",
+      "S"
+     ],
+     "cost": 30000
+    },
+    {
+     "name": "Human Catcher",
+     "keywords": [
+      "Catcher",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Catch",
+      "Dodge"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "D",
+      "P",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Human Thrower",
+     "keywords": [
+      "Thrower",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Pass",
+      "Sure Hands"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Human Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Tackle"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Ogre",
+     "keywords": [
+      "Big Guy",
+      "Ogre"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Loner (3+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 140000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": [
+    "Team Captain"
+   ]
+  },
+  "imperial_nobility": {
+   "name": "Imperial Nobility",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Imperial Retainer",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Fend"
+     ],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 45000
+    },
+    {
+     "name": "Imperial Thrower",
+     "keywords": [
+      "Thrower",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 2,
+     "av": 9,
+     "skills": [
+      "Give and Go",
+      "Pass",
+      "Pro"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Bodyguard",
+     "keywords": [
+      "Blocker",
+      "Human"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 5,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Stand Firm",
+      "Wrestle"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Noble Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Catch",
+      "Pro"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Ogre",
+     "keywords": [
+      "Big Guy",
+      "Ogre"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Loner (3+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 140000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "khorne": {
+   "name": "Khorne",
+   "tier": "3",
+   "positions": [
+    {
+     "name": "Bloodborn Marauder",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Frenzy"
+     ],
+     "primary": [
+      "G",
+      "M"
+     ],
+     "secondary": [
+      "A",
+      "S",
+      "D"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Khorngor",
+     "keywords": [
+      "Runner",
+      "Beastman"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Horns",
+      "Juggernaut",
+      "Jump Up",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "P",
+      "D"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Bloodseeker",
+     "keywords": [
+      "Blocker",
+      "Human"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 5,
+     "st": 4,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Frenzy"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 105000
+    },
+    {
+     "name": "Bloodspawn",
+     "keywords": [
+      "Big Guy",
+      "Spawn"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Claws",
+      "Frenzy",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Unchannelled Fury"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 160000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Favoured of Khorne",
+    "Brawlin' Brutes"
+   ]
+  },
+  "lizardmen": {
+   "name": "Lizardmen",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Skink Lineman",
+     "keywords": [
+      "Lineman",
+      "Lizardman"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 8,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Stunty"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "G",
+      "P",
+      "S",
+      "D"
+     ],
+     "cost": 60000
+    },
+    {
+     "name": "Chameleon Skink",
+     "keywords": [
+      "Thrower",
+      "Lizardman"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 2,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "On the Ball",
+      "Shadowing",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "P"
+     ],
+     "secondary": [
+      "G",
+      "S",
+      "D"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Saurus Blocker",
+     "keywords": [
+      "Blocker",
+      "Lizardman"
+     ],
+     "min": 0,
+     "max": 6,
+     "ma": 6,
+     "st": 4,
+     "ag": 5,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Juggernaut",
+      "Unsteady"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Kroxigor",
+     "keywords": [
+      "Big Guy",
+      "Lizardman"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 5,
+     "ag": 5,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Prehensile Tail",
+      "Thick Skull"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 140000
+    }
+   ],
+   "staff": {
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "necromantic_horror": {
+   "name": "Necromantic Horror",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Zombie Lineman",
+     "keywords": [
+      "Human",
+      "Lineman",
+      "Undead",
+      "Zombie"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 4,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Eye Gouge",
+      "Regeneration",
+      "Unsteady"
+     ],
+     "primary": [
+      "D",
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Ghoul Runner",
+     "keywords": [
+      "Ghoul",
+      "Runner",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Regeneration"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "D",
+      "P",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Wraith",
+     "keywords": [
+      "Blocker",
+      "Undead",
+      "Wraith"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": null,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Foul Appearance",
+      "No Ball",
+      "Regeneration",
+      "Sidestep"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Flesh Golem",
+     "keywords": [
+      "Blocker",
+      "Construct",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 4,
+     "st": 4,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Regeneration",
+      "Stand Firm",
+      "Thick Skull",
+      "Unsteady"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 110000
+    },
+    {
+     "name": "Werewolf",
+     "keywords": [
+      "Blitzer",
+      "Undead",
+      "Werewolf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Claws",
+      "Frenzy",
+      "Regeneration"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "D",
+      "P",
+      "S"
+     ],
+     "cost": 120000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000
+   },
+   "rerollCost": 70000,
+   "apothecary": false,
+   "specialRules": [
+    "Masters of Undeath"
+   ]
+  },
+  "norse": {
+   "name": "Norse",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Norse Raider",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Block",
+      "Drunkard",
+      "Thick Skull",
+      "Unsteady"
+     ],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "P",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Beer Boar",
+     "keywords": [
+      "Special",
+      "Animal"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 1,
+     "ag": 3,
+     "pa": null,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "No Ball",
+      "Pick-me-up",
+      "Stunty",
+      "Titchy"
+     ],
+     "primary": [],
+     "secondary": [
+      "A"
+     ],
+     "cost": 20000
+    },
+    {
+     "name": "Norse Berserker",
+     "keywords": [
+      "Blitzer",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 5,
+     "av": 8,
+     "skills": [
+      "Block",
+      "Frenzy",
+      "Jump Up"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "P"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Valkyrie",
+     "keywords": [
+      "Catcher",
+      "Human",
+      "Thrower"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Catch",
+      "Dauntless",
+      "Pass",
+      "Strip Ball"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 95000
+    },
+    {
+     "name": "Ulfwerener",
+     "keywords": [
+      "Blocker",
+      "Human"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 4,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Frenzy",
+      "Unsteady"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 105000
+    },
+    {
+     "name": "Yhetee",
+     "keywords": [
+      "Big Guy",
+      "Yhetee"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Claws",
+      "Disturbing Presence",
+      "Frenzy",
+      "Loner (4+)",
+      "Unchannelled Fury"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 140000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Favoured of Khorne (Chaos Clash)"
+   ]
+  },
+  "nurgle": {
+   "name": "Nurgle",
+   "tier": "3",
+   "positions": [
+    {
+     "name": "Rotter",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Decay",
+      "Plague Ridden"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "D"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Pestigor",
+     "keywords": [
+      "Runner",
+      "Beastman"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Horns",
+      "Plague Ridden",
+      "Regeneration",
+      "Steady Footing",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "P",
+      "D"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Bloater",
+     "keywords": [
+      "Blocker",
+      "Human"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 4,
+     "st": 4,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Disturbing Presence",
+      "Foul Appearance",
+      "Plague Ridden",
+      "Regeneration",
+      "Stand Firm",
+      "Unsteady"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 110000
+    },
+    {
+     "name": "Rotspawn",
+     "keywords": [
+      "Big Guy",
+      "Spawn"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Disturbing Presence",
+      "Foul Appearance",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Pick-me-up",
+      "Plague Ridden",
+      "Really Stupid",
+      "Regeneration",
+      "Tentacles"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "G",
+      "M",
+      "D"
+     ],
+     "cost": 140000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000
+   },
+   "rerollCost": 60000,
+   "apothecary": false,
+   "specialRules": [
+    "Favoured of Nurgle",
+    "Brawlin' Brutes"
+   ]
+  },
+  "ogre": {
+   "name": "Ogre",
+   "tier": "4",
+   "positions": [
+    {
+     "name": "Gnoblar Lineman",
+     "keywords": [
+      "Gnoblar",
+      "Lineman"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 1,
+     "ag": 3,
+     "pa": 4,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Sidestep",
+      "Stunty",
+      "Titchy"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 15000
+    },
+    {
+     "name": "Ogre Blocker",
+     "keywords": [
+      "Big Guy",
+      "Blocker",
+      "Ogre"
+     ],
+     "min": 0,
+     "max": 5,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Mighty Blow",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "G",
+      "P"
+     ],
+     "cost": 140000
+    },
+    {
+     "name": "Ogre Runt Punter",
+     "keywords": [
+      "Big Guy",
+      "Ogre",
+      "Thrower"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 4,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Kick Team-mate",
+      "Mighty Blow",
+      "Thick Skull"
+     ],
+     "primary": [
+      "P",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "G"
+     ],
+     "cost": 145000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": [
+    "Brawlin' Brutes",
+    "Low Cost Linemen"
+   ]
+  },
+  "old_world_alliance": {
+   "name": "Old World Alliance",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Human Lineman",
+     "keywords": [
+      "Lineman",
+      "Human"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Halfling Hopeful",
+     "keywords": [
+      "Lineman",
+      "Halfling"
+     ],
+     "min": 0,
+     "max": 5,
+     "ma": 5,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 7,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A"
+     ],
+     "secondary": [
+      "G",
+      "S"
+     ],
+     "cost": 30000
+    },
+    {
+     "name": "Human Catcher",
+     "keywords": [
+      "Catcher",
+      "Human"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 8,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Catch",
+      "Dodge"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Dwarf Lineman",
+     "keywords": [
+      "Lineman",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 3,
+     "ma": 4,
+     "st": 3,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Defensive",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "D"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 70000
+    },
+    {
+     "name": "Human Thrower",
+     "keywords": [
+      "Thrower",
+      "Human"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Pass",
+      "Sure Hands"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Dwarf Runner",
+     "keywords": [
+      "Runner",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Sprint",
+      "Sure Hands",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Human Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Human"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Tackle"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Dwarf Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 4,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Diving Tackle",
+      "Tackle",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "P"
+     ],
+     "cost": 100000
+    },
+    {
+     "name": "Troll Slayer",
+     "keywords": [
+      "Special",
+      "Dwarf"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 5,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Dauntless",
+      "Frenzy",
+      "Hatred (Troll)",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A"
+     ],
+     "cost": 95000
+    },
+    {
+     "name": "Ogre*",
+     "keywords": [
+      "Big Guy",
+      "Ogre"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Bone Head",
+      "Loner (3+)",
+      "Mighty Blow",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 140000
+    },
+    {
+     "name": "Altern Forest Treeman*",
+     "keywords": [
+      "Big Guy",
+      "Treeman"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 2,
+     "st": 6,
+     "ag": 5,
+     "pa": 5,
+     "av": 11,
+     "skills": [
+      "Loner (4+)",
+      "Mighty Blow",
+      "Stand Firm",
+      "Strong Arm",
+      "Take Root",
+      "Thick Skull",
+      "Throw Team-mate",
+      "Timmm-ber!"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 120000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "orc": {
+   "name": "Orc",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Orc Lineman",
+     "keywords": [
+      "Lineman",
+      "Orc"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 10,
+     "skills": [],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Goblin Lineman",
+     "keywords": [
+      "Lineman",
+      "Goblin"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G",
+      "P",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Orc Thrower",
+     "keywords": [
+      "Thrower",
+      "Orc"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Pass",
+      "Sure Hands"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "S",
+      "D"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Orc Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Orc"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 10,
+     "skills": [
+      "Block",
+      "Break Tackle"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Big Un Blocker",
+     "keywords": [
+      "Blocker",
+      "Orc"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 4,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Mighty Blow",
+      "Taunt",
+      "Thick Skull",
+      "Unsteady"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 95000
+    },
+    {
+     "name": "Troll",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 115000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Brawlin' Brutes",
+    "Team Captain"
+   ]
+  },
+  "shambling_undead": {
+   "name": "Shambling Undead",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Skeleton Lineman",
+     "keywords": [
+      "Human",
+      "Lineman",
+      "Skeleton",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 8,
+     "skills": [
+      "Regeneration",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Zombie Lineman",
+     "keywords": [
+      "Human",
+      "Lineman",
+      "Undead",
+      "Zombie"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 4,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Eye Gouge",
+      "Regeneration",
+      "Unsteady"
+     ],
+     "primary": [
+      "D",
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Ghoul Runner",
+     "keywords": [
+      "Ghoul",
+      "Runner",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Regeneration"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "D",
+      "P",
+      "S"
+     ],
+     "cost": 75000
+    },
+    {
+     "name": "Wight Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Human",
+      "Skeleton",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 5,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Regeneration",
+      "Tackle",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 95000
+    },
+    {
+     "name": "Mummy",
+     "keywords": [
+      "Big Guy",
+      "Blocker",
+      "Human",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 3,
+     "st": 5,
+     "ag": 5,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Mighty Blow",
+      "Regeneration"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 125000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000
+   },
+   "rerollCost": 70000,
+   "apothecary": false,
+   "specialRules": [
+    "Masters of Undeath"
+   ]
+  },
+  "skaven": {
+   "name": "Skaven",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Skaven Clanrat",
+     "keywords": [
+      "Lineman",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [],
+     "primary": [
+      "G",
+      "D"
+     ],
+     "secondary": [
+      "A",
+      "M",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Skaven Thrower",
+     "keywords": [
+      "Thrower",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 2,
+     "av": 8,
+     "skills": [
+      "Pass",
+      "Sure Hands"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "M",
+      "S"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Gutter Runner",
+     "keywords": [
+      "Runner",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 9,
+     "st": 2,
+     "ag": 2,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Stab"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "D"
+     ],
+     "secondary": [
+      "M",
+      "S"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Skaven Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Strip Ball"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Rat Ogre",
+     "keywords": [
+      "Big Guy",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Animal Savagery",
+      "Frenzy",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Prehensile Tail"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "M"
+     ],
+     "cost": 150000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": []
+  },
+  "snotling": {
+   "name": "Snotling",
+   "tier": "4",
+   "positions": [
+    {
+     "name": "Snotling Lineman",
+     "keywords": [
+      "Lineman",
+      "Snotling"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 1,
+     "ag": 3,
+     "pa": 4,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "Insignificant",
+      "Right Stuff",
+      "Sidestep",
+      "Stunty",
+      "Titchy"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 15000
+    },
+    {
+     "name": "Fun-hoppa",
+     "keywords": [
+      "Snotling",
+      "Special"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 1,
+     "ag": 3,
+     "pa": 4,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "Pogo",
+      "Right Stuff",
+      "Sidestep",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 20000
+    },
+    {
+     "name": "Stilty Runna",
+     "keywords": [
+      "Runner",
+      "Snotling"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 1,
+     "ag": 3,
+     "pa": 4,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Sidestep",
+      "Sprint",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "D"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 20000
+    },
+    {
+     "name": "Fungus Flinga",
+     "keywords": [
+      "Snotling",
+      "Special"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 1,
+     "ag": 3,
+     "pa": 4,
+     "av": 6,
+     "skills": [
+      "Bombardier",
+      "Dodge",
+      "Right Stuff",
+      "Secret Weapon",
+      "Sidestep",
+      "Stunty",
+      "Titchy"
+     ],
+     "primary": [
+      "A",
+      "D",
+      "P"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 30000
+    },
+    {
+     "name": "Pump Wagon",
+     "keywords": [
+      "Big Guy",
+      "Snotling",
+      "Special"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 5,
+     "st": 5,
+     "ag": 5,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Dirty Player",
+      "Juggernaut",
+      "Mighty Blow",
+      "Really Stupid",
+      "Stand Firm"
+     ],
+     "primary": [
+      "D",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 100000
+    },
+    {
+     "name": "Trained Troll",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 115000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": [
+    "Bribery and Corruption",
+    "Low Cost Linemen",
+    "Swarming"
+   ]
+  },
+  "tomb_kings": {
+   "name": "Tomb Kings",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Skeleton Lineman",
+     "keywords": [
+      "Human",
+      "Lineman",
+      "Skeleton",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 5,
+     "st": 3,
+     "ag": 4,
+     "pa": 6,
+     "av": 8,
+     "skills": [
+      "Regeneration",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Tomb Kings Thrower",
+     "keywords": [
+      "Human",
+      "Skeleton",
+      "Thrower",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 4,
+     "pa": 3,
+     "av": 9,
+     "skills": [
+      "Pass",
+      "Regeneration",
+      "Sure Hands",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "S"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Tomb Kings Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Human",
+      "Skeleton",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 3,
+     "ag": 4,
+     "pa": 5,
+     "av": 9,
+     "skills": [
+      "Block",
+      "Regeneration",
+      "Thick Skull"
+     ],
+     "primary": [
+      "G",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "D"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Tomb Guardian",
+     "keywords": [
+      "Big Guy",
+      "Blocker",
+      "Human",
+      "Undead"
+     ],
+     "min": 0,
+     "max": 4,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Brawler",
+      "Decay",
+      "Regeneration"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 115000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000
+   },
+   "rerollCost": 60000,
+   "apothecary": false,
+   "specialRules": [
+    "Masters of Undeath"
+   ]
+  },
+  "underworld_denizens": {
+   "name": "Underworld Denizens",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Goblin Lineman",
+     "keywords": [
+      "Goblin",
+      "Lineman"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 2,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Dodge",
+      "Right Stuff",
+      "Stunty"
+     ],
+     "primary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "secondary": [
+      "G",
+      "P",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Snotling Lineman",
+     "keywords": [
+      "Lineman",
+      "Snotling"
+     ],
+     "min": 0,
+     "max": 6,
+     "ma": 5,
+     "st": 1,
+     "ag": 3,
+     "pa": 4,
+     "av": 6,
+     "skills": [
+      "Dodge",
+      "Insignificant",
+      "Right Stuff",
+      "Sidestep",
+      "Stunty",
+      "Titchy"
+     ],
+     "primary": [
+      "A",
+      "D",
+      "M"
+     ],
+     "secondary": [
+      "G"
+     ],
+     "cost": 15000
+    },
+    {
+     "name": "Skaven Clanrat",
+     "keywords": [
+      "Lineman",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 3,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Animosity (Goblin)"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "D"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 50000
+    },
+    {
+     "name": "Skaven Thrower",
+     "keywords": [
+      "Skaven",
+      "Thrower"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 7,
+     "st": 3,
+     "ag": 3,
+     "pa": 2,
+     "av": 8,
+     "skills": [
+      "Animosity (Goblin)",
+      "Pass",
+      "Sure Hands"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "P"
+     ],
+     "secondary": [
+      "A",
+      "D",
+      "S"
+     ],
+     "cost": 80000
+    },
+    {
+     "name": "Gutter Runner",
+     "keywords": [
+      "Runner",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 9,
+     "st": 2,
+     "ag": 2,
+     "pa": 4,
+     "av": 8,
+     "skills": [
+      "Animosity (Goblin)",
+      "Dodge",
+      "Stab"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "M",
+      "D"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Skaven Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 8,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Animosity (Goblin)",
+      "Block",
+      "Strip Ball"
+     ],
+     "primary": [
+      "G",
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "P"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Troll*",
+     "keywords": [
+      "Big Guy",
+      "Troll"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 4,
+     "st": 5,
+     "ag": 5,
+     "pa": 5,
+     "av": 10,
+     "skills": [
+      "Always Hungry",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Projectile Vomit",
+      "Really Stupid",
+      "Regeneration",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "cost": 115000
+    },
+    {
+     "name": "Rat Ogre*",
+     "keywords": [
+      "Big Guy",
+      "Skaven"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 6,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 9,
+     "skills": [
+      "Animal Savagery",
+      "Frenzy",
+      "Loner (4+)",
+      "Mighty Blow",
+      "Prehensile Tail"
+     ],
+     "primary": [
+      "M",
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 150000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 70000,
+   "apothecary": true,
+   "specialRules": [
+    "Bribery and Corruption"
+   ]
+  },
+  "vampire": {
+   "name": "Vampire",
+   "tier": "2",
+   "positions": [
+    {
+     "name": "Thrall Lineman",
+     "keywords": [
+      "Human",
+      "Lineman",
+      "Thrall"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 6,
+     "st": 3,
+     "ag": 3,
+     "pa": 4,
+     "av": 8,
+     "skills": [],
+     "primary": [
+      "G"
+     ],
+     "secondary": [
+      "A",
+      "S"
+     ],
+     "cost": 40000
+    },
+    {
+     "name": "Vampire Runner",
+     "keywords": [
+      "Runner",
+      "Undead",
+      "Vampire"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Bloodlust (2+)",
+      "Hypnotic Gaze",
+      "Regeneration"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 100000
+    },
+    {
+     "name": "Vampire Thrower",
+     "keywords": [
+      "Thrower",
+      "Undead",
+      "Vampire"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 4,
+     "ag": 2,
+     "pa": 2,
+     "av": 9,
+     "skills": [
+      "Bloodlust (2+)",
+      "Hypnotic Gaze",
+      "Pass",
+      "Regeneration"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 110000
+    },
+    {
+     "name": "Vampire Blitzer",
+     "keywords": [
+      "Blitzer",
+      "Undead",
+      "Vampire"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 6,
+     "st": 4,
+     "ag": 2,
+     "pa": 4,
+     "av": 9,
+     "skills": [
+      "Bloodlust (3+)",
+      "Hypnotic Gaze",
+      "Juggernaut",
+      "Regeneration"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "S"
+     ],
+     "secondary": [],
+     "cost": 110000
+    },
+    {
+     "name": "Vargheist",
+     "keywords": [
+      "Big Guy",
+      "Undead",
+      "Vampire"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 5,
+     "st": 5,
+     "ag": 4,
+     "pa": 6,
+     "av": 10,
+     "skills": [
+      "Bloodlust (3+)",
+      "Claws",
+      "Frenzy",
+      "Loner (4+)",
+      "Regeneration"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 150000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 60000,
+   "apothecary": true,
+   "specialRules": [
+    "Masters of Undeath"
+   ]
+  },
+  "wood_elf": {
+   "name": "Wood Elf",
+   "tier": "1",
+   "positions": [
+    {
+     "name": "Wood Elf Lineman",
+     "keywords": [
+      "Lineman",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 16,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 8,
+     "skills": [],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 65000
+    },
+    {
+     "name": "Wood Elf Thrower",
+     "keywords": [
+      "Thrower",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 7,
+     "st": 3,
+     "ag": 2,
+     "pa": 2,
+     "av": 8,
+     "skills": [
+      "Pass",
+      "Safe Pair of Hands"
+     ],
+     "primary": [
+      "A",
+      "G",
+      "P"
+     ],
+     "secondary": [
+      "S"
+     ],
+     "cost": 85000
+    },
+    {
+     "name": "Wood Elf Catcher",
+     "keywords": [
+      "Catcher",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 2,
+     "ag": 2,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Catch",
+      "Dodge",
+      "Sprint"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 90000
+    },
+    {
+     "name": "Wardancer",
+     "keywords": [
+      "Blitzer",
+      "Elf"
+     ],
+     "min": 0,
+     "max": 2,
+     "ma": 8,
+     "st": 3,
+     "ag": 2,
+     "pa": 3,
+     "av": 8,
+     "skills": [
+      "Block",
+      "Dodge",
+      "Leap"
+     ],
+     "primary": [
+      "A",
+      "G"
+     ],
+     "secondary": [
+      "P",
+      "S"
+     ],
+     "cost": 130000
+    },
+    {
+     "name": "Loren Forest Treeman",
+     "keywords": [
+      "Big Guy",
+      "Treeman"
+     ],
+     "min": 0,
+     "max": 1,
+     "ma": 2,
+     "st": 6,
+     "ag": 5,
+     "pa": 5,
+     "av": 11,
+     "skills": [
+      "Loner (4+)",
+      "Mighty Blow",
+      "Stand Firm",
+      "Strong Arm",
+      "Take Root",
+      "Thick Skull",
+      "Throw Team-mate"
+     ],
+     "primary": [
+      "S"
+     ],
+     "secondary": [
+      "A",
+      "G"
+     ],
+     "cost": 120000
+    }
+   ],
+   "staff": {
+    "cheerleader": 10000,
+    "coach": 10000,
+    "apothecary": 50000
+   },
+   "rerollCost": 50000,
+   "apothecary": true,
+   "specialRules": []
+  }
+ },
+ "skills": {
+  "byCategory": {
+   "Agility": [
+    "Catch",
+    "Diving Catch",
+    "Diving Tackle",
+    "Dodge",
+    "Defensive",
+    "Hit and Run",
+    "Jump Up",
+    "Leap",
+    "Safe Pair of Hands",
+    "Sidestep",
+    "Sprint",
+    "Sure Feet"
+   ],
+   "Devious": [
+    "Dirty Player",
+    "Eye Gouge",
+    "Fumblerooski",
+    "Lethal Flight",
+    "Lone Fouler",
+    "Pile Driver",
+    "Put the Boot In",
+    "Quick Foul",
+    "Saboteur",
+    "Shadowing",
+    "Sneaky Git",
+    "Violent Innovator"
+   ],
+   "General": [
+    "Block",
+    "Dauntless",
+    "Fend",
+    "Frenzy",
+    "Kick",
+    "Pro",
+    "Steady Footing",
+    "Strip Ball",
+    "Sure Hands",
+    "Tackle",
+    "Taunt",
+    "Wrestle"
+   ],
+   "Mutation": [
+    "Big Hand",
+    "Claws",
+    "Disturbing Presence",
+    "Extra Arms",
+    "Foul Appearance",
+    "Horns",
+    "Iron Hard Skin",
+    "Monstrous Mouth",
+    "Prehensile Tail",
+    "Tentacles",
+    "Two Heads",
+    "Very Long Legs"
+   ],
+   "Passing": [
+    "Accurate",
+    "Cannoneer",
+    "Cloud Burster",
+    "Dump-off",
+    "Give and Go",
+    "Hail Mary Pass",
+    "Leader",
+    "Nerves of Steel",
+    "On the Ball",
+    "Pass",
+    "Punt",
+    "Safe Pass"
+   ],
+   "Strength": [
+    "Arm Bar",
+    "Brawler",
+    "Break Tackle",
+    "Bullseye",
+    "Grab",
+    "Guard",
+    "Juggernaut",
+    "Mighty Blow",
+    "Multiple Block",
+    "Stand Firm",
+    "Strong Arm",
+    "Thick Skull"
+   ]
+  },
+  "elite": [
+   "Block",
+   "Dodge",
+   "Guard",
+   "Mighty Blow"
+  ]
+ }
+}
