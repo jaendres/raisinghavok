@@ -418,11 +418,37 @@ app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
     // whole-roster edit: one call applies every changed field on every player
     case 'batch': {
       const edits = Array.isArray(body.edits) ? body.edits.slice(0, 32) : [];
+      // jersey numbers are display-only (identity lives in player.id) but two
+      // ACTIVE players can't share one — dead/retired/fired free theirs up.
+      // Validate against the roster as it will look AFTER this batch, so a
+      // swap or taking a dying player's number works in a single save.
+      const finalNum = new Map(t.bb.players.map(p => [p.id, p.num]));
+      const finalGone = new Map(t.bb.players.map(p => [p.id, !!(p.injuries.dead || p.retired)]));
+      for (const e of edits) {
+        if (!finalNum.has(e.playerId)) continue;
+        if (e.num !== undefined) {
+          if (!Number.isInteger(e.num) || e.num < 1 || e.num > 16) {
+            return res.status(400).json({ error: 'player numbers must be 1-16' });
+          }
+          finalNum.set(e.playerId, e.num);
+        }
+        if (e.status === 'retired' || e.status === 'dead' || e.fire === true) finalGone.set(e.playerId, true);
+        else if (e.status === 'active') finalGone.set(e.playerId, false);
+      }
+      const takenNums = new Set();
+      for (const [pid, num] of finalNum) {
+        if (finalGone.get(pid)) continue;
+        if (takenNums.has(num)) return res.status(400).json({ error: `two active players can't share number ${num}` });
+        takenNums.add(num);
+      }
       const toFire = [];
       for (const e of edits) {
         const pl = t.bb.players.find(p => p.id === e.playerId);
         if (!pl) continue;
         pl.counters = pl.counters || {};
+        if (Number.isInteger(e.num) && e.num !== pl.num) {
+          log(`${pl.name}: number ${pl.num} -> ${e.num}`); pl.num = e.num;
+        }
         if (typeof e.nickname === 'string') {
           const nick = bb.clampName(e.nickname, 20);
           if (nick !== (pl.nickname || '')) { pl.nickname = nick; log(`${pl.name} is now known as "${nick || '(no nickname)'}"`); }

@@ -502,7 +502,7 @@ async function viewTeam(id, tid) {
   const row = l.standings.find(r => r.teamId === tid) || {};
   const matches = l.matches.filter(m => m.home.teamId === tid || m.away.teamId === tid);
   const players = l.playerStats.filter(p => p.teamId === tid);
-  const canEdit = me && (me.toLowerCase() === (t.coach || '').toLowerCase());
+  const canEdit = me && (meAdmin || me.toLowerCase() === (t.coach || '').toLowerCase());
   $app.innerHTML = `
     <div class="crumb"><a href="#/">Leagues</a> / <a href="#/l/${l.id}">${esc(l.name)}</a> / ${esc(t.name)}</div>
     <h1>${esc(t.name)}</h1>
@@ -561,7 +561,7 @@ async function viewTeam(id, tid) {
 async function viewBBTeam(l, tid, editMode = false) {
   const t = l.teams[tid];
   const [sheet, cat] = await Promise.all([api(`/league/${l.id}/team/${tid}/bb`), catalog()]);
-  const canEdit = me && (me.toLowerCase() === (t.coach || '').toLowerCase());
+  const canEdit = me && (meAdmin || me.toLowerCase() === (t.coach || '').toLowerCase());
   const row = l.standings.find(r => r.teamId === tid) || {};
   const matches = l.matches.filter(m => m.home.teamId === tid || m.away.teamId === tid);
   const race = cat.teams[sheet.race];
@@ -613,7 +613,7 @@ async function viewBBTeam(l, tid, editMode = false) {
 
   const editRows = players.map(p => `
     <tr class="editrow ${p.injuries.dead || p.retired ? 'gone' : ''}" data-pid="${p.id}">
-      <td class="num">${p.num}</td>
+      <td class="num"><input class="e-num" type="number" min="1" max="16" value="${p.num}" style="width:52px" title="jersey number"></td>
       <td><b>${esc(p.name)}</b><br><span style="display:inline-flex;gap:4px;margin-top:3px">
         <input class="e-nick" placeholder="nickname" maxlength="20" value="${esc(p.nickname)}" style="width:130px">
         <button class="cbtn e-nickgen" title="roll a nickname">🎲</button></span></td>
@@ -722,6 +722,7 @@ async function viewBBTeam(l, tid, editMode = false) {
   if (saveBtn) saveBtn.onclick = async () => {
     const edits = [...$app.querySelectorAll('.editrow')].map(r => ({
       playerId: r.dataset.pid,
+      num: parseInt(r.querySelector('.e-num').value, 10) || undefined,
       nickname: r.querySelector('.e-nick').value,
       ko: +r.querySelector('.e-ko').value,
       ng: +r.querySelector('.e-ng').value,
