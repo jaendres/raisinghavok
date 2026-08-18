@@ -121,10 +121,14 @@ async function viewBattleTech() {
       <div class="bt-pane">
         <h2>Units <span class="muted" id="bt-count" style="float:right;font-family:'Barlow Condensed'"></span></h2>
         <div class="bt-scroll">
-          <table>
+          <table class="bt-table">
             <thead><tr>
-              <th class="bt-name">Name</th><th>Type</th><th class="num">PV</th><th>Mv</th>
-              <th class="num">S/M/L</th><th class="num">A/S</th><th>Abilities</th><th></th>
+              <th class="c-add"></th>
+              <th class="c-name">Unit</th>
+              <th class="c-pv num">PV</th>
+              <th class="c-mv">Mv</th>
+              <th class="c-dmg num">S/M/L</th>
+              <th class="c-as num">A/S</th>
             </tr></thead>
             <tbody id="bt-results"></tbody>
           </table>
@@ -141,8 +145,11 @@ async function viewBattleTech() {
         </div>
         <select id="force-saved" style="width:100%;margin-bottom:10px"><option value="">Saved forces…</option></select>
         <div class="bt-scroll">
-          <table>
-            <thead><tr><th>Unit</th><th>Skill</th><th class="num">PV</th><th></th></tr></thead>
+          <table class="force-table">
+            <thead><tr>
+              <th class="f-name">Unit</th><th class="f-skill">Skill</th>
+              <th class="f-pv num">PV</th><th class="f-rm"></th>
+            </tr></thead>
             <tbody id="force-list"></tbody>
           </table>
         </div>
@@ -197,16 +204,24 @@ async function runSearch({ append = false } = {}) {
 
   const frag = document.createDocumentFragment();
   for (const u of data.units) {
+    // Type, role and abilities go under the name rather than in their own
+    // columns. Abilities strings run long enough to push the table wider than
+    // the pane, and the add button is the one thing that must never be the
+    // part that gets scrolled off.
+    const sub = [u.type, u.role && u.role !== 'None' ? u.role : null, u.tonnage ? `${u.tonnage}t` : null]
+      .filter(Boolean).join(' · ');
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td class="bt-name">${esc(u.name)}</td>
-      <td>${esc(u.type ?? '')}</td>
-      <td class="num pv">${u.pv}</td>
-      <td>${esc(u.move ?? '')}</td>
-      <td class="num">${dmg(u)}</td>
-      <td class="num">${u.armor ?? '-'}/${u.structure ?? '-'}</td>
-      <td class="bt-abil">${esc(u.abilities ?? '')}</td>
-      <td><button class="addbtn" title="Add to force">+</button></td>`;
+      <td class="c-add"><button class="addbtn" title="Add to force">+</button></td>
+      <td class="c-name">
+        <span class="uname">${esc(u.name)}</span>
+        <span class="usub">${esc(sub)}</span>
+        ${u.abilities ? `<span class="uabil">${esc(u.abilities)}</span>` : ''}
+      </td>
+      <td class="c-pv num pv">${u.pv}</td>
+      <td class="c-mv">${esc(u.move ?? '')}</td>
+      <td class="c-dmg num">${dmg(u)}</td>
+      <td class="c-as num">${u.armor ?? '-'}/${u.structure ?? '-'}</td>`;
     tr.querySelector('.addbtn').addEventListener('click', () => {
       bt.force.push({ uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: 4, type: u.type, tonnage: u.tonnage });
       renderForce();
@@ -230,10 +245,11 @@ function renderForce() {
     const tr = document.createElement('tr');
 
     const name = document.createElement('td');
-    name.className = 'bt-name';
+    name.className = 'f-name';
     name.textContent = entry.name;
 
     const skillCell = document.createElement('td');
+    skillCell.className = 'f-skill';
     const sel = document.createElement('select');
     sel.className = 'skillsel';
     for (const s of SKILLS) {
@@ -247,10 +263,11 @@ function renderForce() {
     skillCell.append(sel);
 
     const pv = document.createElement('td');
-    pv.className = 'num pv';
+    pv.className = 'f-pv num pv';
     pv.textContent = String(pvForSkill(entry.pv, entry.skill));
 
     const rm = document.createElement('td');
+    rm.className = 'f-rm';
     const btn = document.createElement('button');
     btn.className = 'rmbtn';
     btn.textContent = '✕';
