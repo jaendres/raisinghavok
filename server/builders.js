@@ -92,14 +92,16 @@ async function metaPayload() {
 
   // Only offer factions and eras that something is actually available in, so
   // the dropdowns cannot produce an empty combination.
+  // Offer only factions and eras that actually field something, using the same
+  // table the filter queries so a dropdown can never produce an empty result.
   const factions = await query(
     `SELECT f.id, f.name FROM mul_factions f
-      WHERE EXISTS (SELECT 1 FROM mul_availability a WHERE a.faction_id = f.id)
+      WHERE EXISTS (SELECT 1 FROM mul_faction_era_units fe WHERE fe.faction_id = f.id)
       ORDER BY f.name`,
   );
   const eras = await query(
     `SELECT e.id, e.name FROM mul_eras e
-      WHERE EXISTS (SELECT 1 FROM mul_availability a WHERE a.era_id = e.id)
+      WHERE EXISTS (SELECT 1 FROM mul_faction_era_units fe WHERE fe.era_id = e.id)
       ORDER BY e.id`,
   );
 
@@ -161,13 +163,21 @@ async function search(q = {}) {
     if (v !== null) add(sql, v);
   }
 
+  // Faction/era legality comes from mul_faction_era_units, which is MUL's own
+  // faction listing, not the literal pairs printed on each unit's page.
+  //
+  // Unit pages name generic pools -- "HW Clan General", "IS Clan General",
+  // "Inner Sphere General" -- and MUL folds those into every faction they
+  // cover. Filtering the literal pairs gives Clan Wolf 72 units in the Clan
+  // Invasion era where MUL gives 596, silently hiding most of what a player can
+  // legally field.
   const faction = num(q.faction);
   const era = num(q.era);
   if (faction !== null || era !== null) {
-    const conds = ['a.unit_id = mul_units.id'];
-    if (faction !== null) { args.push(faction); conds.push(`a.faction_id = $${args.length}`); }
-    if (era !== null) { args.push(era); conds.push(`a.era_id = $${args.length}`); }
-    where.push(`EXISTS (SELECT 1 FROM mul_availability a WHERE ${conds.join(' AND ')})`);
+    const conds = ['fe.unit_id = mul_units.id'];
+    if (faction !== null) { args.push(faction); conds.push(`fe.faction_id = $${args.length}`); }
+    if (era !== null) { args.push(era); conds.push(`fe.era_id = $${args.length}`); }
+    where.push(`EXISTS (SELECT 1 FROM mul_faction_era_units fe WHERE ${conds.join(' AND ')})`);
   }
 
   const clause = `WHERE ${where.join(' AND ')}`;
