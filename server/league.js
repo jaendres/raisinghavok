@@ -17,6 +17,13 @@ const GAME_STATS = {
     ],
     // SPP per credited action (BB-style: TD 3, CAS 2, COMP 1, INT 2, MVP 4)
     spp: { td: 3, cas: 2, comp: 1, int: 2, mvp: 4 },
+    // Settings the league organiser picks when creating the league. Rendered
+    // generically by the UI, so adding a game means adding a definition here
+    // and nothing else.
+    settings: [
+      { id: 'tvCap', name: 'Team Value cap (k)', type: 'number', default: 1000 },
+      { id: 'edition', name: 'Rules edition', type: 'select', options: ['BB2025', 'BB2020'], default: 'BB2025' },
+    ],
     races: ['Amazon', 'Black Orc', 'Chaos Chosen', 'Chaos Dwarf', 'Dark Elf', 'Dwarf', 'Elven Union', 'Gnome', 'Goblin', 'Halfling', 'High Elf', 'Human', 'Imperial Nobility', 'Khorne', 'Lizardmen', 'Necromantic Horror', 'Norse', 'Nurgle', 'Ogre', 'Old World Alliance', 'Orc', 'Shambling Undead', 'Skaven', 'Snotling', 'Tomb Kings', 'Underworld Denizens', 'Vampire', 'Wood Elf'],
   },
   trenchcrusade: {
@@ -28,9 +35,64 @@ const GAME_STATS = {
     ],
     // per-warband-member credit -> "glory": VP 1, CAS 2, MVP 4
     spp: { vp: 1, cas: 2, mvp: 4 },
+    settings: [
+      { id: 'ducats', name: 'Starting ducats', type: 'number', default: 500 },
+      { id: 'gloryCap', name: 'Glory cap (0 = none)', type: 'number', default: 0 },
+    ],
     races: ['Heretic Legion', 'Trench Pilgrims', 'New Antioch', 'The Iron Sultanate', 'The Cult of the Black Grail', 'Court of the Seven-Headed Serpent', 'Mercenaries'],
   },
+
+  // BattleTech. A "race" here is the faction a player fields, which the force
+  // builder already knows about, so the list is left empty and filled from the
+  // archive rather than hard-coded — there are 80+ of them and they change.
+  battletech: {
+    name: 'BattleTech',
+    score: 'vp',
+    stats: [
+      { id: 'vp', name: 'Victory Points' },
+      { id: 'kills', name: 'Units Destroyed' },
+      { id: 'lost', name: 'Units Lost' },
+    ],
+    // Per-unit credit, the BattleTech analogue of SPP: a kill is worth more
+    // than an objective point, and the MVP award matches the other games.
+    spp: { vp: 1, kills: 2, lost: 0, mvp: 4 },
+    races: [],
+    racesFrom: 'battletech-factions',
+    // Forces are built in our own builder, so a team can point at a saved list.
+    linksForces: true,
+    settings: [
+      { id: 'mode', name: 'Play mode', type: 'select',
+        options: ['Alpha Strike', 'Total Warfare'], default: 'Alpha Strike' },
+      { id: 'cap', name: 'Force cap (PV or BV)', type: 'number', default: 300 },
+      { id: 'era', name: 'Era', type: 'era' },
+      { id: 'rulesLevel', name: 'Max rules level', type: 'select',
+        options: ['Any', 'Introductory', 'Standard', 'Advanced', 'Experimental'], default: 'Standard' },
+      { id: 'factionLocked', name: 'Lock each team to one faction', type: 'bool', default: true },
+    ],
+  },
 };
+
+// Validate and normalise the organiser's settings against a game's definition,
+// so a league can never store a value the game does not define.
+function cleanSettings(game, raw) {
+  const cfg = GAME_STATS[game];
+  const out = {};
+  for (const def of cfg?.settings ?? []) {
+    const v = raw?.[def.id];
+    if (def.type === 'number') {
+      const n = Math.round(Number(v));
+      out[def.id] = Number.isFinite(n) && n >= 0 ? Math.min(n, 1_000_000) : (def.default ?? 0);
+    } else if (def.type === 'select') {
+      out[def.id] = def.options.includes(v) ? v : (def.default ?? def.options[0]);
+    } else if (def.type === 'bool') {
+      out[def.id] = v === undefined ? Boolean(def.default) : Boolean(v);
+    } else {
+      // Free-form ids (era ids come from the builders archive).
+      out[def.id] = v === undefined || v === null ? null : String(v).slice(0, 60);
+    }
+  }
+  return out;
+}
 
 function id() { return crypto.randomBytes(6).toString('hex'); }
 
@@ -53,12 +115,13 @@ function parseRoster(text) {
     });
 }
 
-function makeLeague({ name, game, season }) {
+function makeLeague({ name, game, season, settings }) {
   const g = GAME_STATS[game] ? game : 'bloodbowl';
   return {
     id: id(), name: String(name).slice(0, 60), game: g,
     season: String(season || '1').slice(0, 20),
     status: 'active', createdAt: new Date().toISOString(),
+    settings: cleanSettings(g, settings),
     teams: {}, matches: [],
   };
 }
@@ -69,8 +132,27 @@ function makeTeam({ name, coach, race, rosterText }) {
     race: String(race || '').slice(0, 40),
     rosterText: String(rosterText || '').slice(0, 8000),
     roster: parseRoster(rosterText),
+    // Set by linkForce for games whose lists are built on this site. Stores a
+    // pointer (whose force, which name) rather than a copy, so the list stays
+    // the one the player actually maintains.
+    force: null,
     createdAt: new Date().toISOString(),
   };
+}
+
+// Point a team at one of a user's saved forces. Stored by owner + name so the
+// team always reflects the current list rather than a stale snapshot.
+function linkForce(team, { owner, name, mode, total, units }) {
+  if (!owner || !name) { team.force = null; return { ok: true }; }
+  team.force = {
+    owner: String(owner).slice(0, 40),
+    name: String(name).slice(0, 60),
+    mode: mode === 'tw' ? 'tw' : 'as',
+    total: Math.max(0, Math.round(Number(total) || 0)),
+    units: Math.max(0, Math.round(Number(units) || 0)),
+    linkedAt: new Date().toISOString(),
+  };
+  return { ok: true };
 }
 
 // side = { teamId, stats: {td:2,...}, scorers: [{player, stat, count}], mvp }
@@ -177,6 +259,7 @@ function summary(league) {
     gameName: GAME_STATS[league.game].name, season: league.season,
     status: league.status, teams: Object.keys(league.teams).length,
     matches: league.matches.length, createdAt: league.createdAt,
+    settings: league.settings ?? {},
   };
 }
 
@@ -192,4 +275,4 @@ function full(league) {
   };
 }
 
-module.exports = { GAME_STATS, makeLeague, makeTeam, makeMatch, summary, full, parseRoster };
+module.exports = { cleanSettings, linkForce, GAME_STATS, makeLeague, makeTeam, makeMatch, summary, full, parseRoster };

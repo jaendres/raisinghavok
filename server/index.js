@@ -161,6 +161,7 @@ app.post('/api/garage', (req, res) => {
 
 // ---- League tracker API ----
 const league = require('./league');
+const alphaStrike = require('../public/builders/alphastrike.js');
 
 // Reads are members-only: any logged-in account, or the bot's shared key.
 // (League data lists club members by name — not for the public internet.)
@@ -206,8 +207,41 @@ app.get('/api/league', memberReader, (req, res) => {
   res.json(Object.values(db.leagues()).map(league.summary));
 });
 
-app.get('/api/games', (req, res) => {
-  res.json(Object.entries(league.GAME_STATS).map(([id, g]) => ({ id, name: g.name })));
+app.get('/api/games', async (req, res) => {
+  // Includes each game's configurable settings so the league form can render
+  // them generically — adding a game means editing GAME_STATS, not the UI.
+  const games = await Promise.all(Object.entries(league.GAME_STATS).map(async ([id, g]) => {
+    let races = g.races ?? [];
+    // BattleTech factions come from the archive rather than a hard-coded list:
+    // there are 80+ and they differ by era.
+    if (g.racesFrom === 'battletech-factions' && builders.available()) {
+      try {
+        races = (await builders.metaPayload()).factions.map((f) => f.name);
+      } catch { /* leave empty; the league still works, just without a picker */ }
+    }
+    return {
+      id,
+      name: g.name,
+      stats: g.stats,
+      settings: g.settings ?? [],
+      races,
+      linksForces: Boolean(g.linksForces),
+    };
+  }));
+  res.json(games);
+});
+
+// Eras, for league settings that need one (BattleTech). Kept here rather than
+// in the builders API because a league organiser needs it even if they never
+// open the force builder.
+app.get('/api/games/eras', memberReader, async (req, res) => {
+  if (!builders.available()) return res.json([]);
+  try {
+    res.json((await builders.metaPayload()).eras);
+  } catch (err) {
+    console.error('[games] eras:', err.message);
+    res.json([]);
+  }
 });
 
 app.get('/api/league/:id', memberReader, (req, res) => {
@@ -217,9 +251,9 @@ app.get('/api/league/:id', memberReader, (req, res) => {
 });
 
 app.post('/api/league', leagueWriter, (req, res) => {
-  const { name, game, season } = req.body || {};
+  const { name, game, season, settings } = req.body || {};
   if (!name || String(name).trim().length < 2) return res.status(400).json({ error: 'league needs a name' });
-  const l = league.makeLeague({ name: String(name).trim(), game, season });
+  const l = league.makeLeague({ name: String(name).trim(), game, season, settings });
   db.leagues()[l.id] = l;
   db.saveLeagues();
   res.json(league.summary(l));
@@ -284,6 +318,66 @@ app.get('/api/league/:id/team/:tid/bb', memberReader, (req, res) => {
   const t = l && l.teams[req.params.tid];
   if (!t || !t.bb) return res.status(404).json({ error: 'no such drafted team' });
   res.json(bb.serializeTeam(t, sppEarnedLookup(l, t.id)));
+});
+
+// Link a saved force from the builders section to a league team.
+//
+// Stores a pointer (whose list, which name) rather than a copy, so the team
+// always shows the list the player is actually maintaining. Only the owner of
+// the force can attach it, and only to a team they own — or an admin.
+app.post('/api/league/:id/team/:tid/force', leagueWriter, async (req, res) => {
+  const l = db.leagues()[req.params.id];
+  if (!l) return res.status(404).json({ error: 'no such league' });
+  const t = l.teams[req.params.tid];
+  if (!t) return res.status(404).json({ error: 'no such team' });
+
+  const cfg = league.GAME_STATS[l.game];
+  if (!cfg?.linksForces) {
+    return res.status(400).json({ error: `${cfg?.name ?? 'This game'} doesn't use linked force lists.` });
+  }
+
+  const owner = req.reporter;
+  const { name } = req.body || {};
+
+  if (!name) { league.linkForce(t, {}); db.saveLeagues(); return res.json({ ok: true, force: null }); }
+
+  const saved = db.forces(owner)[String(name)];
+  if (!saved) return res.status(404).json({ error: 'no saved force by that name' });
+
+  // Price the list the way this league plays, so the stored total is the one
+  // the organiser's cap is measured against.
+  const mode = l.settings?.mode === 'Total Warfare' ? 'tw' : 'as';
+  let total = 0;
+  try {
+    // Price each saved entry against its own crew. Iterating the resolved units
+    // and searching back for "the entry with this id" silently mis-prices
+    // duplicates, and fielding two of the same chassis at different skills is
+    // completely normal.
+    const resolved = await builders.hydrateForce(saved.units);
+    const statsById = new Map(resolved.map((u) => [u.id, u]));
+    total = saved.units.reduce((n, entry) => {
+      const u = statsById.get(Number(entry.id));
+      if (!u) return n;
+      return n + (mode === 'tw'
+        ? alphaStrike.bvForCrew(u.bv, entry.gunnery ?? 4, entry.piloting ?? 5)
+        : alphaStrike.pvForSkill(u.pv, entry.skill ?? 4));
+    }, 0);
+  } catch (err) {
+    console.error('[league] force pricing:', err.message);
+    return res.status(502).json({ error: 'Unit database is not answering.' });
+  }
+
+  league.linkForce(t, { owner, name, mode, total, units: saved.units.length });
+
+  const cap = Number(l.settings?.cap) || 0;
+  db.saveLeagues();
+  res.json({
+    ok: true,
+    force: t.force,
+    // Report rather than refuse: an organiser may well allow an overrun, and
+    // silently rejecting a list is worse than showing the number.
+    overCap: cap > 0 && total > cap ? { cap, total, over: total - cap } : null,
+  });
 });
 
 app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
