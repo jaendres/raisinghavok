@@ -56,11 +56,12 @@ function loginWall() {
 
 // Skill/PV maths comes from /builders/alphastrike.js, which the server also
 // requires — one implementation of the rule, shared by both sides.
-const { pvForSkill, SKILLS } = window.AlphaStrike;
+const { pvForSkill, tmmForMove, SKILLS } = window.AlphaStrike;
 
 const bt = {
   meta: null,
-  force: [],      // { uid, id, name, pv (base), skill, type, tonnage }
+  force: [],          // { uid, id, name, pv (base), skill, type, tonnage }
+  statsById: new Map(), // full stats for anything seen, for the print sheet
   offset: 0,
   total: 0,
   uid: 1,
@@ -156,7 +157,8 @@ async function viewBattleTech() {
         <p class="muted" id="force-empty">Nuffin' here yet — add units from da list.</p>
         <div class="force-total"><span class="muted"><span id="force-count">0</span> units</span><b id="force-pv">0</b></div>
         <div class="force-actions">
-          <button class="btn ghost small" id="force-copy">Copy as text</button>
+          <button class="btn ghost small" id="force-print">Print sheet</button>
+          <button class="btn ghost small" id="force-copy">Copy text</button>
           <button class="btn ghost small" id="force-clear">Clear</button>
         </div>
       </div>
@@ -204,6 +206,7 @@ async function runSearch({ append = false } = {}) {
 
   const frag = document.createDocumentFragment();
   for (const u of data.units) {
+    bt.statsById.set(u.id, u);
     // Type, role and abilities go under the name rather than in their own
     // columns. Abilities strings run long enough to push the table wider than
     // the pane, and the add button is the one thing that must never be the
@@ -222,6 +225,7 @@ async function runSearch({ append = false } = {}) {
       <td class="c-mv">${esc(u.move ?? '')}</td>
       <td class="c-dmg num">${dmg(u)}</td>
       <td class="c-as num">${u.armor ?? '-'}/${u.structure ?? '-'}</td>`;
+    tr.querySelector('.uname').addEventListener('click', () => openUnit(u.id));
     tr.querySelector('.addbtn').addEventListener('click', () => {
       bt.force.push({ uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: 4, type: u.type, tonnage: u.tonnage });
       renderForce();
@@ -353,6 +357,7 @@ function wireBattleTech() {
     if (!name) return;
     try {
       const data = await api('/builders/forces/' + encodeURIComponent(name));
+      for (const u of data.units) bt.statsById.set(u.id, u);
       bt.force = data.units.map((u) => ({
         uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: u.skill, type: u.type, tonnage: u.tonnage,
       }));
@@ -370,6 +375,8 @@ function wireBattleTech() {
       toast(`Deleted "${name}"`);
     } catch (err) { toast(err.message); }
   });
+
+  document.getElementById('force-print').addEventListener('click', () => printForce());
 
   document.getElementById('force-clear').addEventListener('click', () => {
     bt.force = [];
@@ -389,6 +396,160 @@ function wireBattleTech() {
   });
 }
 
+// ------------------------------------------------------------- unit detail
+
+// Images sit behind the same member check as everything else, and an <img>
+// tag cannot send an Authorization header. So the bytes are fetched with the
+// token and handed to the page as a blob url -- which also keeps the session
+// token out of URLs, browser history and referrer headers.
+async function imageObjectUrl(path) {
+  const res = await fetch(path, { headers: token ? { Authorization: 'Bearer ' + token } : {} });
+  if (!res.ok) return null;
+  return URL.createObjectURL(await res.blob());
+}
+
+const cardPath = (id) => `/api/builders/battletech/units/${id}/card`;
+
+// Full unit sheet in a modal: the rendered Alpha Strike card, the stat line,
+// and every faction/era it is legal in. The card is the same image the Master
+// Unit List printed, archived before that site closed.
+async function openUnit(id) {
+  const back = document.createElement('div');
+  back.className = 'modal-back';
+  back.innerHTML = '<div class="modal"><p class="muted">Loading…</p></div>';
+  back.addEventListener('click', (ev) => { if (ev.target === back) back.remove(); });
+  document.body.append(back);
+
+  const onEsc = (ev) => { if (ev.key === 'Escape') { back.remove(); document.removeEventListener('keydown', onEsc); } };
+  document.addEventListener('keydown', onEsc);
+
+  let data;
+  try {
+    data = await api(`/builders/battletech/units/${id}`);
+  } catch (err) {
+    back.querySelector('.modal').innerHTML = `<div class="warn">${esc(err.message)}</div>`;
+    return;
+  }
+
+  const u = data.unit;
+  const stat = (label, value) => `<div class="st"><span>${label}</span><b>${esc(value ?? '—')}</b></div>`;
+
+  back.querySelector('.modal').innerHTML = `
+    <button class="modal-x" title="Close">&#10005;</button>
+    <h2>${esc(u.name)}</h2>
+    <div class="sub">${esc([u.type, u.role && u.role !== 'None' ? u.role : null, u.tech, u.rules]
+      .filter(Boolean).join(' · '))}</div>
+
+    <div class="unit-body">
+      <div class="unit-card">
+        <div id="card-slot"><p class="muted">Loading card…</p></div>
+      </div>
+
+      <div class="unit-facts">
+        <div class="stats">
+          ${stat('PV', u.pv)}${stat('Size', u.size)}${stat('Tonnage', u.tonnage)}
+          ${stat('Move', u.move)}${stat('TMM', tmmForMove(u.move))}${stat('Overheat', u.overheat)}
+          ${stat('Armor', u.armor)}${stat('Structure', u.structure)}${stat('Threshold', u.threshold)}
+          ${stat('S / M / L / E', `${u.damage.s ?? '-'} / ${u.damage.m ?? '-'} / ${u.damage.l ?? '-'} / ${u.damage.e ?? '-'}`)}
+          ${stat('Battle Value', u.bv)}${stat('Introduced', u.introduced)}
+        </div>
+        ${u.abilities ? `<p class="abilities"><span>Abilities</span> ${esc(u.abilities)}</p>` : ''}
+        ${u.tro ? `<p class="muted">Source: ${esc(u.tro)}</p>` : ''}
+
+        <h3>Availability</h3>
+        ${data.availability.length ? data.availability.map((e) => `
+          <details class="era">
+            <summary>${esc(e.era)} <span class="muted">(${e.factions.length})</span></summary>
+            <div class="factions">${e.factions.map((f) => esc(f.name)).join(' · ')}</div>
+          </details>`).join('')
+          : '<p class="muted">No faction availability recorded.</p>'}
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn small" id="modal-add">Add to force</button>
+      <button class="btn ghost small" id="modal-close">Close</button>
+    </div>`;
+
+  // Load the card, then wire "open in new tab" to the same blob so the full
+  // size image opens without a second authenticated request.
+  (async () => {
+    const slot = back.querySelector('#card-slot');
+    if (!slot) return;
+    const url = await imageObjectUrl(cardPath(u.id));
+    if (!url) {
+      slot.innerHTML = '<p class="muted">No card was archived for this unit — the source site could not render one.</p>';
+      return;
+    }
+    slot.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `Alpha Strike card for ${u.name}`;
+    const open = document.createElement('button');
+    open.className = 'btn ghost small';
+    open.textContent = 'Open card in new tab';
+    open.addEventListener('click', () => window.open(url, '_blank', 'noopener'));
+    slot.append(img, open);
+  })();
+
+  const close = () => { back.remove(); document.removeEventListener('keydown', onEsc); };
+  back.querySelector('.modal-x').addEventListener('click', close);
+  back.querySelector('#modal-close').addEventListener('click', close);
+  bt.statsById.set(u.id, u);
+  back.querySelector('#modal-add').addEventListener('click', () => {
+    bt.force.push({ uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: 4, type: u.type, tonnage: u.tonnage });
+    renderForce();
+    toast(`Added ${u.name}`);
+    close();
+  });
+}
+
+// ----------------------------------------------------------- print playsheet
+
+// A play sheet, not a screenshot of the app: one row per unit with everything
+// needed at the table, sized to print on a single sheet where possible.
+function printForce() {
+  if (!bt.force.length) return toast('Add some units first.');
+  const name = document.getElementById('force-name').value.trim() || 'Force';
+
+  const rows = bt.force.map((e) => {
+    const u = bt.statsById?.get(e.id) ?? {};
+    return `<tr>
+      <td class="p-name">${esc(e.name)}</td>
+      <td>${esc(u.type ?? e.type ?? '')}</td>
+      <td class="num">${e.skill}</td>
+      <td class="num">${pvForSkill(e.pv, e.skill)}</td>
+      <td>${esc(u.move ?? '')}</td>
+      <td class="num">${tmmForMove(u.move ?? e.move) ?? ''}</td>
+      <td class="num">${u.damage ? `${u.damage.s ?? '-'}/${u.damage.m ?? '-'}/${u.damage.l ?? '-'}` : ''}</td>
+      <td class="num">${u.overheat ?? ''}</td>
+      <td class="num">${u.armor ?? ''} / ${u.structure ?? ''}</td>
+      <td class="p-abil">${esc(u.abilities ?? '')}</td>
+      <td class="p-track"></td>
+    </tr>`;
+  }).join('');
+
+  const sheet = document.createElement('div');
+  sheet.id = 'printsheet';
+  sheet.innerHTML = `
+    <h1>${esc(name)}</h1>
+    <div class="p-meta">${bt.force.length} units &bull; ${forceTotal()} PV &bull; Alpha Strike</div>
+    <table>
+      <thead><tr>
+        <th>Unit</th><th>Type</th><th class="num">Sk</th><th class="num">PV</th>
+        <th>Mv</th><th class="num">TMM</th><th class="num">S/M/L</th><th class="num">OV</th>
+        <th class="num">A / S</th><th>Abilities</th><th>Damage track</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="p-foot">Raising Havok — from our archive of the Master Unit List</p>`;
+
+  document.body.append(sheet);
+  const cleanup = () => { sheet.remove(); window.removeEventListener('afterprint', cleanup); };
+  window.addEventListener('afterprint', cleanup);
+  window.print();
+}
+
 // ------------------------------------------------------------------ chooser
 
 function viewHome() {
@@ -405,7 +566,9 @@ function viewHome() {
       <div class="card builder-card" onclick="location.href='/league/'">
         <div class="game">Blood Bowl</div>
         <h3>Team Draft &amp; Roster</h3>
-        <div class="meta">Lives on da league page — draftin', advancement an' injuries.</div>
+        <div class="meta">Draftin', advancement an' injuries. A Blood Bowl roster belongs to a
+          team in a league, so pick yer league an' team on da league page an' da draft screen
+          opens from there.</div>
       </div>
     </div>`;
 }

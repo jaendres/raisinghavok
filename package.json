@@ -7,6 +7,7 @@
     "start": "node server/index.js"
   },
   "dependencies": {
+    "@azure/storage-blob": "^12.33.0",
     "express": "^4.19.2",
     "pg": "^8.23.0",
     "socket.io": "^4.7.5"

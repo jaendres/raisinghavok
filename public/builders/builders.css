@@ -122,3 +122,77 @@ main { width: min(1500px, 97vw); }
   .bt-layout { grid-template-columns: 1fr; }
   .bt-scroll { max-height: none; }
 }
+
+/* ---- unit detail modal ---- */
+
+.c-name .uname { cursor: pointer; }
+.c-name .uname:hover { color: var(--rust); text-decoration: underline; }
+
+.modal-back {
+  position: fixed; inset: 0; background: rgba(0,0,0,.72);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 4vh 2vw; z-index: 100; overflow: auto;
+}
+.modal {
+  position: relative; background: var(--panel); border: 1px solid #2b221b;
+  border-top: 3px solid var(--rust); box-shadow: 6px 6px 0 #000;
+  padding: 20px 24px; width: min(980px, 96vw);
+}
+.modal h2 { margin: 0 0 2px; font-size: 22px; }
+.modal h3 { font-size: 15px; color: var(--rust); margin: 16px 0 8px; }
+.modal-x {
+  position: absolute; top: 10px; right: 12px; background: transparent;
+  border: 1px solid #3a2f26; color: var(--dust); cursor: pointer; padding: 2px 8px;
+}
+.modal-x:hover { background: var(--blood); border-color: var(--blood); color: #fff; }
+.modal-actions { display: flex; gap: 8px; margin-top: 18px; }
+
+.unit-body { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; }
+.unit-card img { width: 100%; height: auto; border: 1px solid #2b221b; background: #fff; }
+.unit-card .btn { margin-top: 8px; display: inline-block; }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px 12px; }
+.st { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed #2b221b; padding: 3px 0; }
+.st span { color: var(--dust); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+.st b { font-family: 'Black Ops One'; font-size: 14px; }
+
+.abilities { margin-top: 12px; font-size: 15px; line-height: 1.4; }
+.abilities span { color: var(--dust); text-transform: uppercase; font-size: 12.5px; letter-spacing: .08em; }
+
+.era { border-bottom: 1px dashed #2b221b; padding: 5px 0; }
+.era summary { cursor: pointer; color: var(--bone); }
+.era summary:hover { color: var(--rust); }
+.factions { color: var(--dust); font-size: 14px; padding: 6px 0 4px 14px; line-height: 1.5; }
+
+@media (max-width: 760px) { .unit-body { grid-template-columns: 1fr; } }
+
+/* ---- printable play sheet ---- */
+
+#printsheet { display: none; }
+
+@media print {
+  /* Print the sheet, nothing else — no nav, no filters, no app chrome. */
+  body > *:not(#printsheet) { display: none !important; }
+
+  #printsheet {
+    display: block; color: #000; background: #fff;
+    font-family: 'Barlow Condensed', Arial, sans-serif;
+  }
+  #printsheet h1 { font-size: 20pt; margin: 0 0 2mm; color: #000; text-shadow: none; }
+  #printsheet .p-meta { font-size: 10pt; margin-bottom: 4mm; color: #333; }
+  #printsheet table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  #printsheet th {
+    text-align: left; border-bottom: 1.5pt solid #000; padding: 1.5mm 1mm;
+    color: #000; font-size: 8pt; text-transform: uppercase; background: none;
+  }
+  #printsheet td { border-bottom: 0.4pt solid #999; padding: 1.5mm 1mm; vertical-align: top; }
+  #printsheet .num { text-align: right; }
+  #printsheet .p-name { font-weight: 700; }
+  #printsheet .p-abil { font-size: 7.5pt; }
+  /* Blank box for marking damage during play. */
+  #printsheet .p-track { width: 34mm; border-bottom: 0.4pt solid #999; }
+  #printsheet tbody tr { page-break-inside: avoid; }
+  #printsheet .p-foot { margin-top: 4mm; font-size: 7.5pt; color: #666; }
+
+  @page { margin: 10mm; size: landscape; }
+}

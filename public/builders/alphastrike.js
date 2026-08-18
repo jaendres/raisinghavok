@@ -33,5 +33,38 @@
     return Math.max(basePV + multiplier, 1);
   }
 
-  return { pvForSkill: pvForSkill, SKILLS: [0, 1, 2, 3, 4, 5, 6, 7, 8] };
+  // Target Movement Modifier, derived from a unit's movement.
+  //
+  // The Master Unit List's JSON reports TMM as 0 for every single unit -- the
+  // field is simply never populated -- while the card it renders shows the real
+  // value. TMM is consulted on every attack roll, so it is derived here from
+  // the movement rate instead of trusting that field.
+  //
+  // Verified against the cards MUL itself rendered:
+  //   Atlas AS7-D-DC   MV  6"  -> TMM 1
+  //   Panther PNT-9ALAG MV 10" -> TMM 2
+  //   Mongoose MON-68  MV 14"  -> TMM 3
+  //   Snow Fox 2       MV 20"  -> TMM 4
+  var TMM_BANDS = [
+    [4, 0], [8, 1], [12, 2], [18, 3], [34, 4],
+  ];
+
+  function tmmForMove(move) {
+    if (move === null || move === undefined) return null;
+    // Movement looks like '6"', '4"j', '6"t', or '8"/6"j' for multi-mode units.
+    // Alpha Strike takes the primary (first) movement rate.
+    var m = String(move).match(/(\d+)/);
+    if (!m) return null;
+    var inches = Number(m[1]);
+    for (var i = 0; i < TMM_BANDS.length; i++) {
+      if (inches <= TMM_BANDS[i][0]) return TMM_BANDS[i][1];
+    }
+    return 5;
+  }
+
+  return {
+    pvForSkill: pvForSkill,
+    tmmForMove: tmmForMove,
+    SKILLS: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  };
 }));

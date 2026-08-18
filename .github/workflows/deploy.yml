@@ -40,6 +40,8 @@ jobs:
               discordClientId='${{ secrets.DISCORD_CLIENT_ID }}' \
               discordClientSecret='${{ secrets.DISCORD_CLIENT_SECRET }}' \
               mulDatabaseUrl='${{ secrets.MUL_DATABASE_URL }}' \
+              mulStorageAccount='${{ secrets.MUL_STORAGE_ACCOUNT }}' \
+              mulStorageKey='${{ secrets.MUL_STORAGE_KEY }}' \
             --output none
 
       - uses: actions/setup-node@v4

@@ -40,6 +40,12 @@ param discordGuildId string = '963268059362103376'
 @secure()
 param mulDatabaseUrl string = ''
 
+// Blob storage holding the archived unit cards and artwork. Empty disables the
+// image endpoints; the builder still works, just without pictures.
+param mulStorageAccount string = ''
+@secure()
+param mulStorageKey string = ''
+
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: planName
 }
@@ -104,6 +110,14 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'MUL_DATABASE_URL'
           value: mulDatabaseUrl
+        }
+        {
+          name: 'MUL_STORAGE_ACCOUNT'
+          value: mulStorageAccount
+        }
+        {
+          name: 'MUL_STORAGE_KEY'
+          value: mulStorageKey
         }
       ]
     }

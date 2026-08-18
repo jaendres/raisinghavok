@@ -585,6 +585,32 @@ app.get('/api/builders/battletech/units/:id', memberReader, buildersReady, async
   }
 });
 
+// Unit imagery. Members-only like the rest of the builder; the images are part
+// of the same private archive.
+const media = require('./media');
+
+app.get('/api/builders/battletech/units/:id/card', memberReader, async (req, res) => {
+  if (!media.available()) return res.status(503).json({ error: 'Image storage ain\'t hooked up yet.' });
+  try {
+    await media.send(res, media.cardBlob(req.params.id));
+  } catch (err) {
+    console.error('[media] card:', err.message);
+    res.status(502).json({ error: 'Could not load that card.' });
+  }
+});
+
+app.get('/api/builders/battletech/units/:id/art', memberReader, buildersReady, async (req, res) => {
+  if (!media.available()) return res.status(503).json({ error: 'Image storage ain\'t hooked up yet.' });
+  try {
+    const found = await builders.unit(req.params.id);
+    if (!found?.unit?.image) return res.status(404).json({ error: 'no artwork for that unit' });
+    await media.send(res, media.artBlob(found.unit.image));
+  } catch (err) {
+    console.error('[media] art:', err.message);
+    res.status(502).json({ error: 'Could not load that image.' });
+  }
+});
+
 app.get('/api/builders/forces', async (req, res) => {
   const user = authed(req);
   if (!user) return res.status(401).json({ error: 'not logged in' });
