@@ -196,3 +196,7 @@ main { width: min(1500px, 97vw); }
 
   @page { margin: 10mm; size: landscape; }
 }
+
+/* ---- Alpha Strike / Total Warfare switch ---- */
+.modeswitch { display: flex; gap: 8px; margin: -8px 0 16px; }
+.modeswitch .btn { padding: 5px 16px; }

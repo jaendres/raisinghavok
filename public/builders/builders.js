@@ -56,9 +56,19 @@ function loginWall() {
 
 // Skill/PV maths comes from /builders/alphastrike.js, which the server also
 // requires — one implementation of the rule, shared by both sides.
-const { pvForSkill, tmmForMove, SKILLS } = window.AlphaStrike;
+const { pvForSkill, tmmForMove, bvForCrew, SKILLS } = window.AlphaStrike;
+
+// 'as' = Alpha Strike (point values, one skill), 'tw' = Total Warfare (battle
+// values, separate gunnery and piloting). The Master Unit List kept these as two
+// separate builders; here they are one screen with a mode switch, because the
+// unit list and filters are identical either way.
+const MODES = {
+  as: { label: 'Alpha Strike', cost: 'PV', min: 'minPV', max: 'maxPV' },
+  tw: { label: 'Total Warfare', cost: 'BV', min: 'minBV', max: 'maxBV' },
+};
 
 const bt = {
+  mode: localStorage.getItem('bt_mode') === 'tw' ? 'tw' : 'as',
   meta: null,
   force: [],          // { uid, id, name, pv (base), skill, type, tonnage }
   statsById: new Map(), // full stats for anything seen, for the print sheet
@@ -67,7 +77,17 @@ const bt = {
   uid: 1,
 };
 
-const forceTotal = () => bt.force.reduce((n, e) => n + pvForSkill(e.pv, e.skill), 0);
+// Adjusted cost of one entry in the current mode.
+const entryCost = (e) => (bt.mode === 'tw'
+  ? bvForCrew(e.bv, e.gunnery ?? 4, e.piloting ?? 5)
+  : pvForSkill(e.pv, e.skill ?? 4));
+
+const forceTotal = () => bt.force.reduce((n, e) => n + (entryCost(e) || 0), 0);
+const forceTonnage = () => bt.force.reduce((n, e) => n + (Number(e.tonnage) || 0), 0);
+
+// Base cost before any crew adjustment — Total Warfare players quote both.
+const forceBaseTotal = () => bt.force.reduce(
+  (n, e) => n + (Number(bt.mode === 'tw' ? e.bv : e.pv) || 0), 0);
 
 const dmg = (u) => [u.damage?.s, u.damage?.m, u.damage?.l]
   .map((d) => (d === null || d === undefined ? '-' : d)).join('/');
@@ -91,9 +111,13 @@ async function viewBattleTech() {
 
   $app.innerHTML = `
     <div class="crumb"><a href="#/">&larr; Builders</a></div>
-    <h1>BattleTech — Alpha Strike</h1>
+    <h1>BattleTech</h1>
     <div class="sub">${m.counts.units.toLocaleString()} units &bull;
       ${m.counts.availabilityPairs.toLocaleString()} faction/era entries</div>
+    <div class="modeswitch">
+      <button class="btn small ${bt.mode === 'as' ? '' : 'ghost'}" data-mode="as">Alpha Strike</button>
+      <button class="btn small ${bt.mode === 'tw' ? '' : 'ghost'}" data-mode="tw">Total Warfare</button>
+    </div>
 
     <div class="bt-layout">
       <div class="bt-pane bt-filters">
@@ -106,13 +130,13 @@ async function viewBattleTech() {
         <label>Type<select id="f-type"><option value="">Any type</option>${opts(m.types)}</select></label>
         <label>Role<select id="f-role"><option value="">Any role</option>${opts(m.roles)}</select></label>
         <div class="row">
-          <label>Min PV<input type="number" id="f-minpv" min="0"></label>
-          <label>Max PV<input type="number" id="f-maxpv" min="0"></label>
+          <label>Min ${MODES[bt.mode].cost}<input type="number" id="f-mincost" min="0"></label>
+          <label>Max ${MODES[bt.mode].cost}<input type="number" id="f-maxcost" min="0"></label>
         </div>
         <label>Sort<select id="f-sort">
           <option value="name">Name</option>
-          <option value="pv">PV (high &rarr; low)</option>
-          <option value="pvasc">PV (low &rarr; high)</option>
+          <option value="${bt.mode === 'tw' ? 'bv' : 'pv'}">${MODES[bt.mode].cost} (high &rarr; low)</option>
+          <option value="${bt.mode === 'tw' ? 'bvasc' : 'pvasc'}">${MODES[bt.mode].cost} (low &rarr; high)</option>
           <option value="tonnage">Tonnage</option>
           <option value="type">Type</option>
         </select></label>
@@ -126,7 +150,7 @@ async function viewBattleTech() {
             <thead><tr>
               <th class="c-add"></th>
               <th class="c-name">Unit</th>
-              <th class="c-pv num">PV</th>
+              <th class="c-pv num">${MODES[bt.mode].cost}</th>
               <th class="c-mv">Mv</th>
               <th class="c-dmg num">S/M/L</th>
               <th class="c-as num">A/S</th>
@@ -148,14 +172,21 @@ async function viewBattleTech() {
         <div class="bt-scroll">
           <table class="force-table">
             <thead><tr>
-              <th class="f-name">Unit</th><th class="f-skill">Skill</th>
-              <th class="f-pv num">PV</th><th class="f-rm"></th>
+              <th class="f-name">Unit</th>
+              ${bt.mode === 'tw'
+                ? '<th class="f-skill">G</th><th class="f-skill">P</th>'
+                : '<th class="f-skill">Skill</th>'}
+              <th class="f-pv num">${MODES[bt.mode].cost}</th><th class="f-rm"></th>
             </tr></thead>
             <tbody id="force-list"></tbody>
           </table>
         </div>
         <p class="muted" id="force-empty">Nuffin' here yet — add units from da list.</p>
-        <div class="force-total"><span class="muted"><span id="force-count">0</span> units</span><b id="force-pv">0</b></div>
+        <div class="force-total">
+          <span class="muted"><span id="force-count">0</span> units &bull; <span id="force-tons">0</span>t</span>
+          <b id="force-pv">0</b>
+        </div>
+        <div class="muted" id="force-base" style="text-align:right;font-size:13px"></div>
         <div class="force-actions">
           <button class="btn ghost small" id="force-print">Print sheet</button>
           <button class="btn ghost small" id="force-copy">Copy text</button>
@@ -181,9 +212,10 @@ function filterParams() {
   put('era', 'f-era');
   put('type', 'f-type');
   put('role', 'f-role');
-  put('minPV', 'f-minpv');
-  put('maxPV', 'f-maxpv');
+  put(MODES[bt.mode].min, 'f-mincost');
+  put(MODES[bt.mode].max, 'f-maxcost');
   put('sort', 'f-sort');
+  p.set('mode', bt.mode);
   return p;
 }
 
@@ -221,15 +253,12 @@ async function runSearch({ append = false } = {}) {
         <span class="usub">${esc(sub)}</span>
         ${u.abilities ? `<span class="uabil">${esc(u.abilities)}</span>` : ''}
       </td>
-      <td class="c-pv num pv">${u.pv}</td>
+      <td class="c-pv num pv">${bt.mode === 'tw' ? (u.bv ?? '—') : u.pv}</td>
       <td class="c-mv">${esc(u.move ?? '')}</td>
       <td class="c-dmg num">${dmg(u)}</td>
       <td class="c-as num">${u.armor ?? '-'}/${u.structure ?? '-'}</td>`;
     tr.querySelector('.uname').addEventListener('click', () => openUnit(u.id));
-    tr.querySelector('.addbtn').addEventListener('click', () => {
-      bt.force.push({ uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: 4, type: u.type, tonnage: u.tonnage });
-      renderForce();
-    });
+    tr.querySelector('.addbtn').addEventListener('click', () => addToForce(u));
     frag.append(tr);
   }
   body.append(frag);
@@ -240,10 +269,38 @@ async function runSearch({ append = false } = {}) {
   document.getElementById('bt-more').style.display = bt.offset >= data.total ? 'none' : '';
 }
 
+// Store both costs and both crew schemes on every entry, so switching mode
+// re-prices the same force instead of forcing you to rebuild it.
+function addToForce(u) {
+  bt.statsById.set(u.id, u);
+  bt.force.push({
+    uid: bt.uid++, id: u.id, name: u.name,
+    pv: u.pv, bv: u.bv,
+    skill: 4,            // Alpha Strike: one skill, 4 is regular
+    gunnery: 4, piloting: 5, // Total Warfare: 4/5 is the regular crew
+    type: u.type, tonnage: u.tonnage, move: u.move,
+  });
+  renderForce();
+}
+
 function renderForce() {
   const body = document.getElementById('force-list');
   if (!body) return;
   body.textContent = '';
+
+  const skillSelect = (value, onChange) => {
+    const sel = document.createElement('select');
+    sel.className = 'skillsel';
+    for (const v of SKILLS) {
+      const o = document.createElement('option');
+      o.value = String(v);
+      o.textContent = String(v);
+      if (v === value) o.selected = true;
+      sel.append(o);
+    }
+    sel.addEventListener('change', () => { onChange(Number(sel.value)); renderForce(); });
+    return sel;
+  };
 
   for (const entry of bt.force) {
     const tr = document.createElement('tr');
@@ -251,24 +308,27 @@ function renderForce() {
     const name = document.createElement('td');
     name.className = 'f-name';
     name.textContent = entry.name;
+    tr.append(name);
 
-    const skillCell = document.createElement('td');
-    skillCell.className = 'f-skill';
-    const sel = document.createElement('select');
-    sel.className = 'skillsel';
-    for (const s of SKILLS) {
-      const o = document.createElement('option');
-      o.value = String(s);
-      o.textContent = String(s);
-      if (s === entry.skill) o.selected = true;
-      sel.append(o);
+    if (bt.mode === 'tw') {
+      // Total Warfare prices a unit from gunnery and piloting separately.
+      const g = document.createElement('td');
+      g.className = 'f-skill';
+      g.append(skillSelect(entry.gunnery ?? 4, (v) => { entry.gunnery = v; }));
+      const pl = document.createElement('td');
+      pl.className = 'f-skill';
+      pl.append(skillSelect(entry.piloting ?? 5, (v) => { entry.piloting = v; }));
+      tr.append(g, pl);
+    } else {
+      const sk = document.createElement('td');
+      sk.className = 'f-skill';
+      sk.append(skillSelect(entry.skill ?? 4, (v) => { entry.skill = v; }));
+      tr.append(sk);
     }
-    sel.addEventListener('change', () => { entry.skill = Number(sel.value); renderForce(); });
-    skillCell.append(sel);
 
-    const pv = document.createElement('td');
-    pv.className = 'f-pv num pv';
-    pv.textContent = String(pvForSkill(entry.pv, entry.skill));
+    const cost = document.createElement('td');
+    cost.className = 'f-pv num pv';
+    cost.textContent = String(entryCost(entry) ?? '—');
 
     const rm = document.createElement('td');
     rm.className = 'f-rm';
@@ -282,8 +342,17 @@ function renderForce() {
     });
     rm.append(btn);
 
-    tr.append(name, skillCell, pv, rm);
+    tr.append(cost, rm);
     body.append(tr);
+  }
+
+  const tons = forceTonnage();
+  document.getElementById('force-tons').textContent = tons % 1 ? tons.toFixed(1) : String(tons);
+  const base = document.getElementById('force-base');
+  if (base) {
+    base.textContent = bt.force.length
+      ? `base ${forceBaseTotal()} ${MODES[bt.mode].cost} before crew adjustment`
+      : '';
   }
 
   document.getElementById('force-pv').textContent = String(forceTotal());
@@ -319,15 +388,27 @@ function wireBattleTech() {
   };
   const rerun = debounce(() => runSearch(), 250);
 
-  for (const id of ['f-q', 'f-minpv', 'f-maxpv']) {
+  for (const id of ['f-q', 'f-mincost', 'f-maxcost']) {
     document.getElementById(id).addEventListener('input', rerun);
+  }
+
+  // Switching mode re-renders the whole screen (labels, columns, crew selects)
+  // and re-prices the force that is already assembled.
+  for (const b of document.querySelectorAll('.modeswitch button')) {
+    b.addEventListener('click', () => {
+      const next = b.dataset.mode;
+      if (next === bt.mode) return;
+      bt.mode = next;
+      localStorage.setItem('bt_mode', next);
+      viewBattleTech();
+    });
   }
   for (const id of ['f-faction', 'f-era', 'f-type', 'f-role', 'f-sort']) {
     document.getElementById(id).addEventListener('change', () => runSearch());
   }
 
   document.getElementById('f-reset').addEventListener('click', () => {
-    for (const id of ['f-q', 'f-minpv', 'f-maxpv']) document.getElementById(id).value = '';
+    for (const id of ['f-q', 'f-mincost', 'f-maxcost']) document.getElementById(id).value = '';
     for (const id of ['f-faction', 'f-era', 'f-type', 'f-role']) document.getElementById(id).value = '';
     document.getElementById('f-sort').value = 'name';
     runSearch();
@@ -343,7 +424,9 @@ function wireBattleTech() {
         method: 'POST',
         body: JSON.stringify({
           name,
-          units: bt.force.map((e) => ({ id: e.id, skill: e.skill })),
+          units: bt.force.map((e) => ({
+            id: e.id, skill: e.skill, gunnery: e.gunnery, piloting: e.piloting,
+          })),
         }),
       });
       await refreshSavedForces();
@@ -359,7 +442,11 @@ function wireBattleTech() {
       const data = await api('/builders/forces/' + encodeURIComponent(name));
       for (const u of data.units) bt.statsById.set(u.id, u);
       bt.force = data.units.map((u) => ({
-        uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: u.skill, type: u.type, tonnage: u.tonnage,
+        uid: bt.uid++, id: u.id, name: u.name,
+        pv: u.pv, bv: u.bv,
+        skill: u.skill ?? 4,
+        gunnery: u.gunnery ?? 4, piloting: u.piloting ?? 5,
+        type: u.type, tonnage: u.tonnage, move: u.move,
       }));
       document.getElementById('force-name').value = name;
       renderForce();
@@ -497,8 +584,7 @@ async function openUnit(id) {
   back.querySelector('#modal-close').addEventListener('click', close);
   bt.statsById.set(u.id, u);
   back.querySelector('#modal-add').addEventListener('click', () => {
-    bt.force.push({ uid: bt.uid++, id: u.id, name: u.name, pv: u.pv, skill: 4, type: u.type, tonnage: u.tonnage });
-    renderForce();
+    addToForce(u);
     toast(`Added ${u.name}`);
     close();
   });
@@ -512,14 +598,18 @@ function printForce() {
   if (!bt.force.length) return toast('Add some units first.');
   const name = document.getElementById('force-name').value.trim() || 'Force';
 
+  const tw = bt.mode === 'tw';
   const rows = bt.force.map((e) => {
     const u = bt.statsById?.get(e.id) ?? {};
+    const crew = tw
+      ? `<td class="num">${e.gunnery ?? 4}</td><td class="num">${e.piloting ?? 5}</td>`
+      : `<td class="num">${e.skill ?? 4}</td>`;
     return `<tr>
       <td class="p-name">${esc(e.name)}</td>
       <td>${esc(u.type ?? e.type ?? '')}</td>
-      <td class="num">${e.skill}</td>
-      <td class="num">${pvForSkill(e.pv, e.skill)}</td>
-      <td>${esc(u.move ?? '')}</td>
+      ${crew}
+      <td class="num">${entryCost(e)}</td>
+      <td>${esc(u.move ?? e.move ?? '')}</td>
       <td class="num">${tmmForMove(u.move ?? e.move) ?? ''}</td>
       <td class="num">${u.damage ? `${u.damage.s ?? '-'}/${u.damage.m ?? '-'}/${u.damage.l ?? '-'}` : ''}</td>
       <td class="num">${u.overheat ?? ''}</td>
@@ -533,10 +623,13 @@ function printForce() {
   sheet.id = 'printsheet';
   sheet.innerHTML = `
     <h1>${esc(name)}</h1>
-    <div class="p-meta">${bt.force.length} units &bull; ${forceTotal()} PV &bull; Alpha Strike</div>
+    <div class="p-meta">${bt.force.length} units &bull; ${forceTonnage()} tons &bull;
+      ${forceTotal()} ${MODES[bt.mode].cost} &bull; ${MODES[bt.mode].label}</div>
     <table>
       <thead><tr>
-        <th>Unit</th><th>Type</th><th class="num">Sk</th><th class="num">PV</th>
+        <th>Unit</th><th>Type</th>
+        ${tw ? '<th class="num">G</th><th class="num">P</th>' : '<th class="num">Sk</th>'}
+        <th class="num">${MODES[bt.mode].cost}</th>
         <th>Mv</th><th class="num">TMM</th><th class="num">S/M/L</th><th class="num">OV</th>
         <th class="num">A / S</th><th>Abilities</th><th>Damage track</th>
       </tr></thead>

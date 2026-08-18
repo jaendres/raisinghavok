@@ -130,12 +130,17 @@ const SORTS = {
   name: 'name ASC',
   pv: 'point_value DESC, name ASC',
   pvasc: 'point_value ASC, name ASC',
+  bv: 'battle_value DESC NULLS LAST, name ASC',
+  bvasc: 'battle_value ASC NULLS LAST, name ASC',
   tonnage: 'tonnage DESC NULLS LAST, name ASC',
   type: 'type ASC, name ASC',
 };
 
 async function search(q = {}) {
-  const where = ['point_value > 0'];
+  // Alpha Strike needs a point value; Total Warfare needs a Battle Value. A
+  // unit can have one without the other, so the mode decides what "fieldable"
+  // means rather than always demanding a PV.
+  const where = [q.mode === 'tw' ? 'battle_value > 0' : 'point_value > 0'];
   const args = [];
   const add = (sql, value) => {
     args.push(value);
@@ -158,6 +163,8 @@ async function search(q = {}) {
     ['maxPV', 'point_value <= $?'],
     ['minTons', 'tonnage >= $?'],
     ['maxTons', 'tonnage <= $?'],
+    ['minBV', 'battle_value >= $?'],
+    ['maxBV', 'battle_value <= $?'],
   ]) {
     const v = num(q[key]);
     if (v !== null) add(sql, v);

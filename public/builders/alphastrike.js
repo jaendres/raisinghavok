@@ -62,9 +62,47 @@
     return 5;
   }
 
+  // ---- Total Warfare -------------------------------------------------------
+  //
+  // Battle Value adjusted for crew skill, indexed [gunnery][piloting].
+  // Transcribed verbatim from the Master Unit List's Total Warfare force
+  // builder (/Force/TWBuild) before that site shut down.
+  //
+  // Two independent checks that this table is the right one:
+  //   mods[4][5] = 1.00 -- gunnery 4 / piloting 5 is the "regular" crew that a
+  //     unit's headline Battle Value is quoted at, so the multiplier is 1.
+  //   mods[4][4] = 1.10 -- Atlas AS7-D-DC base BV 1858 x 1.10 = 2044, which is
+  //     exactly the value in the 9x9 grid MUL renders on that unit's own page.
+  var BV_MODS = [
+    [2.42, 2.31, 2.21, 2.10, 1.93, 1.75, 1.68, 1.59, 1.50],
+    [2.21, 2.11, 2.02, 1.92, 1.76, 1.60, 1.54, 1.46, 1.38],
+    [1.93, 1.85, 1.76, 1.68, 1.54, 1.40, 1.35, 1.28, 1.21],
+    [1.66, 1.58, 1.51, 1.44, 1.32, 1.20, 1.16, 1.10, 1.04],
+    [1.38, 1.32, 1.26, 1.20, 1.10, 1.00, 0.95, 0.90, 0.85],
+    [1.31, 1.19, 1.13, 1.08, 0.99, 0.90, 0.86, 0.81, 0.77],
+    [1.24, 1.12, 1.07, 1.02, 0.94, 0.85, 0.81, 0.77, 0.72],
+    [1.17, 1.06, 1.01, 0.96, 0.88, 0.80, 0.76, 0.72, 0.68],
+    [1.10, 0.99, 0.95, 0.90, 0.83, 0.75, 0.71, 0.68, 0.64]
+  ];
+
+  // Rounding note: verified against 486 cells of MUL's own rendered grids, of
+  // which 482 match exactly. The four that differ are all exact halves -- e.g.
+  // Baboon (Howler) base 645 x 2.10 = 1354.5 -- where MUL's server rounds
+  // half-to-even (1354) while its force builder's JavaScript rounds half-up
+  // (1355). The site disagrees with itself; we follow its force builder, since
+  // that is the tool being replaced. The difference is at most 1 BV.
+  function bvForCrew(baseBV, gunnery, piloting) {
+    if (!Number.isFinite(baseBV)) return baseBV;
+    var g = Math.min(Math.max(Math.round(gunnery), 0), 8);
+    var p = Math.min(Math.max(Math.round(piloting), 0), 8);
+    return Math.round(baseBV * BV_MODS[g][p]);
+  }
+
   return {
     pvForSkill: pvForSkill,
     tmmForMove: tmmForMove,
+    bvForCrew: bvForCrew,
+    BV_MODS: BV_MODS,
     SKILLS: [0, 1, 2, 3, 4, 5, 6, 7, 8],
   };
 }));
