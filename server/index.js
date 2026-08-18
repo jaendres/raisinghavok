@@ -38,7 +38,7 @@ app.get('/api/config', (req, res) => {
 // and hands the session token to the client in the URL fragment (fragments
 // never reach servers or logs).
 const ssoStates = new Map(); // state -> { exp, ret }, CSRF protection + return target
-const SSO_RETURNS = ['/play/', '/league/', '/'];
+const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/'];
 
 app.get('/api/auth/discord', (req, res) => {
   if (!process.env.DISCORD_CLIENT_ID) return res.status(404).send('Discord SSO not configured');
@@ -538,6 +538,102 @@ app.delete('/api/league/:id/match/:mid', leagueWriter, (req, res) => {
   l.matches = l.matches.filter(x => x.id !== req.params.mid);
   db.saveLeagues();
   res.json({ ok: true });
+});
+
+// ---- Builders API ----
+// List builders for the games the club plays. Reference data is members-only
+// for the same reason the league is: it's our private archive, not a public
+// mirror. Saved forces belong to the logged-in account.
+const builders = require('./builders');
+
+// The builders database is a separate Azure resource. If it is unreachable the
+// rest of the site must carry on regardless, so these routes fail on their own
+// rather than at startup.
+function buildersReady(req, res, next) {
+  if (!builders.available()) {
+    return res.status(503).json({ error: 'Da unit database ain\'t hooked up yet.' });
+  }
+  next();
+}
+
+app.get('/api/builders/battletech/meta', memberReader, buildersReady, async (req, res) => {
+  try {
+    res.json(await builders.metaPayload());
+  } catch (err) {
+    console.error('[builders] meta:', err.message);
+    res.status(502).json({ error: 'Unit database is not answering.' });
+  }
+});
+
+app.get('/api/builders/battletech/units', memberReader, buildersReady, async (req, res) => {
+  try {
+    res.json(await builders.search(req.query));
+  } catch (err) {
+    console.error('[builders] search:', err.message);
+    res.status(502).json({ error: 'Unit database is not answering.' });
+  }
+});
+
+app.get('/api/builders/battletech/units/:id', memberReader, buildersReady, async (req, res) => {
+  try {
+    const found = await builders.unit(req.params.id);
+    if (!found) return res.status(404).json({ error: 'no such unit' });
+    res.json(found);
+  } catch (err) {
+    console.error('[builders] unit:', err.message);
+    res.status(502).json({ error: 'Unit database is not answering.' });
+  }
+});
+
+app.get('/api/builders/forces', async (req, res) => {
+  const user = authed(req);
+  if (!user) return res.status(401).json({ error: 'not logged in' });
+  const saved = db.forces(user.name);
+
+  // Saved forces store ids and skills only, so the totals are recomputed from
+  // live unit data. Without the database we can still list them, just without
+  // point totals — better than failing the whole request.
+  if (!builders.available()) {
+    return res.json({
+      forces: Object.values(saved)
+        .map(f => ({ name: f.name, units: f.units, updated: f.updated, totalPV: null }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    });
+  }
+
+  try {
+    res.json({ forces: await builders.summariseForces(saved) });
+  } catch (err) {
+    console.error('[builders] forces:', err.message);
+    res.status(502).json({ error: 'Unit database is not answering.' });
+  }
+});
+
+app.get('/api/builders/forces/:name', buildersReady, async (req, res) => {
+  const user = authed(req);
+  if (!user) return res.status(401).json({ error: 'not logged in' });
+  const saved = db.forces(user.name)[req.params.name];
+  if (!saved) return res.status(404).json({ error: 'no such force' });
+  try {
+    res.json({ name: saved.name, units: await builders.hydrateForce(saved.units) });
+  } catch (err) {
+    console.error('[builders] hydrate:', err.message);
+    res.status(502).json({ error: 'Unit database is not answering.' });
+  }
+});
+
+app.post('/api/builders/forces', (req, res) => {
+  const user = authed(req);
+  if (!user) return res.status(401).json({ error: 'not logged in' });
+  const r = db.saveForce(user.name, req.body?.name, req.body?.units);
+  if (r.error) return res.status(400).json(r);
+  res.json({ ok: true });
+});
+
+app.delete('/api/builders/forces/:name', (req, res) => {
+  const user = authed(req);
+  if (!user) return res.status(401).json({ error: 'not logged in' });
+  res.json(db.deleteForce(user.name, req.params.name));
 });
 
 // ---- Multiplayer lobby ----

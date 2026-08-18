@@ -133,6 +133,50 @@ function saveGarage(name, builds) {
   save();
 }
 
+// ---- Builders: saved force lists ----
+// Stored on the user record so a list built on the laptop is there on the
+// phone at the table. Only ids and skills are kept — unit stats are looked up
+// from the builders database at load time, so a re-imported archive updates
+// every saved force at once instead of leaving stale copies around.
+
+const MAX_FORCES = 40;
+const MAX_UNITS_PER_FORCE = 60;
+
+function forces(name) {
+  const user = getUser(name);
+  return user?.forces && typeof user.forces === 'object' ? user.forces : {};
+}
+
+function saveForce(name, forceName, units) {
+  const user = getUser(name);
+  if (!user) return { error: 'no such user' };
+
+  const label = String(forceName || '').trim().slice(0, 60);
+  if (!label) return { error: 'Give it a name first, git.' };
+
+  const cleaned = (Array.isArray(units) ? units : [])
+    .slice(0, MAX_UNITS_PER_FORCE)
+    .map(u => ({ id: Number(u.id), skill: Math.min(Math.max(Math.round(Number(u.skill)) || 4, 0), 8) }))
+    .filter(u => Number.isFinite(u.id));
+
+  if (!user.forces) user.forces = {};
+  if (!user.forces[label] && Object.keys(user.forces).length >= MAX_FORCES) {
+    return { error: `Yer at ${MAX_FORCES} saved forces — delete one first.` };
+  }
+
+  user.forces[label] = { name: label, units: cleaned, updated: Date.now() };
+  save();
+  return { ok: true };
+}
+
+function deleteForce(name, forceName) {
+  const user = getUser(name);
+  if (!user?.forces) return { ok: true };
+  delete user.forces[String(forceName)];
+  save();
+  return { ok: true };
+}
+
 function recordStats(name, delta) {
   const user = getUser(name);
   if (!user) return;
@@ -150,4 +194,4 @@ function leaderboard() {
 }
 
 load();
-module.exports = { createUser, checkLogin, upsertDiscordUser, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard, leagues, saveLeagues };
+module.exports = { createUser, checkLogin, upsertDiscordUser, issueToken, userByToken, revokeToken, getUser, saveGarage, recordStats, leaderboard, leagues, saveLeagues, forces, saveForce, deleteForce };

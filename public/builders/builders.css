@@ -1,0 +1,83 @@
+/* Builders section.
+   Inherits the club's look from the league stylesheet so the whole site stays
+   one design, then adds the three-pane layout the force builder needs. */
+@import url('/league/league.css');
+
+main { width: min(1500px, 97vw); }
+
+/* ---- builder chooser ---- */
+
+.builder-card { cursor: pointer; transition: transform .1s, border-color .1s; }
+.builder-card:hover { transform: translateY(-3px); border-top-color: var(--rust); }
+.builder-card h3 { font-size: 21px; color: var(--bone); }
+.builder-card .meta { color: var(--dust); font-size: 14px; margin-top: 6px; }
+.builder-card .game { color: var(--rust); font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase; }
+
+/* ---- three-pane force builder ---- */
+
+.bt-layout {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 400px;
+  gap: 14px;
+  align-items: start;
+}
+
+.bt-pane {
+  background: var(--panel);
+  border: 1px solid #2b221b;
+  border-top: 3px solid var(--rust-dk);
+  padding: 14px 16px;
+}
+
+.bt-pane h2 { margin: 0 0 10px; font-size: 16px; }
+
+.bt-filters label { margin-bottom: 10px; }
+.bt-filters .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.bt-scroll { max-height: 62vh; overflow: auto; }
+.bt-scroll table { font-size: 15px; }
+.bt-scroll th { position: sticky; top: 0; background: var(--panel); z-index: 1; }
+
+.bt-name { min-width: 11rem; }
+.bt-abil { color: var(--dust); font-size: 13px; }
+.pv { color: var(--rust); font-family: 'Black Ops One'; font-size: 14px; }
+
+.addbtn {
+  cursor: pointer; background: transparent; color: var(--dust);
+  border: 1px solid #3a2f26; padding: 1px 9px; font-family: 'Black Ops One'; font-size: 13px;
+}
+.addbtn:hover { background: var(--ok); border-color: var(--ok); color: #0c0a08; }
+
+.rmbtn {
+  cursor: pointer; background: transparent; color: var(--dust);
+  border: 1px solid transparent; padding: 1px 7px; font-size: 14px;
+}
+.rmbtn:hover { background: var(--blood); border-color: var(--blood); color: #fff; }
+
+.skillsel { padding: 2px 4px; font-size: 14px; }
+
+.force-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-top: 2px solid #2b221b; margin-top: 10px; padding-top: 10px;
+}
+.force-total b { font-family: 'Black Ops One'; color: var(--rust); font-size: 22px; }
+
+.force-bar { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; margin-bottom: 10px; }
+.force-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.force-actions .btn { flex: 1; text-align: center; }
+
+.toast {
+  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+  background: var(--panel2); border: 1px solid var(--rust); color: var(--bone);
+  padding: 9px 18px; box-shadow: 4px 4px 0 #000; z-index: 50;
+}
+
+.warn {
+  background: #3a1a10; border: 1px solid var(--blood); color: #ffb59b;
+  padding: 10px 14px; margin-bottom: 14px; font-size: 15px;
+}
+
+@media (max-width: 1150px) {
+  .bt-layout { grid-template-columns: 1fr; }
+  .bt-scroll { max-height: none; }
+}

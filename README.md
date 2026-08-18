@@ -111,3 +111,79 @@ site account named after the Discord display name.
 All game balance lives in `server/parts.js` (costs, damage, ranges, speeds)
 and the constants at the top of `server/game.js` (match size, arena size,
 storm timing). Tweak and restart.
+
+## Builders (`/builders`)
+
+List builders for the games the club plays, members-only like the league.
+First one is **BattleTech — Alpha Strike**.
+
+The unit data is our own archive of [masterunitlist.info](http://masterunitlist.info),
+harvested in August 2026 before that site shut down (the harvester and the raw
+capture live in `../mul-archive`). It is a **private club copy** — BattleTech
+unit data is community-compiled around Catalyst Game Labs' published material,
+so it stays behind the login and off the public web.
+
+### Where the data lives
+
+Azure Database for PostgreSQL Flexible Server, Burstable **B1ms**, 32 GB, in
+the same region as the app service plan. It is not in this repo: ~8,700 units
+and ~200k faction/era availability rows, filtered on several dimensions at once,
+is what a database is for. `pg` is pure JavaScript, so the Node 20 host needs no
+native build step.
+
+The connection string reaches the app as the `MUL_DATABASE_URL` app setting,
+via the `mulDatabaseUrl` bicep parameter from the `MUL_DATABASE_URL` GitHub
+secret. **`infra/main.bicep` owns the app-settings list** — setting it by hand
+in the portal gets wiped on the next deploy.
+
+If `MUL_DATABASE_URL` is empty the Builders API returns 503 and the rest of the
+site carries on as normal; nothing else depends on it.
+
+### Standing it up
+
+```bash
+# 1. create the server (once)
+az postgres flexible-server create \
+  --resource-group tcg-business-rg --name raisinghavok-pg --location centralus \
+  --tier Burstable --sku-name Standard_B1ms --storage-size 32 --version 16 \
+  --admin-user rhadmin --admin-password "$(cat ~/.raisinghavok-pg-password.txt)" \
+  --public-access <your ip> --yes
+
+# 2. let the app service reach it
+az postgres flexible-server firewall-rule create \
+  --resource-group tcg-business-rg --name raisinghavok-pg \
+  --rule-name allow-azure --start-ip-address 0.0.0.0 --end-ip-address 0.0.0.0
+
+# 3. load the archive (from ../mul-archive)
+export MUL_DATABASE_URL='postgresql://rhadmin:<password>@raisinghavok-pg.postgres.database.azure.com/postgres?sslmode=require'
+node build/import-postgres.mjs
+
+# 4. hand the connection string to CI, then deploy
+gh secret set MUL_DATABASE_URL --repo jaendres/raisinghavok --body "$MUL_DATABASE_URL"
+```
+
+Re-running the import is safe — it replaces the tables inside one transaction,
+so the site never sees a half-loaded dataset.
+
+### Developing without Azure
+
+`../mul-archive/test/serve-site-pglite.cjs` runs **this exact server** against
+an in-process Postgres (PGlite), loading the archive from local JSON. No Azure,
+no Docker, no local Postgres install:
+
+```bash
+cd ../mul-archive && node test/serve-site-pglite.cjs
+```
+
+It prints a login token to drop into `localStorage.mol_token`. There is also a
+test suite covering the real import and the real queries:
+
+```bash
+cd ../mul-archive && node test/builders.pglite.test.cjs
+```
+
+### Saved forces
+
+Stored on the user record in `db.json` as ids plus pilot skill only — unit stats
+are looked up at load time, so re-importing the archive refreshes every saved
+force at once instead of leaving stale copies behind.

@@ -34,6 +34,12 @@ param discordClientSecret string = ''
 // Only members of this Discord server may log in (empty disables the check).
 param discordGuildId string = '963268059362103376'
 
+// Connection string for the Builders unit database (Azure Postgres holding our
+// Master Unit List archive). Empty disables the Builders section cleanly rather
+// than breaking the rest of the site.
+@secure()
+param mulDatabaseUrl string = ''
+
 resource plan 'Microsoft.Web/serverfarms@2023-12-01' existing = {
   name: planName
 }
@@ -94,6 +100,10 @@ resource site 'Microsoft.Web/sites@2023-12-01' = {
         {
           name: 'DISCORD_GUILD_ID'
           value: discordGuildId
+        }
+        {
+          name: 'MUL_DATABASE_URL'
+          value: mulDatabaseUrl
         }
       ]
     }

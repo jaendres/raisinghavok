@@ -39,6 +39,7 @@ jobs:
               leagueApiKey='${{ secrets.LEAGUE_API_KEY }}' \
               discordClientId='${{ secrets.DISCORD_CLIENT_ID }}' \
               discordClientSecret='${{ secrets.DISCORD_CLIENT_SECRET }}' \
+              mulDatabaseUrl='${{ secrets.MUL_DATABASE_URL }}' \
             --output none
 
       - uses: actions/setup-node@v4
