@@ -1,0 +1,94 @@
+/* Trench Crusade warband builder.
+   builders.css (imported first) pulls in the club look from league.css and
+   provides the three-pane .bt-layout scaffolding; this file adds the
+   warband-builder pieces: unit cards, statline strips, the ducat/glory
+   meter, and fat tap targets for the club iPads. */
+
+/* ---- warband chooser ---- */
+
+.wb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.wb-card h3 { font-size: 20px; color: var(--bone); }
+.wb-card .meta { min-height: 48px; }
+.wb-card .game.fallen { color: #c04848; }
+
+/* ---- recruit table ---- */
+
+.tc-table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.tc-table th { position: sticky; top: 0; background: var(--panel); z-index: 1; padding: 6px 6px; font-size: 11.5px; }
+.tc-table td { padding: 8px 6px; vertical-align: top; }
+.tc-table .c-add { width: 44px; padding-right: 0; }
+.tc-table .c-cost { width: 56px; }
+.tc-table .c-name { width: auto; white-space: normal; word-break: break-word; }
+.c-name .ucat { display: block; color: var(--dust); font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em; }
+.c-name .ustat { display: block; color: #8a7f6f; font-size: 12.5px; margin-top: 2px; }
+.du { color: var(--rust); font-family: 'Black Ops One'; font-size: 14px; white-space: nowrap; }
+.gl { color: #d8b46a; font-family: 'Black Ops One'; font-size: 14px; white-space: nowrap; }
+
+/* iPad-friendly: every interactive control at least ~40px in the hit direction */
+.addbtn { min-width: 40px; min-height: 36px; font-size: 16px; }
+.rmbtn { min-width: 36px; min-height: 32px; }
+
+/* ---- armoury reference ---- */
+
+.armoury h3 { font-size: 13.5px; color: var(--rust); margin: 12px 0 4px; letter-spacing: .1em; }
+.arm-row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 2px; border-bottom: 1px dashed #2b221b; cursor: pointer; font-size: 15px; }
+.arm-row:hover { background: #ff6a1a12; }
+.arm-row .muted { font-size: 13px; }
+.arm-detail { color: #8a7f6f; font-size: 13.5px; padding: 4px 2px 10px; line-height: 1.35; }
+.arm-detail b { color: var(--dust); }
+
+/* ---- roster pane ---- */
+
+.ducat-meter { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; text-align: center; }
+.ducat-meter .box { background: var(--panel2); border: 1px solid #2b221b; padding: 8px 4px; }
+.ducat-meter .lbl { display: block; color: var(--dust); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+.ducat-meter b { font-family: 'Black Ops One'; font-size: 19px; color: var(--rust); }
+.ducat-meter .glory b { color: #d8b46a; }
+.ducat-meter .over b { color: #ff7b6b; }
+
+.unit-card { background: var(--panel2); border: 1px solid #2b221b; border-left: 3px solid var(--rust-dk); padding: 10px 12px; margin-bottom: 10px; }
+.unit-card.merc { border-left-color: #8a6d2e; }
+.unit-card .uc-head { display: flex; align-items: center; gap: 8px; }
+.unit-card .uc-head input { flex: 1; min-width: 0; padding: 6px 8px; font-size: 15px; }
+.unit-card .uc-type { color: var(--dust); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+.unit-card .uc-cost { font-family: 'Black Ops One'; color: var(--rust); white-space: nowrap; }
+
+.statline { width: 100%; border-collapse: collapse; margin: 8px 0 4px; }
+.statline th { font-size: 9.5px; padding: 2px 3px; text-align: center; color: var(--dust); border-bottom: 1px solid #2b221b; }
+.statline td { font-size: 14px; padding: 3px 3px; text-align: center; border-bottom: none; white-space: nowrap; }
+
+.kwline { color: #8a7f6f; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; margin: 2px 0 4px; }
+.abil { color: #a99d8a; font-size: 13.5px; margin: 4px 0; line-height: 1.35; }
+.abil b { color: var(--dust); }
+.unote { color: #d8b46a; font-size: 13px; margin: 4px 0; line-height: 1.35; }
+
+.gear-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 3px 0; font-size: 14.5px; }
+.gear-row .g-cost { color: var(--dust); white-space: nowrap; }
+.gear-add { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-top: 6px; }
+.gear-add select { min-height: 40px; min-width: 0; }
+.gear-add .btn.small { min-height: 40px; padding: 4px 14px; }
+
+/* ---- warnings ---- */
+
+.warnbox { background: #3a1a10; border: 1px solid var(--blood); color: #ffb59b; padding: 8px 12px; margin-bottom: 12px; font-size: 14.5px; }
+.warnbox ul { margin-left: 18px; }
+.rulebox { background: var(--panel2); border: 1px solid #2b221b; padding: 8px 12px; margin-bottom: 12px; font-size: 14px; color: var(--dust); }
+.rulebox li { margin-left: 16px; }
+
+/* ---- export sheet ---- */
+
+.export-pre {
+  background: #fff; color: #111; font-family: 'Courier New', monospace; font-size: 13px;
+  padding: 20px 24px; white-space: pre-wrap; word-break: break-word; line-height: 1.35;
+  max-height: 60vh; overflow: auto;
+}
+
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  body { background: #fff; }
+  main { width: 100%; margin: 0; }
+  .modal-back { position: static; padding: 0; background: #fff; display: block; }
+  .modal { box-shadow: none; border: none; width: 100%; padding: 0; }
+  .modal-x, .modal-actions { display: none !important; }
+  .export-pre { max-height: none; overflow: visible; padding: 0; }
+}

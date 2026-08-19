@@ -673,6 +673,12 @@ function viewHome() {
         <div class="meta">Full unit roster wiv faction an' era availability, skill-adjusted PV,
           an' saved forces. Built from our own archive of da Master Unit List.</div>
       </div>
+      <div class="card builder-card" onclick="location.href='/builders/trenchcrusade/'">
+        <div class="game">Trench Crusade</div>
+        <h3>Warband Builder</h3>
+        <div class="meta">All seven faction lists wiv armouries, mercenaries an' glory —
+          compiled from da free official rules (v1.0.2). Saves live on yer device.</div>
+      </div>
       <div class="card builder-card" onclick="location.href='/builders/necromunda/'">
         <div class="game">Necromunda</div>
         <h3>Gang Builder</h3>

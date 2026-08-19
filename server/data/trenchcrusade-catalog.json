@@ -1,0 +1,5607 @@
+{
+ "meta": {
+  "game": "Trench Crusade",
+  "rulesVersion": "1.0.2 (Warbands of Trench Crusade, February 2026)",
+  "compiledDate": "2026-08-19",
+  "sources": [
+   {
+    "url": "https://www.trenchcrusade.com/rules/",
+    "note": "Official free rules hub — Trench Crusade rules and warband lists are published free by the designers."
+   },
+   {
+    "url": "https://www.trenchcrusade.com/app/uploads/2026/02/Warbands-of-Trench-Crusade.pdf",
+    "note": "Official \"Warbands of Trench Crusade\" v1.0.2 PDF. Unit costs, limits and statlines in this catalog were cross-verified against it; armoury stipulations are transcribed from its armoury tables."
+   },
+   {
+    "url": "https://github.com/Fawkstrot11/TrenchCrusade",
+    "note": "NewRecruit-approved community dataset (BattleScribe format, revision of Aug 2026) used as the structured base for stats, abilities, costs and armoury prices."
+   },
+   {
+    "url": "https://atrollinthetrenches.com/wp-content/uploads/2026/03/trench-crusade-1.0.2-community-faq-en-v2.pdf",
+    "note": "Community FAQ v2 (Mar 2026), consulted for rules context."
+   }
+  ],
+  "note": "All stats are transcribed from the freely published official Trench Crusade rules (the game is funded by miniature sales; rules and warband lists are free). Where a value could not be confirmed against the official PDF, the unit or option was omitted and recorded in meta.gaps instead of guessed.",
+  "gaps": [
+   "hereticLegion: variant-warband units omitted (base list only): Technomancer",
+   "trenchPilgrims: variant-warband units omitted (base list only): Chieftain, Huscarl",
+   "newAntioch: variant-warband units omitted (base list only): Trench Dogs of the Red Brigade, Crimson Communicant",
+   "ironSultanate: variant-warband units omitted (base list only): \"Zamburak\" Weapon Platform, Bedu Sharpshooter, Archeologist, Teğmen, Shirdal",
+   "blackGrail: variant-warband units omitted (base list only): Matagot Hag, Gregori Gula, Cradle Thrall",
+   "court: variant-warband units omitted (base list only): Faceless, Stalker",
+   "mercenaries: not in the v1.0.2 Warbands book, omitted: Trench Dog, Disciple of St. Roch, Guard Dog, Martyrdom Dog, Mercy Dog, Hellhound",
+   "Variant warbands (e.g. Trench Ghosts, Papal States Intervention Force, House of Wisdom, War Pilgrimage of Saint Methodius, Dirge of the Great Hegemon) are out of scope: only the seven base lists are compiled.",
+   "Campaign-layer content (advancements, exploration upgrades, fireteams, injuries) is not part of this catalog.",
+   "Armoury stipulation notes are transcribed from the official PDF armoury tables where machine-readable; a handful of wrapped table rows may be missing their note text."
+  ]
+ },
+ "rules": {
+  "standardDucats": 700,
+  "leagueDefaultDucats": 500,
+  "oneOffGloryGuideline": 6,
+  "notes": [
+   "The official standard game is 700 ducats; the club league default is 500 (the organiser can change it).",
+   "Warbands are Faithful (New Antioch, Trench Pilgrims, Iron Sultanate) or Fallen (Heretic Legion, Black Grail, The Court). A warband cannot include models of the opposing alignment.",
+   "Mercenaries cost Glory Points. For one-off games the designers suggest allowing each player 6 Glory on top of their ducats.",
+   "An item with Limit: X in the armoury can be bought at most X times for the whole warband.",
+   "Shield Combo: a model can combine a shield with a 2-handed weapon only if both carry the Shield Combo stipulation."
+  ]
+ },
+ "battlekit": {
+  "Anti-Material Rifle": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "36\"",
+   "keywords": [
+    "+1 INJURY DICE",
+    "CRITICAL",
+    "HEAVY",
+    "IGNORE ARMOUR"
+   ]
+  },
+  "Automatic Pistol": {
+   "category": "ranged",
+   "type": "1-Handed",
+   "range": "12\"/Melee",
+   "keywords": [
+    "ASSAULT",
+    "AUTOMATIC 2",
+    "PISTOL"
+   ]
+  },
+  "Automatic Rifle": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "24\"",
+   "keywords": [
+    "ASSAULT",
+    "AUTOMATIC 2"
+   ],
+   "rules": "**Focused Fire**: When this weapon is used to make 2 Ranged Attacks, the same enemy model must be the target of both attacks"
+  },
+  "Automatic Shotgun": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "12\"",
+   "keywords": [
+    "+1 DICE",
+    "ASSAULT",
+    "SHOTGUN"
+   ]
+  },
+  "Blunderbuss": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "10\"",
+   "keywords": [
+    "SHRAPNEL"
+   ]
+  },
+  "Bolt-Action Rifle": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "24\""
+  },
+  "Flamethrower": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "8\"",
+   "keywords": [
+    "-1 INJURY DICE",
+    "FIRE",
+    "FLAMETHROWER",
+    "IGNORE ARMOUR"
+   ]
+  },
+  "Grenade Launcher": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "36\"",
+   "keywords": [
+    "BLAST 3\"",
+    "HEAVY",
+    "IGNORE COVER",
+    "SHRAPNEL"
+   ]
+  },
+  "Heavy Flamethrower": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "8\"",
+   "keywords": [
+    "-1 INJURY DICE",
+    "AUTOMATIC 2",
+    "FIRE",
+    "FLAMETHROWER",
+    "HEAVY",
+    "IGNORE ARMOUR"
+   ]
+  },
+  "Heavy Shotgun": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "12\"",
+   "keywords": [
+    "+1 DICE",
+    "+1 INJURY DICE",
+    "HEAVY",
+    "SHOTGUN"
+   ],
+   "rules": "**Tungsten-orichalcum Alloy Shot**: Add +1 INJURY DICE to rolls for Ranged Attacks made by this Weapon at Short Range."
+  },
+  "Machine Gun": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "36\"",
+   "keywords": [
+    "AUTOMATIC 3",
+    "HEAVY",
+    "RELOAD"
+   ]
+  },
+  "Musket": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "18\"",
+   "keywords": [
+    "-1 INJURY DICE"
+   ]
+  },
+  "Silenced Pistol": {
+   "category": "ranged",
+   "type": "1-Handed",
+   "range": "12\"/Melee",
+   "keywords": [
+    "ASSAULT",
+    "PISTOL"
+   ],
+   "rules": "**Silent**: Add +1 DICE to the roll if the attacker is in contact with a terrain piece that is at least 1/2\" tall and that lies in between it and the target model."
+  },
+  "Semi-Automatic Rifle": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "24\"",
+   "keywords": [
+    "ASSAULT"
+   ]
+  },
+  "Shotgun": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "12\"",
+   "keywords": [
+    "+1 DICE",
+    "SHOTGUN"
+   ]
+  },
+  "Pistol": {
+   "category": "ranged",
+   "type": "1-Handed",
+   "range": "12\"/Melee",
+   "keywords": [
+    "PISTOL"
+   ]
+  },
+  "Sniper Rifle": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "48\"",
+   "keywords": [
+    "+1 DICE",
+    "CRITICAL",
+    "RISKY"
+   ],
+   "rules": "**Bull's Eye**: If the Success Roll for a Ranged Attack made with a Sniper Rifle is a Critical Success then the Injury Roll for the attack has the IGNORE ARMOUR Keyword."
+  },
+  "Submachine Gun": {
+   "category": "ranged",
+   "type": "2-Handed",
+   "range": "16\"",
+   "keywords": [
+    "ASSAULT"
+   ],
+   "rules": "**Quick Bursts: A model armed with a Submachine Gun can take two Shoot ACTIONS during the same Activation, as long as the Submachine Gun is used to make both attacks. The Shoot ACTIONS can be taken one after the other, or other ACTIONS can be taken between the Shoot ACTIONS.**"
+  },
+  "Frag Grenades": {
+   "category": "grenade",
+   "type": "Grenade",
+   "range": "8\"",
+   "keywords": [
+    "ASSAULT",
+    "BLAST 2”",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE",
+    "SHRAPNEL"
+   ]
+  },
+  "Gas Grenades": {
+   "category": "grenade",
+   "type": "Grenade",
+   "range": "8\"",
+   "keywords": [
+    "-1 INJURY DICE",
+    "ASSAULT",
+    "BLAST 3”",
+    "GAS",
+    "IGNORE ARMOUR",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE"
+   ]
+  },
+  "Incendiary Grenades": {
+   "category": "grenade",
+   "type": "Grenade",
+   "range": "8\"",
+   "keywords": [
+    "ASSAULT",
+    "FIRE",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE"
+   ],
+   "rules": "**Liquid Fire**: If the Success Roll for a Ranged Attack made with an Incendiary Grenade is a Critical Success then the Injury Roll for the attack has the IGNORE ARMOUR Keyword"
+  },
+  "Molotov Cocktail": {
+   "category": "grenade",
+   "type": "Grenade",
+   "range": "6\"",
+   "keywords": [
+    "-1 INJURY DICE",
+    "ASSAULT",
+    "FIRE",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE"
+   ],
+   "rules": "**Liquid Fire**: If the Success Roll for a Ranged Attack made with an Incendiary Grenade is a Critical Success then the Injury Roll for the attack has the IGNORE ARMOUR Keyword"
+  },
+  "Satchel Charge": {
+   "category": "grenade",
+   "type": "Grenade",
+   "range": "6\"",
+   "keywords": [
+    "+1 INJURY DICE",
+    "BLAST 3”",
+    "CONSUMABLE",
+    "HEAVY",
+    "IGNORE ARMOUR",
+    "IGNORE COVER",
+    "SCATTER"
+   ],
+   "rules": "**Heavy Explosive**: Once during a game, a model with a Satchel Charge can use it to make a Ranged Attack."
+  },
+  "Anti-Tank Hammer": {
+   "category": "melee",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY DICE",
+    "CRITICAL",
+    "IGNORE ARMOUR",
+    "RISKY"
+   ],
+   "rules": "**Dangerous**: Place 1 BLOOD MARKER next to the model using this Weapon if it makes a Melee Attack and the Success Roll is a Success or a Critical Success."
+  },
+  "Bayonet": {
+   "category": "melee",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "CUMBERSOME"
+   ]
+  },
+  "Flail/Scourge": {
+   "category": "melee",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 DICE"
+   ],
+   "rules": "**Unwieldy**: The +1 DICE Keyword does not apply when this Weapon is used as an Off- Hand Weapon."
+  },
+  "Great Hammer/Maul": {
+   "category": "melee",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY MODIFIER",
+    "HEAVY"
+   ]
+  },
+  "Great Sword/Axe": {
+   "category": "melee",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY DICE",
+    "CRITICAL",
+    "HEAVY"
+   ]
+  },
+  "Misericordia": {
+   "category": "melee",
+   "type": "1-Handed",
+   "range": "Melee",
+   "rules": "**Despatch**: This weapon has the IGNORE ARMOUR Keyword if the target is Down."
+  },
+  "Polearm": {
+   "category": "melee",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "BLOCK",
+    "CUMBERSOME"
+   ]
+  },
+  "Sword/Axe": {
+   "category": "melee",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "CRITICAL"
+   ]
+  },
+  "Trench Club": {
+   "category": "melee",
+   "type": "1-Handed",
+   "range": "Melee"
+  },
+  "Trench Knife": {
+   "category": "melee",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "-1 DICE"
+   ]
+  },
+  "Trench Shield": {
+   "category": "armour",
+   "type": "Shield",
+   "keywords": [
+    "-1 INJURY MODIFIER"
+   ]
+  },
+  "Reinforced Armour": {
+   "category": "armour",
+   "type": "Armour",
+   "keywords": [
+    "-2 INJURY MODIFIER"
+   ]
+  },
+  "Standard Armour": {
+   "category": "armour",
+   "type": "Armour",
+   "keywords": [
+    "-1 INJURY MODIFIER"
+   ]
+  },
+  "Armour Piercing Bullets": {
+   "category": "armour",
+   "type": "Equipment",
+   "keywords": [
+    "AMMUNITION (ARMOUR-PIERCING)",
+    "CONSUMABLE"
+   ]
+  },
+  "Binoculars": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "**Survey the Land**: Enemy models cannot use the INFILTRATOR Keyword to deploy within 16” of a model with this Keyword unless they are in their own side’s deployment zone."
+  },
+  "Blessed Icon": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "CONSUMABLE"
+   ],
+   "rules": "**Talisman**: Once during a game, when a Risky Success Roll for a model with a Blessed Icon is a Failure, you can say that the model will use its Talisman. If you do, the model’s Activation does not end."
+  },
+  "Combat Helmet": {
+   "category": "armour",
+   "type": "Equipment",
+   "keywords": [
+    "NEGATE SHRAPNEL"
+   ]
+  },
+  "Dum-Dum Bullets": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "AMMUNITION (CRITICAL)",
+    "CONSUMABLE"
+   ]
+  },
+  "Field Shrine": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "DEPLOYABLE"
+   ],
+   "rules": "A Field Shrine is represented by a terrain piece that is at least ½” high and which is mounted on a 40mm base. It is Impassable terrain.\n- **Site of Worship**: After you deploy a model that has Field Shrine, you can also deploy their Field Shrine anywhere wholly within their deployment zone. In the Morale Phase, each friendly Field Shrine on the battlefield adds 3 to the number of models you have in your Warband that are not Down or Out of Action, up to a maximum bonus of 9 extra models. Once deployed, the model that had the Field Shrine is not considered to be carrying it for the rest of the game.\n- **Tear It Down!**: Models can attack a Field Shrine as if it were an enemy model. If it is hit by an attack or is in the blast radius of an attack made with a Weapon that has the BLAST Keyword, it is removed from the battlefield and is removed from the Warband Roster (no Injury Roll is required)."
+  },
+  "Gas Mask": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "NEGATE GAS"
+   ]
+  },
+  "Hellbound Soul Contract": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "**Fiery Exodus**: If a model with a Hellbound Soul Contract is taken Out of Action, before removing it from the battlefield add 1 BLOOD MARKER to each enemy model that is within 1” of it. Models that have the NEGATE FIRE Keyword are not affected by this special rule."
+  },
+  "Holy Relic": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "BLESSED 1"
+   ]
+  },
+  "Incendiary Ammunition": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "AMMUNITION (FIRE)",
+    "CONSUMABLE"
+   ]
+  },
+  "Infernal Brand": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "NEGATE FIRE"
+   ]
+  },
+  "Martyrdom Pills": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "CONSUMABLE"
+   ],
+   "rules": "**Inured to Pain**: When you deploy a model that has Martyrdom Pills you can say that they will consume them. If you do so, until the end of the game the model has the NEGATE FEAR Keyword. In addition, add -1 INJURY DICE to rolls for attacks that hit the model."
+  },
+  "Medikit": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "**Treat ACTION**: A model with this Keyword can take a Treat ACTION. If it does so, take a Risky Success Roll for the model. If the roll is a Failure, the model’s Activation ends immediately. If it is a Success or a Critical Success, you can do one of the following things:\n* Remove 1 BLOOD MARKER from the model or a friendly model within 1” of the model.\n* Stand up a friendly model that is Down and within 1” of the model."
+  },
+  "Mountaineer Kit": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "**Ropes and Pitons**: Add +1 DICE to Risky Success Rolls for friendly models with this special rule that are attempting to climb a sheer surface."
+  },
+  "Musical Instrument": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "HELD"
+   ],
+   "rules": "**Fanfare**: Add +1 DICE to Risky Success Rolls for friendly models that are taking a Dash ACTION and are within 4” of one or more models with a Musical Instrument."
+  },
+  "Shovel": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "**Dug In**: A model equipped with a Shovel that starts the game on Open terrain has the COVER Keyword until it moves away from its starting position. In addition, a model equipped with a Shovel can use it as a 2-Handed Melee Weapon instead of using any other Melee Weapons it has."
+  },
+  "Tracer Bullets": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "AMMUNITION (+1 DICE)",
+    "CONSUMABLE"
+   ]
+  },
+  "Troop Flag": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "LEADER",
+    "HELD"
+   ]
+  },
+  "Unholy Relic": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "FEAR"
+   ]
+  },
+  "Unholy Trinket": {
+   "category": "equipment",
+   "type": "Equipment",
+   "keywords": [
+    "CONSUMABLE"
+   ],
+   "rules": "**Talisman**: Once during a game, when a Risky Success Roll for a model with an Unholy Trinket is a Failure, you can say that the model will use it. If you do, the model’s Activation does not end."
+  },
+  "Weaponized Shovel": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "-"
+   ]
+  },
+  "Bolt Action Rifle": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "24\"",
+   "keywords": [
+    "-"
+   ],
+   "rules": "-"
+  },
+  "Jezzail": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "18\"",
+   "keywords": [
+    "-"
+   ],
+   "rules": "-"
+  },
+  "Sacrificial Blade": {
+   "category": "equipment",
+   "type": "1-handed",
+   "range": "Melee",
+   "keywords": [
+    "+2 INJURY MODIFIER",
+    "RISKY"
+   ],
+   "rules": "-"
+  },
+  "Blasphemous Staff": {
+   "category": "equipment",
+   "type": "1-handed",
+   "range": "Melee",
+   "keywords": [
+    "FIRE",
+    "CRITICAL"
+   ],
+   "rules": "Evil Power: Add +1 DICE to Success Rolls or Risky Success Rolls for a model with a Blasphemous Staff, apart from the Success Rolls for a Ranged or Melee Attack, or the Risky Success Roll to take a Dash ACTION."
+  },
+  "Hellblade": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY DICE",
+    "FIRE"
+   ],
+   "rules": "-"
+  },
+  "Tartarus Claws": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "Melee",
+   "keywords": [
+    "CLEAVE 2",
+    "CRITICAL",
+    "CUMBERSOME"
+   ],
+   "rules": "Harrowing Assault: If the target is taken Down or Out of Action by a Melee Attack made with Tartarus Claws, you can immediately move the model up to 3”. You can use this move to move within 1” another enemy model, and if you do so, this model can take another Fight ACTION. However, it cannot make the 3” move if the second attack takes the target Down or Out of Action."
+  },
+  "Scourge/Battle Whip/Flail": {
+   "category": "equipment",
+   "type": "1-handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 DICE"
+   ],
+   "rules": "Unwieldy: The +1 DICE Keyword does not apply when this Weapon is used as an Off-Hand Weapon."
+  },
+  "Great Hammer/Maul/Club/Mace": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY MODIFIER",
+    "HEAVY"
+   ],
+   "rules": "-"
+  },
+  "Shield": {
+   "category": "armour",
+   "type": "Shield",
+   "range": "-",
+   "keywords": [
+    "-1 INJURY MODIFIER"
+   ],
+   "rules": "-"
+  },
+  "Machine Armour": {
+   "category": "armour",
+   "type": "Armour",
+   "range": "-",
+   "keywords": [
+    "-3 INJURY MODIFIER"
+   ],
+   "rules": "Change the base size of a model that has Machine Armour to 40mm unless it is already 40mm or larger. In addition, a model with Machine Armour cannot be equipped with a Trench Shield and has a Charge Bonus of D3\" instead of D6\".\n\n- Standfast: When a model that has Machine Armour suffers a Down result on the Injury table, it is treated as a Minor Wound result instead."
+  },
+  "Holy Icon Armour": {
+   "category": "armour",
+   "type": "Armour",
+   "range": "-",
+   "keywords": [
+    "-1 INJURY MODIFIER",
+    "IMPERVIOUS"
+   ],
+   "rules": "-"
+  },
+  "Holy Icon Shield": {
+   "category": "armour",
+   "type": "Shield",
+   "range": "-",
+   "keywords": [
+    "-1 INJURY MODIFIER",
+    "IMPERVIOUS"
+   ]
+  },
+  "Iron Capirote": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "NEGATE FEAR",
+    "NEGATE SHRAPNEL"
+   ],
+   "rules": "-"
+  },
+  "Medi-kit": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Treat ACTION: A model with this Keyword can take a Treat ACTION. If it does so, take a Risky Success Roll for the model. If the roll is a Failure, the model’s Activation ends immediately. If it is a Success or a Critical Success, you can do one of the following things:\n* Remove 1 BLOOD MARKER from the model or a friendly model within 1\" of the model.\n* Stand up a friendly model that is Down and within 1\" of the model."
+  },
+  "Crown of Hellfire": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "Searing Flames: When a model with a Crown of Hellfire ends an Activation, place 1 BLOOD MARKER next to each enemy model within 1” of the model with a Crown of Hellfire, except for enemy models that have the NEGATE FIRE Keyword."
+  },
+  "Sniper Scope": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Enhanced Accuracy: When this Glory Item is given to a model, you must choose 1 Ranged Weapon that the model already has and which has the word “Rifle” as part of its name. That Weapon gains the IGNORE LONG RANGE Keyword."
+  },
+  "Infernal Iron Armour": {
+   "category": "armour",
+   "type": "Armour",
+   "keywords": [
+    "-2 INJURY MODIFIER",
+    "IMPERVIOUS"
+   ]
+  },
+  "Tormentor Chain": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "10\"",
+   "keywords": [
+    "ASSAULT",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE",
+    "SHRAPNEL"
+   ],
+   "rules": "Dragged Forwards: If an attack made with a Tormentor Chain is a Success or Critical Success, do not make an Injury Roll for the target. Instead, place 1 BLOOD MARKER next to the target, and then place a second BLOOD MARKER on the target because the Tormentor Chain has the SHRAPNEL Keyword. After placing the BLOOD MARKERS, you can move the target model up to 12\" in a straight line, but you must move it so that it finishes the move as close as possible to the attacking model.\n\nDeadly Embrace: Enemy models cannot retreat if they are within 1\" of a model with a Tormentor Chain."
+  },
+  "Infested Rifle": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "18\"",
+   "keywords": [
+    "ARMOUR-PIERCING"
+   ],
+   "rules": "-"
+  },
+  "Putrid Shotgun": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "12\"",
+   "keywords": [
+    "+1 DICE",
+    "ASSAULT",
+    "INFECTION MARKERS",
+    "SHOTGUN"
+   ]
+  },
+  "Beelzebub's Axe": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+2 INJURY DICE",
+    "HEAVY",
+    "INFECTION MARKERS"
+   ],
+   "rules": "-"
+  },
+  "Viscera Cannon": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "24\"",
+   "keywords": [
+    "+2 DICE",
+    "HEAVY"
+   ],
+   "rules": "Self Sacrifice: If a Viscera Cannon hits a target, after resolving the Injury Roll, you can place up to 3 BLOOD MARKERS next to model that made the Attack (until it has a maximum of 6 markers). Then place 1 INFECTION MARKER next to the target for each BLOOD MARKER that you placed on the attacking model."
+  },
+  "Plague Blade": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "INFECTION MARKERS"
+   ],
+   "rules": "-"
+  },
+  "Black Grail Shield": {
+   "category": "armour",
+   "type": "Shield",
+   "range": "-",
+   "keywords": [
+    "-1 INJURY MODIFIER"
+   ],
+   "rules": "Power of the Cult of the Black Grail: When a model with a Black Grail Shield is chosen as the target for a Ranged Attack, it can draw on the Power of the Cult of the Black Grail before the Success Roll is made for the attack. If it does so, take a Success Roll for the model with the Black Grail Shield. If the roll is a Failure, nothing happens and the attack is carried out as normal. If the roll is a Success, add -2 DICE to the roll for the Ranged Attack. If the roll is a Critical Success, the attack is automatically a Failure (do not make a Success Roll for the attack)."
+  },
+  "Parasite Grenades": {
+   "category": "equipment",
+   "type": "Grenades",
+   "range": "8\"",
+   "keywords": [
+    "ASSAULT",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE"
+   ],
+   "rules": "Terrifying Hallucinations: If a Parasite Grenade hits a target, after resolving the Injury Roll, you can move the target model 3\". The move must be in a straight line, but can be in any direction, and can be used to make the model move within 1\" of an enemy, make a retreat move, Climb, Jump, or Jump Down. The model cannot make a Diving Charge and does not count as charging if it finishes the move within 1\" of an enemy model."
+  },
+  "Corruption Belcher": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "8\"",
+   "keywords": [
+    "FLAMETHROWER",
+    "GAS",
+    "IGNORE ARMOUR"
+   ],
+   "rules": "-"
+  },
+  "Torture Instrument": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "Melee",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Agonising Injuries: When you make an Injury Roll for an attack made with a Torture Instrument, roll 1D6 instead of 2D6, but then double the number of BLOOD MARKERS that are caused by the roll (if there are any). Any +INJURY DICE or -INJURY DICE that applied to the Injury Roll will apply normally, except that you pick the single highest or lowest dice in the roll instead of the 2 highest or lowest. Note that when you make a Bloodbath Roll for an attack made with a Torture Instrument, you only roll 2D6 instead of 3D6, but you can then double the number of BLOOD MARKERS that are caused by the roll."
+  },
+  "Arquebus": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "18\"",
+   "keywords": [
+    "CUMBERSOME"
+   ],
+   "rules": "Batter: A model that has an Arquebus can use it as a 2-Handed Melee Weapon."
+  },
+  "Ophidian Rifle": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "30\"",
+   "keywords": [
+    "HEAVY",
+    "IGNORE COVER",
+    "IGNORE LONG RANGE"
+   ],
+   "rules": "Unnatural Inversion: Add +1 DICE to roll for attacks made with this weapon if the Cover or Long Range modifiers apply to the attack, instead of adding -1 DICE. Note that this means you add +2 DICE to the roll if both modifiers apply to the attack."
+  },
+  "Serpent Assault Gun": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "36\"",
+   "keywords": [
+    "ASSAULT",
+    "AUTOMATIC 2",
+    "GAS",
+    "HEAVY"
+   ],
+   "rules": "-"
+  },
+  "Headtaker": {
+   "category": "equipment",
+   "type": "1-handed",
+   "range": "Melee",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Ambush Weapon: Add a +2 INJURY MODIFIER to rolls made for this weapon if the target has not yet been Activated this Turn."
+  },
+  "Malebranche Sword": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "Melee",
+   "keywords": [
+    "HEAVY",
+    "DEADLY"
+   ]
+  },
+  "Armour-Piercing Ammunition": {
+   "category": "armour",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "CONSUMABLE",
+    "AMMUNITION (ARMOUR-PIERCING)"
+   ]
+  },
+  "Bow of Lethe": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "24\"",
+   "keywords": [
+    "ASSAULT"
+   ],
+   "rules": "Special Ammunition: Before making an Injury Roll for an attack made with a Bow of Lethe, you must choose if the roll will have the +2 INJURY DICE Keyword or the IGNORE ARMOUR Keyword."
+  },
+  "Punt Gun": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "18\"",
+   "keywords": [
+    "+1 DICE",
+    "+1 INJURY DICE",
+    "HEAVY",
+    "SHOTGUN",
+    "SHRAPNEL"
+   ],
+   "rules": "Overcharge: Before making a Ranged Attack with a model armed with a Punt Gun, you can say that the model will Overcharge the weapon. To do so, the model has to either have the STRONG Keyword or be in base-to-base contact with a friendly model. An Overcharged Ranged Attack gains the BLAST 3\" and RELOAD Keywords. After an Overcharged attack has been carried out, place 1 BLOOD MARKER next to the model that made the attack, and its activation immediately ends."
+  },
+  "War Cross": {
+   "category": "equipment",
+   "type": "Grenade",
+   "range": "8\"",
+   "keywords": [
+    "ASSAULT",
+    "IGNORE LONG RANGE"
+   ],
+   "rules": "-"
+  },
+  "Assassin's Dagger": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY MODIFIER",
+    "CRITICAL"
+   ],
+   "rules": "Slashing Attack: If an Assassin’s Blade causes at least one BLOOD MARKER to be placed next to the target model, the Assassin can use a Dash ACTION to Retreat in the same Activation. In addition, if the Assassin Retreats (by Dashing or using the normal Retreat ACTION) during the same Activation, enemy models within 1” cannot make a Melee Attack against it before it is moved as they would normally be able to do."
+  },
+  "Halberd-Gun": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "Melee/24\"",
+   "keywords": [
+    "ASSAULT",
+    "BLOCK",
+    "CUMBERSOME"
+   ],
+   "rules": "-"
+  },
+  "MURAD Bombard": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "36\"",
+   "keywords": [
+    "BLAST 3\"",
+    "HEAVY",
+    "SCATTER"
+   ],
+   "rules": "If the Success Roll for a Ranged Attack with an M.U.R.A.D Bombard that targets an enemy model is a Success or a Critical Success, or if the attack is a Failure and the target point scatters onto a model’s base, apply the effect of the DEADLY Keyword to the Injury Roll for that model. All other models caught in the M.U.R.A.D. Bombard’s blast radius, or that are in the M.U.R.A.D. Bombard’s blast radius if it did not hit the target model or scatter onto a model’s base, are taken Down (do not make an Injury Roll for them)"
+  },
+  "Flame Cannon": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "12\"",
+   "keywords": [
+    "FIRE",
+    "HEAVY",
+    "IGNORE ARMOUR"
+   ],
+   "rules": "Greek Fire: When a Flame Cannon is used to make a Ranged Attack, do not make a Success Roll for the attack. Instead, measure a straight line 1mm wide and up to 12\" long from the attacking model to a point on the ground or a model’s base. The line stops if it reaches a terrain piece that is taller than the model making the Attack. Make an Injury Roll for every model (friend or foe) that is touched by the line, apart from the attacking model itself."
+  },
+  "Titan Zulfiqar": {
+   "category": "equipment",
+   "type": "1-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+2 INJURY MODIFIER",
+    "CRITICAL",
+    "HEAVY"
+   ],
+   "rules": "-"
+  },
+  "Alaybozan": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "12\"",
+   "keywords": [
+    "SHRAPNEL"
+   ],
+   "rules": "-"
+  },
+  "Siege Jezzail": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "30\"",
+   "keywords": [
+    "+1 INJURY DICE",
+    "HEAVY"
+   ],
+   "rules": "-"
+  },
+  "Alchemist Armour": {
+   "category": "armour",
+   "type": "Armour",
+   "range": "-",
+   "keywords": [
+    "-2 INJURY MODIFIER",
+    "NEGATE FIRE",
+    "NEGATE GAS"
+   ],
+   "rules": "Protection From Harm: Add- 1 INJURY DICE to Injury Rolls for attacks made by Weapons with the FIRE or GAS Keywords that target a model that has Alchemist Armour, even if the attacking weapon has the IGNORE ARMOUR Keyword."
+  },
+  "Alchemical Ammunition": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "AMMUNITION (+1 DICE)"
+   ],
+   "rules": "Alchemical Ammunition can only be used with an Alaybozan, Halberd-Gun, Jezzail or Siege Jezzail (even though the Alaybozan has the SHRAPNEL Keyword). In a campaign, you cannot reallocate Alchemical Ammunition to another model."
+  },
+  "Cloak of Alamut": {
+   "category": "armour",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Blend In: The Ranged Attack Modifier for a target being in Cover is -2 DICE instead of -1 DICE if the target has a Cloak of Alamut."
+  },
+  "Wind Amulet": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Gusts of Wind: Once per game, when you Activate a model that has a Wind Amulet you may declare that it will use the amulet before it takes any ACTIONS. Using the Wind Amulet adds 3\" to the model’s Movement Characteristic for the rest of the Activation."
+  },
+  "Marid Shovel": {
+   "category": "equipment",
+   "type": "Equipment",
+   "rules": "The Marid Shovel has the Keyword HEAVY which allows a Brazen Bull to use it. Otherwise, it works exactly like a normal shovel.\n\nShovel: A model equipped with a Shovel that starts the game on Open terrain has the COVER Keyword until it moves away from its starting position. In addition, a model equipped with a Shovel can use it as a 2-Handed Melee Weapon instead of using any other Melee Weapons it has."
+  },
+  "Gavel of Justice": {
+   "category": "equipment",
+   "type": "1-handed",
+   "range": "Melee",
+   "keywords": [
+    "CRITICAL"
+   ],
+   "rules": "Wrath of God: After making the Injury Roll for a Gavel of Justice, place 1 extra BLOOD MARKER next to the target model (even if the Injury Roll has No Effect). If the target has the BLACK GRAIL, DEMONIC, or HERETIC Keyword, place 2 BLOOD MARKERS next to it instead of 1."
+  },
+  "Gas Grenade Launcher": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "36\"",
+   "keywords": [
+    "-1 INJURY DICE",
+    "BLAST 3\"",
+    "GAS",
+    "HEAVY",
+    "IGNORE ARMOUR",
+    "IGNORE COVER"
+   ],
+   "rules": "-"
+  },
+  "Heavy Ballistic Shield": {
+   "category": "armour",
+   "type": "Shield",
+   "range": "-",
+   "keywords": [
+    "COVER",
+    "HELD"
+   ],
+   "rules": "-"
+  },
+  "Dum-Dum Ammunition": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "CONSUMABLE",
+    "AMMUNITION (CRITICAL)"
+   ]
+  },
+  "Black Spot Rifle": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "24\"",
+   "keywords": [
+    "+1 DICE",
+    "-1 INJURY DICE",
+    "ASSAULT",
+    "INFECTION MARKERS"
+   ],
+   "rules": "If an Injury Roll for a Ranged Attack made with a Black Spot Rifle does not take an enemy model Out of Action, a Ravenous or Hound of the Black Grail within 12” of the attacking model can immediately carry out a Charge move. This Charge move does not stop that model from also being Activated in the same Turn (before or after this Charge move was made)."
+  },
+  "Butcher Bayonet": {
+   "category": "equipment",
+   "type": "2-handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY DICE",
+    "CUMBERSOME"
+   ],
+   "rules": "Twisted Addition: A model must have a Ranged Weapon with a Bayonet Lug for it to have a Butcher Bayonet.\n\nHack and Hew: Friendly models within 3” of a model with a\nButcher Bayonet achieve a Critical Success on an 11+ for\ntheir Melee Attacks."
+  },
+  "Grasping Maw": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "12\"",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Grasp ACTION: If a model takes a Grasp ACTION, take a Risky Success Roll for the model. If the roll is a Failure, the model’s Activation ends immediately. If the roll is a Success or Critical Success, pick 1 enemy model that is within 12” of the model taking the Grasp ACTION and in their Line of Sight. You can move the model 3”. The move must be in a straight line directly towards the model taking the Grasp ACTION, and can be used to make the model Jump Down, move within 1” of an enemy or retreat, but you cannot make Melee attacks with models within 1” of it before it retreats. The model stops if the model moves into contact with another model, Difficult, Dangerous or Impassable Terrain, or a terrain piece it cannot cross without having to Climb or Jump Across."
+  },
+  "Devouring Jaws": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Devour ACTION: If a model takes a Devour ACTION, it can make a Melee Attack against an enemy model within 1”. A Devour Melee Attack does not use a Melee Weapon and has the CRITICAL Keyword. In addition, if the Devour Melee Attack does not take the targeted model Out of Action, place 1 BLOOD MARKER next to the model taking the Devour ACTION."
+  },
+  "Pestilent Fang": {
+   "category": "equipment",
+   "type": "2-Handed",
+   "range": "Melee",
+   "keywords": [
+    "+1 INJURY MODIFIER",
+    "HEAVY"
+   ],
+   "rules": "Gnashing Blow: When a Melee Attack made with a Pestilent Fang causes 1 or more BLOOD MARKERS to be placed next to the target, place 1 INFECTION MARKER next to the target model.\n\n\nRotten Splinters: If the Success Roll for a Melee Attack made with a Pestilent Fang is a Critical Success then the Injury Roll for the Attack has the IGNORE ARMOUR Keyword."
+  },
+  "Unending Starvation": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Agonising Pangs: A model with this Battlekit adds +1” to their Movement Characteristic, and may target themselves with the Ravenous Infection Ability. In addition, if this model is more than 1” away from an enemy model, its first ACTION each Activation must be a Move, Charge or Dash ACTION, moving the maximum distance possible directly towards the nearest enemy model, and charging them if possible.\n\nMutation: Once this Battlekit has been equipped, it cannot be removed or lost over the course of a campaign for any reason."
+  },
+  "Restraining Muzzle": {
+   "category": "equipment",
+   "type": "Equipment",
+   "range": "-",
+   "keywords": [
+    "-"
+   ],
+   "rules": "Restrained: Add +1 DICE to rolls made for a Ranged Attack made by a Yoke Fiend that has a Restraining Muzzle. In addition, the Hateful ability does not apply to a Yoke Fiend that has a Restraining Muzzle."
+  }
+ },
+ "warbands": [
+  {
+   "key": "hereticLegion",
+   "name": "Heretic Legion",
+   "alignment": "Fallen",
+   "lore": "Human legions sworn to Hell, damned soldiers who marched through the Gate and returned changed.",
+   "special": [
+    "A Heretic Legion warband must include 1 Heretic Priest.",
+    "Wretched may only be given battlekit costing up to 10 ducats each, and each must have at least 1 weapon."
+   ],
+   "requires": [
+    {
+     "anyOf": [
+      "Heretic Priest"
+     ],
+     "min": 1
+    }
+   ],
+   "units": [
+    {
+     "name": "Anointed Heavy Infantry",
+     "type": "troop",
+     "ducats": 95,
+     "glory": 0,
+     "min": 0,
+     "max": 5,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "-2",
+      "base": "32mm"
+     },
+     "keywords": [
+      "HERETIC",
+      "STRONG"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": false
+     },
+     "extra": [
+      "Unseen Infiltrator",
+      "Infernal Brand",
+      "Reinforced Armour"
+     ]
+    },
+    {
+     "name": "Heretic Priest",
+     "type": "elite",
+     "ducats": 80,
+     "glory": 0,
+     "min": 1,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "HERETIC",
+      "TOUGH",
+      "LEADER"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Death Commando",
+     "type": "elite",
+     "ducats": 90,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "HERETIC",
+      "INFILTRATOR"
+     ],
+     "abilities": [
+      {
+       "name": "Stealth Generator",
+       "text": "Add -1 DICE to rolls for Ranged Attacks that target a Death Commando."
+      },
+      {
+       "name": "Hide",
+       "text": "A Death Commando can take a Hide ACTION if they are in contact with a terrain piece that is at least ½\" high. If they do so, take a Risky Success Roll for the model and add +1 DICE to the roll. If the roll is a Failure, the Death Commando’s Activation ends immediately. If the roll is a Success or Critical Success, enemy models cannot choose the Death Commando as the target for a Ranged Attack or Charge until the Death Commando moves, charges, retreats, makes a Ranged Attack, or an enemy model moves within 1.5\" of them. The Death Commando can be hit if they are within the blast radius of a Weapon with the BLAST Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Chorister",
+     "type": "elite",
+     "ducats": 65,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-2 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "HERETIC",
+      "FEAR"
+     ],
+     "abilities": [
+      {
+       "name": "Unholy Hymns",
+       "text": "All enemy models within 8” of the Chorister suffer an additional -1 DICE for all ACTIONS they attempt."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "War Wolf Assault Beast",
+     "type": "troop",
+     "ducats": 145,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "8\"/Infantry",
+      "ranged": "-",
+      "melee": "+2 DICE",
+      "armour": "-3",
+      "base": "50mm"
+     },
+     "keywords": [
+      "ARTIFICIAL",
+      "HERETIC",
+      "TOUGH",
+      "FEAR",
+      "NEGATE DIFFICULT TERRAIN"
+     ],
+     "abilities": [
+      {
+       "name": "Loping Dash",
+       "text": "Add +1 DICE to the Risky Success Roll for a War Wolf that is taking a Dash ACTION. In addition, a War Wolf ignores the penalty for moving through Difficult terrain (other terrain affects it normally)."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Byzantinium Hearth",
+      "Thermal Shielding"
+     ]
+    },
+    {
+     "name": "Artillery Witch",
+     "type": "troop",
+     "ducats": 100,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "HERETIC",
+      "ARTIFICIAL",
+      "LIMITED POTENTIAL",
+      "NEGATE FEAR",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Creator's Shadow",
+       "text": "Due to rubbing shoulders with their makers every day, Phosphor Witches cannot be promoted to ELITE, as their creators would never allow the indignity."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Unseen Infiltrator"
+     ]
+    },
+    {
+     "name": "Wretched",
+     "type": "troop",
+     "ducats": 25,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-1 DICE",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "HERETIC"
+     ],
+     "abilities": [
+      {
+       "name": "Dark Blessing",
+       "text": "When a Wretched is taken Out of Action, place 1 BLESSING MARKER next to the nearest friendly model with the ELITE and HERETIC Keywords. If two or more eligible models are equally close to the Wretched, you can choose which receives the BLESSING MARKER"
+      },
+      {
+       "name": "Law of Hell",
+       "text": "If an attack made by a Wretched takes an enemy model with the ELITE Keyword out of Action, the Wretched model gains its freedom and is immediately removed from the game. It no longer counts as being part of the Warband for the purposes of Morale Checks and is removed from the Warband Roster."
+      },
+      {
+       "name": "Chattel",
+       "text": "In a campaign, Wretched can be sold in the Quartermaster Step for 25 ducats plus half the cost in ducats of any Battlekit they have."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Unseen Infiltrator"
+     ],
+     "note": "May only carry battlekit costing up to 10 ducats per item and must have at least 1 weapon."
+    },
+    {
+     "name": "Heretic Trooper",
+     "type": "troop",
+     "ducats": 30,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+0 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "HERETIC"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    }
+   ],
+   "armoury": [
+    {
+     "name": "Blasphemous Staff",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "melee",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Hellblade",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 2,
+     "category": "melee",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Trench Knife",
+     "ducats": 1,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Bayonet",
+     "ducats": 2,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo",
+     "source": "pdf-table"
+    },
+    {
+     "name": "Trench Club",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sword/Axe",
+     "ducats": 4,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Polearm",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Great Hammer/Maul",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Sword/Axe",
+     "ducats": 12,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Tartarus Claws",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Death Commando only"
+    },
+    {
+     "name": "Sacrificial Blade",
+     "ducats": 23,
+     "glory": 0,
+     "limit": 2,
+     "category": "melee",
+     "note": "ELITE only, Limit: 2"
+    },
+    {
+     "name": "Anti-Material Rifle",
+     "ducats": 0,
+     "glory": 3,
+     "limit": 1,
+     "category": "ranged",
+     "note": "Limit:1"
+    },
+    {
+     "name": "Automatic Rifle",
+     "ducats": 0,
+     "glory": 2,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Bayonet Lug, Limit: 2"
+    },
+    {
+     "name": "Submachine Gun",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Pistol",
+     "ducats": 6,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Bolt-Action Rifle",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Shotgun",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Automatic Shotgun",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Semi-Automatic Rifle",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Silenced Pistol",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Flamethrower",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged",
+     "note": "Limit: 3"
+    },
+    {
+     "name": "Grenade Launcher",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Machine Gun",
+     "ducats": 50,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Heavy Flamethrower",
+     "ducats": 55,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged"
+    },
+    {
+     "name": "Frag Grenades",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Gas Grenades",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Incendiary Grenades",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Combat Helmet",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Headgear"
+    },
+    {
+     "name": "Thermal Shielding",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "profile": {
+      "type": "Equipment",
+      "range": "-",
+      "keywords": [
+       "NEGATE FIRE"
+      ],
+      "rules": "Attacks or effects from friendly sources with the FIRE keyword suffer a -2 DICE penalty to injure the model."
+     }
+    },
+    {
+     "name": "Trench Shield",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Standard Armour",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Reinforced Armour",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Anointed & ELITE only"
+    },
+    {
+     "name": "Field Shrine",
+     "ducats": 0,
+     "glory": 2,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Troop Flag",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Mountaineer Kit",
+     "ducats": 3,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Gas Mask",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Hellbound Soul Contract",
+     "ducats": 5,
+     "glory": 0,
+     "limit": 3,
+     "category": "equipment",
+     "note": "Heretic Troopers & Legionnaires only, Limit: 3"
+    },
+    {
+     "name": "Infernal Brand",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Medikit",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Shovel",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Binoculars",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Byzantinium Hearth",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "profile": {
+      "type": "Equipment",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "This model treats any DOWN INJURY result as a MINOR INJURY instead, unless it is as a result of the TOUGH keyword converting an OUT OF ACTION to a DOWN result.\nIf a Byzantinium Heart is ever removed or lost from the model that has it equipped for any reason, the model instantly dies."
+     }
+    },
+    {
+     "name": "Wind Amulet",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Incendiary Ammunition",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Musical Instrument",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Unholy Relic",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Unholy Trinket",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "Consumable"
+    },
+    {
+     "name": "Tempered Filigree",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    }
+   ]
+  },
+  {
+   "key": "trenchPilgrims",
+   "name": "Trench Pilgrims",
+   "alignment": "Faithful",
+   "lore": "Fanatic processions of the faithful, armed with martyrdom, stigmata and holy wrath.",
+   "special": [
+    "A Trench Pilgrim warband must include 1 War Prophet."
+   ],
+   "requires": [
+    {
+     "anyOf": [
+      "War Prophet"
+     ],
+     "min": 1
+    }
+   ],
+   "units": [
+    {
+     "name": "Castigator",
+     "type": "elite",
+     "ducats": 50,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "PILGRIM"
+     ],
+     "abilities": [
+      {
+       "name": "Whip of God",
+       "text": "Unlike other models, a Castigator is allowed to attack friendly models with melee attacks within 1”. They can do this without declaring a charge. Each time the Castigator takes a friendly model Out of Action with a melee attack, set a die aside in a pool as the act of piety inspires the troops. The next time your warband makes a Morale roll, add an amount of +DICE to that roll equal to the amount of dice in the pool and empty it."
+      },
+      {
+       "name": "Enforced Orthodoxy",
+       "text": "At any point during its Activation, a Castigator may take a RISKY ACTION with +1 DICE. If successful, all friendly models that are Down and within 8” of the Castigator may immediately stand up at no penalty or cost."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Trench Pilgrim",
+     "type": "troop",
+     "ducats": 30,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+0 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "PILGRIM"
+     ],
+     "abilities": [
+      {
+       "name": "Resurrection",
+       "text": "If a Trench Pilgrim is killed after a game (▶ see Campaign in the Trench Crusade Digital Rulebook), they can be resurrected in the following Quartermaster Step as a Martyr Penitent with the Martyr Penitent Profile for a cost 45 ducats. Add -1 INJURY DICE to Injury Rolls for a Martyr Penitent. A Martyr Penitent keeps their Battlekit and Zealot Strength if the ability was purchased, but loses any Scars, Experience, and Advancements. Martyrdom Pills have no effect on a Martyr Penitent model"
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Communicant",
+     "type": "elite",
+     "ducats": 100,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-3 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "40mm"
+     },
+     "keywords": [
+      "PILGRIM",
+      "STRONG",
+      "TOUGH",
+      "LIMITED POTENTIAL",
+      "REGENERATE 1",
+      "NEGATE SHRAPNEL",
+      "NEGATE FEAR",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Bodyguard",
+       "text": "If a friendly PILGRIM model within 1\" of a Communicant is hit by a Ranged Attack or Melee Attack, you can say that the Communicant will take the hit. If you do so, make an Injury Roll for the Communicant instead of the original target. This ability cannot be used against attacks that have the BLAST Keyword."
+      },
+      {
+       "name": "The Communicant Cross",
+       "text": "A sacred cross is nailed on the face of the Communicant. This counts as an Iron Capirote, Combat Helmet and a Gas Mask (Immune to SHRAPNEL, GAS, and FEAR)."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "War Prophet",
+     "type": "elite",
+     "ducats": 80,
+     "glory": 0,
+     "min": 1,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "PILGRIM",
+      "LEADER"
+     ],
+     "abilities": [
+      {
+       "name": "Loudspeakers",
+       "text": "A War Prophet can take a Loudspeakers ACTION. If they do so, take a Risky Success Roll for the model and add +2 DICE to the roll. If the roll is a Failure, the War Prophet’s Activation ends immediately. If the roll is a Success or Critical Success, you can move all friendly models within 8\" of the War Prophet up to 3\". They must end the move as close as possible to the nearest enemy model that was visible to them at the start of the move. This move can be used to bring a model within 1\" of an enemy model in which case the model counts as charging. If no enemy models are visible, they can move normally."
+      },
+      {
+       "name": "Memento Mori",
+       "text": "The War Prophet is touched by a higher power, and the revealed truth allows them a degree of protection against premature death. The first time the War Prophet suffers an Out of Action result on the Injury Table, it is treated as a No Effect result instead. A War Prophet cannot have the TOUGH Keyword."
+      },
+      {
+       "name": "Laying on Hands",
+       "text": "A War Prophet can take a Laying on of Hands ACTION. If they do so, take a Success Roll for the model. If the roll is a Failure, nothing happens. If the roll is a Success, remove 1 BLOOD MARKER from a friendly model within 6\" of the War Prophet. If the roll is a Critical Success, remove 3 BLOOD MARKERS from a friendly model within 6\" of the War Prophet instead of only 1. The War Prophet can use this ACTION to heal themselves."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Ecclesiastic Prisoner",
+     "type": "troop",
+     "ducats": 20,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "PILGRIM"
+     ],
+     "abilities": [
+      {
+       "name": "Mad Dash",
+       "text": "Ecclesiastic Prisoner can add +1 DICE to their Dash ACTION"
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     }
+    },
+    {
+     "name": "Stigmatic Nun",
+     "type": "troop",
+     "ducats": 50,
+     "glory": 0,
+     "min": 0,
+     "max": 4,
+     "stats": {
+      "movement": "8\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "PILGRIM",
+      "REGENERATE 1"
+     ],
+     "abilities": [
+      {
+       "name": "Blessed Stigmata",
+       "text": "Each time you remove a BLOOD MARKER from a Stigmatic Nun because of the REGENERATE 1 Keyword, place 1 BLESSING MARKER next to the Stigmatic Nun."
+      },
+      {
+       "name": "Agile",
+       "text": "Stigmatic Nuns may take any Dash ACTION or jump/climb/Diving Charge ACTION with +1 DICE."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Anchorite Shrine",
+     "type": "troop",
+     "ducats": 140,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-",
+      "melee": "+2 DICE",
+      "armour": "-3",
+      "base": "60mm"
+     },
+     "keywords": [
+      "PILGRIM"
+     ],
+     "abilities": [
+      {
+       "name": "Broken on the Wheel",
+       "text": "Broken on the Wheel: At the start of each game, before deployment, you can say that one Trench Pilgrim or Ecclesiastic Prisoner will be broken on the wheel to show their piety and devotion. The model you choose is permanently removed from your Warband, but in a campaign you can redistribute their Battlekit to other models that would be allowed to have it in the following Quartermaster Step. Injuries that would be inflicted on the Anchorite Shrine are instead inflicted on its unfortunate victim, until the victim finally passes away. This is represented by the following special rules, which apply to the Anchorite Shrine until it suffers an Out of Action result on the Injury Table:\n* It has an Armour Characteristic of 0 and does not have the NEGATE SHRAPNEL and TOUGH Keywords.\n* It treats Down results as Minor Hit results.\n* The first time the Anchorite Shrine suffers an Out of Action result on the Injury Table, it is treated as a No Effect result.\nWhen this happens, any BLOOD MARKERS on the Anchorite Shrine are removed, and from then on, these special rules no longer apply to the model, it has an Armour Characteristic of -3, and gains the NEGATE SHRAPNEL and TOUGH Keywords (the TOUGH Keyword will apply the next time the Anchorite Shrine suffers an Out of Action result on the Injury Table)"
+      },
+      {
+       "name": "Symphony of Slaughter",
+       "text": "An Anchorite Shrine is armed with two 1-Handed Melee Weapons (the Catherine Wheel and Bonebreaker Mace). When it makes a Melee Attack, it can either attack once using either its Catherine Wheel or the Bonebreaker Mace, or twice, first with the Catherine Wheel and second with its Bonebreaker Mace (the Off-Hand Weapon modifier applies to the attack made with the Bonebreaker Mace)."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": false,
+      "equipment": true,
+      "armour": false
+     },
+     "extra": [
+      "Sacrificial Lamb",
+      "Combat Helmet"
+     ]
+    }
+   ],
+   "armoury": [
+    {
+     "name": "Trench Knife",
+     "ducats": 1,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Bayonet",
+     "ducats": 2,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo",
+     "source": "pdf-table"
+    },
+    {
+     "name": "Trench Club",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sword/Axe",
+     "ducats": 4,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Flail/Scourge",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Polearm",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Great Hammer/Maul",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Sword/Axe",
+     "ducats": 12,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Misericordia",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "melee",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Machine Gun",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Sniper Rifle",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Submachine Gun",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Blunderbuss",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Gas Filters",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "NEGATE GAS"
+      ],
+      "rules": "-"
+     }
+    },
+    {
+     "name": "Musket",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Pistol",
+     "ducats": 6,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Bolt-Action Rifle",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Holy Diesel Engine",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Advanced Design: When you take a Dash ACTION with this Anchorite Shrine, you can choose to add +2 DICE to the Risky Success Roll. If you do so, you must place 1 BLOOD MARKER next to the model"
+     }
+    },
+    {
+     "name": "Shotgun",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Semi-Automatic Rifle",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Automatic Pistol",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Punt Gun",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Flamethrower",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Anti-Material Rifle",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Automatic Rifle",
+     "ducats": 40,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "note": "Bayonet Lug, Limit: 1"
+    },
+    {
+     "name": "Heavy Flamethrower",
+     "ducats": 45,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Gas Censer",
+     "ducats": 50,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "profile": {
+      "type": "2-Handed",
+      "range": "6''",
+      "keywords": [
+       "GAS",
+       "IGNORE ARMOUR",
+       "RELOAD"
+      ],
+      "rules": "Cloud of Gas: When you take a Shoot ACTION with this model, instead of making a Ranged Attack, you can unleash a cloud of gas. If you do so, do not make a Success Roll. Instead, all other models within 6” of the model using the Gas Censer are hit, and an Injury Roll must be made for each one. Note that the attack hits all models, friend or foe, apart from the model making the attack, regardless of Line of Sight."
+     }
+    },
+    {
+     "name": "Autocannon",
+     "ducats": 55,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "profile": {
+      "type": "2-Handed",
+      "range": "48\"",
+      "keywords": [
+       "+1 INJURY DICE",
+       "AUTOMATIC 3",
+       "HEAVY"
+      ],
+      "rules": "-"
+     }
+    },
+    {
+     "name": "Molotov Cocktail",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Warcross",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Incendiary Grenades",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Holy Icon Shield",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "armour",
+     "note": "ELITE only, Shield Combo"
+    },
+    {
+     "name": "Trench Shield",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Standard Armour",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Reinforced Armour",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Field Shrine",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Holy Relic",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "equipment",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Troop Flag",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Mountaineer Kit",
+     "ducats": 3,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Gas Mask",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Medikit",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Iron Capirote",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "Headgear"
+    },
+    {
+     "name": "Hallowed Anchorite",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Manifold Blessings: A Hallowed Anchorite Shrine can be promoted to ELITE status in the Promotions & Experience Step of the Campaign Phase."
+     }
+    },
+    {
+     "name": "Piston Legs",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Grind to Dust ACTION: This Anchorite Shrine can take a Grind to Dust ACTION. If it does so, it makes a Melee Attack but must target an enemy model within 1\" that is Down and is mounted on a base that is 32mm or smaller. The attack does not use a Melee Weapon."
+     }
+    },
+    {
+     "name": "Sacred Geometry",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Divine Accuracy: Add +1 DICE to the Ranged Characteristic of this Anchorite Shrine."
+     }
+    },
+    {
+     "name": "Blessed Icon",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "Consumable"
+    },
+    {
+     "name": "Grand Anchorite",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Impossible to Stop: Enemy models are not allowed to make a Melee Attack when a Grand Anchorite Shrine that is within 1\" of them retreats. In addition, a Grand Anchorite Shrine can take a Move or Charge ACTION if it starts within 1\" of any enemy models."
+     }
+    },
+    {
+     "name": "Incendiary Ammunition",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Martyred",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "rules": "Any attacks against a Martyr-Penitent add -1 DICE when rolling on the Injury Table."
+     }
+    },
+    {
+     "name": "Musical Instrument",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Martyrdom Pills",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 3,
+     "category": "equipment",
+     "note": "Consumable, Limit: 3"
+    },
+    {
+     "name": "Wrathful Cherub Face",
+     "ducats": 20,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "type": "Special",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Cower Before The Lord: An enemy model that does not have the FEAR keyword and that starts an Activation within 1\" of this Anchorite Shrine must take a Retreat ACTION as part of the Activation. It cannot take any ACTION that require a Risky Success Roll while it is within 1\" of this Anchorite Shrine."
+     }
+    },
+    {
+     "name": "Martyrdom Device",
+     "ducats": 35,
+     "glory": 0,
+     "limit": 4,
+     "category": "equipment",
+     "profile": {
+      "rules": "If the Ecclesiastic Prisoner is taken Out of Action by its Martyrdom Device, it does not count as being Out of Action for any rules related to Morale."
+     }
+    }
+   ]
+  },
+  {
+   "key": "newAntioch",
+   "name": "New Antioch",
+   "alignment": "Faithful",
+   "lore": "The professional soldiery of the Principality of New Antioch, shield of Christendom.",
+   "special": [
+    "A New Antioch warband must include 1 Lieutenant."
+   ],
+   "requires": [
+    {
+     "anyOf": [
+      "Lieutenant"
+     ],
+     "min": 1
+    }
+   ],
+   "units": [
+    {
+     "name": "Lieutenant",
+     "type": "elite",
+     "ducats": 70,
+     "glory": 0,
+     "min": 1,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH",
+      "TOUGH",
+      "LEADER"
+     ],
+     "abilities": [
+      {
+       "name": "On my Command!",
+       "text": "ACTION: The Lieutenant orders their warband to stop shooting, forcing the enemy to move first. To represent this, a Lieutenant can take a Hold Your Fire! ACTION. If they do so, pick 1 enemy model that is in the Lieutenant’s Line of Sight and that the opponent is allowed to Activate. The Lieutenant’s Activation then ends, and the opponent must Activate the model you picked."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Trench Cleric",
+     "type": "elite",
+     "ducats": 60,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH",
+      "NEGATE FEAR"
+     ],
+     "abilities": [
+      {
+       "name": "Onward Christian Soldiers!",
+       "text": "Friendly NEW ANTIOCH models within 8\" of a Trench Cleric have the NEGATE FEAR Keyword."
+      },
+      {
+       "name": "God is With Us!",
+       "text": "ACTION: A Trench Cleric can take a God is With Us! ACTION. If they do so, take a Risky Success Roll for the Trench Cleric. If the roll is a Failure, nothing happens, and the Trench Cleric’s Activation ends. If the roll is a Success or a Critical Success, you can place 1 BLESSING MARKER next to the Trench Cleric or a friendly model within 6\" of the Trench Cleric."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Yeoman",
+     "type": "troop",
+     "ducats": 30,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+0 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Sniper Priest",
+     "type": "elite",
+     "ducats": 50,
+     "glory": 0,
+     "min": 0,
+     "max": 2,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH",
+      "CLERGY"
+     ],
+     "abilities": [
+      {
+       "name": "Aim",
+       "text": "ACTION: A Sniper Priest can take an Aim ACTION. If they do so, take a Risky Success Roll for the model and add +2 DICE to the roll. If the roll is a Failure, nothing happens and the Sniper Priest’s Activation ends. If the roll is a Success or Critical Success, for the rest of the Activation, add +2 DICE to the Success Rolls for Ranged Attacks that are made by the Sniper Priest."
+      },
+      {
+       "name": "Absolute Faith",
+       "text": "Sniper Priests do not use their eyesight to aim at their enemies. The opposing player cannot spend BLOOD MARKERS to add -DICE to a Ranged Attack by a Sniper Priest."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Shocktrooper",
+     "type": "troop",
+     "ducats": 45,
+     "glory": 0,
+     "min": 0,
+     "max": 5,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH"
+     ],
+     "abilities": [
+      {
+       "name": "Shock Charge",
+       "text": "When you roll the Charge Bonus for a Shock Trooper, roll 1 extra D6 and use the single highest die to determine the bonus."
+      },
+      {
+       "name": "Assault Drill",
+       "text": "You can ignore the Effect of the HEAVY Keyword for 1 Melee Weapon that a Shock Trooper has. A Shock Trooper still cannot have more than 1 Weapon (of any type) with the HEAVY Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Combat Engineer",
+     "type": "troop",
+     "ducats": 80,
+     "glory": 0,
+     "min": 0,
+     "max": 2,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+1 DICE",
+      "armour": "-2",
+      "base": "25mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH"
+     ],
+     "abilities": [
+      {
+       "name": "Defuse Mine",
+       "text": "When you move a Combat Engineer into contact with a Marker or terrain piece with the MINED Keyword, you can say the Combat Engineer will halt and try to defuse the mine before it detonates. If you do so, take a Risky Success Roll for the model. If the roll is a Failure, the mine detonates anyway and the Combat Engineer’s Activation ends. If the roll is a Success or a Critical Success, the mine does not detonate and the Marker or terrain piece loses the MINED Keyword. A model that sets a mine on a terrain piece can defuse the mine automatically if it moves into contact with the terrain piece (do not take a Risky Success Roll)."
+      },
+      {
+       "name": "Battlefield Demolition",
+       "text": "You can ignore the Effect of the HEAVY Keyword for 1 Satchel Charge that a Combat Engineer has. A Combat Engineer still cannot have more than 1 Weapon (of any type) with the HEAVY Keyword."
+      },
+      {
+       "name": "Fortify",
+       "text": "ACTION: A Combat Engineer can take a Fortify ACTION. If they do so, take a Risky Success Roll for the Combat Engineer. If the roll is a Failure, the Combat Engineer’s Activation ends. If the roll is a Success or a Critical Success, the Combat Engineer has the COVER Keyword until they move away from their current position."
+      },
+      {
+       "name": "Set Mine",
+       "text": "A Combat Engineer can take a Set Mine ACTION if they are in contact with a terrain piece that measures up to 8” by 8” that doesn’t have the MINED Keyword. If they do so, take a Success Roll for the model and add +2 DICE to the roll. If the roll is a Failure, nothing happens. If the roll is a Success or a Critical Success, the terrain piece gains the MINED Keyword."
+      },
+      {
+       "name": "Negate Mined",
+       "text": ""
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": false
+     },
+     "extra": [
+      "Shovel"
+     ]
+    },
+    {
+     "name": "Combat Medic",
+     "type": "troop",
+     "ducats": 65,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+0 DICE",
+      "armour": "-1",
+      "base": "25mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH"
+     ],
+     "abilities": [
+      {
+       "name": "Convent Conditioning",
+       "text": "The Medic is immune to FEAR."
+      },
+      {
+       "name": "Finish the Fallen",
+       "text": "Due their knowledge of anatomy and physiology, medics are experts at inflicting debilitating injuries and excruciating pain. Unless the target has the Keyword DEMONIC or BLACK GRAIL, add +1 BONUS DICE to any injury rolls the medic makes in melee against opponents who are Down."
+      },
+      {
+       "name": "Expert Medic",
+       "text": "Add +2 DICE to the Risky Success Roll when a Combat Medic carries out a Treat ACTION with their Medi-kit."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": false
+     },
+     "extra": [
+      "Gas Mask",
+      "Medikit",
+      "Standard Armour"
+     ],
+     "note": "Always has Standard Armour, a Gas Mask, a Medi-kit and a Misericordia — included in the cost and in the profile above. May take any battlekit from the New Antioch armoury apart from Armour."
+    },
+    {
+     "name": "Mechanized Heavy Infantry",
+     "type": "troop",
+     "ducats": 85,
+     "glory": 0,
+     "min": 0,
+     "max": 3,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+0 DICE",
+      "armour": "-2",
+      "base": "40mm"
+     },
+     "keywords": [
+      "NEW ANTIOCH",
+      "STRONG"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": false
+     }
+    }
+   ],
+   "armoury": [
+    {
+     "name": "Trench Knife",
+     "ducats": 1,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Bayonet",
+     "ducats": 2,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo",
+     "source": "pdf-table"
+    },
+    {
+     "name": "Trench Club",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sword/Axe",
+     "ducats": 4,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Polearm",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Great Hammer/Maul",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Sword/Axe",
+     "ducats": 12,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Misericordia",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "melee",
+     "note": "Combat Medic only, Limit: 1"
+    },
+    {
+     "name": "Pistol",
+     "ducats": 6,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Bolt-Action Rifle",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Shotgun",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Automatic Shotgun",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo, Limit: 2"
+    },
+    {
+     "name": "Semi-Automatic Rifle",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Automatic Pistol",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged",
+     "note": "ELITE only, Limit: 3"
+    },
+    {
+     "name": "Heavy Shotgun",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Shield Combo, Limit: 2"
+    },
+    {
+     "name": "Flamethrower",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged",
+     "note": "Limit: 3"
+    },
+    {
+     "name": "Grenade Launcher",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Submachine Gun",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo, Limit: 2"
+    },
+    {
+     "name": "Sniper Rifle",
+     "ducats": 35,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged",
+     "note": "Limit: 3"
+    },
+    {
+     "name": "Automatic Rifle",
+     "ducats": 40,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "note": "Bayonet Lug, Limit: 1"
+    },
+    {
+     "name": "Machine Gun",
+     "ducats": 50,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Heavy Flamethrower",
+     "ducats": 55,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged"
+    },
+    {
+     "name": "Frag Grenades",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Incendiary Grenades",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 2,
+     "category": "grenade"
+    },
+    {
+     "name": "Satchel Charge",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 3,
+     "category": "grenade",
+     "note": "Consumable, Limit: 3 (1 per model)"
+    },
+    {
+     "name": "Combat Helmet",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Headgear"
+    },
+    {
+     "name": "Machine Armour",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Trench Shield",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Heavy Ballistic Shield",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Models wearing Machine Armour"
+    },
+    {
+     "name": "Standard Armour",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Reinforced Armour",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Engineer Body Armour",
+     "ducats": 45,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Combat Engineer only",
+     "source": "pdf-table"
+    },
+    {
+     "name": "Field Shrine",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Martyrdom Pills",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 2,
+     "category": "equipment",
+     "note": "Consumable, ELITE only, Limit: 2"
+    },
+    {
+     "name": "Troop Flag",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Mountaineer Kit",
+     "ducats": 3,
+     "glory": 0,
+     "limit": 4,
+     "category": "equipment",
+     "note": "Limit: 4"
+    },
+    {
+     "name": "Fire Support Reconfiguration",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "rules": "For an additional cost of +5 ducats, the armour of Cataphracti can be reconfigured for sustained fire support. With this upgrade, firing a Machine Gun does not end the turn of the model, however doing so lowers the Machine Gun's range to 24\" and prohibits equipping any melee weapons. This upgrade can be reversed whenever you update your roster."
+     }
+    },
+    {
+     "name": "Gas Mask",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Guard Dog",
+     "ducats": 5,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "No infiltrator can be placed within 12” of a Guard Dog, and you can charge any enemy within 4” of this dog even if it is out of sight."
+     }
+    },
+    {
+     "name": "Man's Best Friend",
+     "ducats": 5,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "profile": {
+      "rules": "This dog can form a fireteam with another model in your Warband."
+     }
+    },
+    {
+     "name": "Medikit",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Menaulatoi Princeps",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "rules": "As a seasoned leader of Longspear formations, the Princeps gains +1 DICE to their ranged attack ACTIONS when fight­ing within 4\" of another Menaulatoi. This does not apply to GRENADE weapons."
+     }
+    },
+    {
+     "name": "Mercy Dog",
+     "ducats": 5,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "profile": {
+      "rules": "Mercy dogs can also drag any model within 1” that is Down at ½ speed with them, both with normal movement or when dashing."
+     }
+    },
+    {
+     "name": "Shovel",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Binoculars",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Musical Instrument",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Varangian Warlord",
+     "ducats": 20,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "rules": "The Warlord’s armour has been reconfigured to gain +1 to their melee characteristic, at the cost of -1 to their ranged characteristic. It is already reflected in their profile. This upgrade gives the keyword AS­SAULT to ranged weapons with the Shield Combo indicator when used with a Trench Shield."
+     }
+    }
+   ]
+  },
+  {
+   "key": "ironSultanate",
+   "name": "The Iron Sultanate",
+   "alignment": "Faithful",
+   "lore": "Defenders of the Great Iron Wall, alchemists and janissaries of the unconquered Sultanate.",
+   "special": [
+    "An Iron Sultanate warband must include 1 Yüzbaşı Captain."
+   ],
+   "requires": [
+    {
+     "anyOf": [
+      "Yüzbaşı Captain"
+     ],
+     "min": 1
+    }
+   ],
+   "units": [
+    {
+     "name": "Sultanate Sapper",
+     "type": "troop",
+     "ducats": 50,
+     "glory": 0,
+     "min": 0,
+     "max": 2,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "0",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "SULTANATE"
+     ],
+     "abilities": [
+      {
+       "name": "Set Mine",
+       "text": "A Sultanate Sapper can take a Set Mine ACTION if they are in contact with a terrain piece that measures up to 8\" by 8\". If they do so, take a Success Roll for the model and add +2 DICE to the roll. If the roll is a Failure, nothing happens. If the roll is a Success or a Critical Success, the terrain piece becomes Mined."
+      },
+      {
+       "name": "Fortify",
+       "text": "A Sultanate Sapper can take a Fortify ACTION. If they do so, take a Risky Success Roll for the Sultanate Sapper. If the roll is a Failure, the Sultanate Sappers Activation ends. If the roll is a Success or a Critical Success, the Sultanate Sapper has the COVER Keyword until they move away from their current position."
+      },
+      {
+       "name": "Defuse Mine",
+       "text": "When you move a Sultanate Sapper into contact with a terrain piece that has been Mined, you can say the Sultanate Sapper will halt and try to defuse the mine before it detonates (▶ see Detonating Mines below). If you do so, take a Risky Success Roll for the model. If the roll is a Failure, the mine detonates anyway and the Sultanate Sapper’s Activation ends. If the roll is a Success or a Critical Success, the mine does not detonate and the terrain piece is no longer considered to be Mined"
+      },
+      {
+       "name": "Forward Positions",
+       "text": "When you deploy a Sultanate Sapper for the first time in a game, you must deploy them up to 6\" away from your deployment zone and in contact with a terrain piece that is at least ½\" high."
+      },
+      {
+       "name": "Detonating Mine",
+       "text": "When a model moves into contact with a Mined terrain piece, the mine will detonate unless the model is the one that set the mine, or has the Defuse Mine ability (▶ see above). Make an Injury Roll with the SHRAPNEL Keyword for the model that detonated the mine. The terrain piece is then no longer considered to be Mined. If the model wasn’t taken Down or Out of Action, it can then continue its move. Flying models only detonate a mine if they finish a move in contact with a Mined terrain piece (they can fly across it without setting it off )."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Shovel"
+     ]
+    },
+    {
+     "name": "Jabirean Alchemist",
+     "type": "elite",
+     "ducats": 55,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "SULTANATE"
+     ],
+     "abilities": [
+      {
+       "name": "Mastery of the Elements",
+       "text": "When this model is deployed for the first time in a game, you can give one of the following Keywords to all of the Jabirean Alchemist’s Ranged Weapons and Melee Weapons: FIRE or GAS or SHRAPNEL. All of the Weapons have the same Keyword. If the Weapon already has the Keyword, it does not receive it a second time."
+      },
+      {
+       "name": "Elemental Change",
+       "text": "ACTION: A Jabirean Alchemist can take an Elemental Change ACTION. If they do so, take a Risky Success Roll for the model. If the roll is a Failure, nothing happens and the Jabirean Alchemist’s Activation ends. If the roll is a Success or a Critical Success, you can change the Master of the Elements Keyword on all of the Jabirean Alchemist’s Weapons to one of the other two choices."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Secrets of the House of Wisdom"
+     ]
+    },
+    {
+     "name": "Janissary",
+     "type": "troop",
+     "ducats": 55,
+     "glory": 0,
+     "min": 0,
+     "max": 6,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "STRONG",
+      "SULTANATE"
+     ],
+     "abilities": [
+      {
+       "name": "Counter-Charge",
+       "text": "If the first ACTION a Janissary makes during their Activation is a Charge, they can add +1 DICE to their subsequent Melee Attack ACTIONS during this Activation"
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Brazen Bull",
+     "type": "troop",
+     "ducats": 100,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "60mm"
+     },
+     "keywords": [
+      "STRONG",
+      "TOUGH",
+      "SULTANATE",
+      "LIMITED POTENTIAL",
+      "ARTIFICIAL"
+     ],
+     "abilities": [
+      {
+       "name": "Artificial Life",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Brazen Bull."
+      },
+      {
+       "name": "Trample",
+       "text": "ACTION: A Brazen Bull can take a Trample ACTION. If it does so, it can make a Melee Attack that must target an enemy model that is Down. A Trample Melee Attack does not use a Melee Weapon and has the IGNORE ARMOUR Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": false,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Satchel Charge"
+     ]
+    },
+    {
+     "name": "Sultanate Assassin",
+     "type": "elite",
+     "ducats": 85,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "INFILTRATOR",
+      "SULTANATE"
+     ],
+     "abilities": [
+      {
+       "name": "Temporal Assassin",
+       "text": "After determining the Charge Bonus for a Sultanate Assassin that has not already carried out a Fight ACTION in its Activation, you can say that the Sultanate Assassin will split itself through time. If you do so, choose an additional enemy model as the target of the Charge (the normal rules for picking a target apply, but do not count targets of the Charge as interposing enemy models). Then make a charge move with the Sultanate Assassin which finishes within 1” of the first enemy model you picked as a target, and then take a Fight ACTION with the enemy model as the target. After resolving the Fight ACTION, you must immediately remove the Sultanate Assassin from the battlefield and redeploy it to within 1” of the other model that you picked. Then take a second Fight ACTION with the other enemy model as the target. The Sultanate Assassin must use the same Melee Weapon for both attacks, and cannot take a Fight ACTION later in the same Activation."
+      },
+      {
+       "name": "Time Slip",
+       "text": "If your opponent fails their Success Roll for an attack targeting a Sultanate Assassin, you can say the Sultanate Assassin will slip into a moment in the future. If you do so, you can redeploy it anywhere within 6” of its original location (measured from the centre of its base to the centre of its base), and more than 1” away from any enemy models. If the failed attack took place because the Sultanate Assassin is retreating, the retreat move ends after you redeploy the model."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Arts of Assassination"
+     ]
+    },
+    {
+     "name": "Yüzbaşı Captain",
+     "type": "elite",
+     "ducats": 70,
+     "glory": 0,
+     "min": 1,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "TOUGH",
+      "SULTANATE",
+      "LEADER"
+     ],
+     "abilities": [
+      {
+       "name": "Mubarizun",
+       "text": "A Yüzbaşı is expected to face the mightiest of their enemies in personal combat, inspiring the troops to victory with their personal prowess. Add +1 INJURY DICE for attacks made by a Yüzbaşı if the target model has the TOUGH Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Azeb",
+     "type": "troop",
+     "ducats": 25,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "SULTANATE"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Lion of Jabir",
+     "type": "troop",
+     "ducats": 60,
+     "glory": 0,
+     "min": 0,
+     "max": 2,
+     "stats": {
+      "movement": "8\"/Infantry",
+      "ranged": "-",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "50mm"
+     },
+     "keywords": [
+      "SULTANATE",
+      "LIMITED POTENTIAL",
+      "ARTIFICIAL"
+     ],
+     "abilities": [
+      {
+       "name": "Artificial Life",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Lion of Jabir"
+      },
+      {
+       "name": "Agile",
+       "text": "Add +1 DICE to Risky Success Roll when a Lion of Jabir Climbs, Jumps, or makes a Diving Charge, or takes a Dash ACTION."
+      },
+      {
+       "name": "Pin",
+       "text": "Enemy models that are Down and that are mounted on a base of 40mm or less are not allowed to stand up if a Lion of Jabir is within 1\" of them (even if the Lion of Jabir is also Down)."
+      },
+      {
+       "name": "Teeth and Claws",
+       "text": "A Lion of Jabir can make a Melee Attack even though it does not have any Melee Weapons."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": true
+     },
+     "extra": [
+      "Wind Amulet"
+     ]
+    }
+   ],
+   "armoury": [
+    {
+     "name": "Trench Knife",
+     "ducats": 1,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Bayonet",
+     "ducats": 2,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo",
+     "source": "pdf-table"
+    },
+    {
+     "name": "Trench Club",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sword/Axe",
+     "ducats": 4,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Polearm",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Great Hammer/Maul",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Sword/Axe",
+     "ducats": 12,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Assassin's Dagger",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Sultanate Assassins only"
+    },
+    {
+     "name": "Halberd-Gun",
+     "ducats": 20,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Titan Zulfiqar",
+     "ducats": 30,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "note": "Brazen Bull only"
+    },
+    {
+     "name": "Musket",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Pistol",
+     "ducats": 6,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Jezzail",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Alaybozan",
+     "ducats": 9,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Sultanate Sappers only, Shield Combo"
+    },
+    {
+     "name": "Shotgun",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo"
+    },
+    {
+     "name": "Flamethrower",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged",
+     "note": "Limit: 3"
+    },
+    {
+     "name": "Siege Jezzail",
+     "ducats": 30,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Sniper Rifle",
+     "ducats": 35,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "ELITE & Janissaries only, Limit: 2"
+    },
+    {
+     "name": "Machine Gun",
+     "ducats": 50,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Flame Cannon",
+     "ducats": 60,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "note": "Brazen Bull only, Limit: 1"
+    },
+    {
+     "name": "Frag Grenades",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Combat Helmet",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Headgear"
+    },
+    {
+     "name": "Trench Shield",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "Shield Combo"
+    },
+    {
+     "name": "Standard Armour",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Reinforced Armour",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "armour",
+     "note": "ELITE & Janissaries only"
+    },
+    {
+     "name": "Alchemist Armour",
+     "ducats": 50,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Machine Armour",
+     "ducats": 50,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Holy Relic",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "equipment",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Takwin Anqā Bird",
+     "ducats": 0,
+     "glory": 2,
+     "limit": 1,
+     "category": "equipment",
+     "note": "ELITE only, Limit: 1",
+     "profile": {
+      "type": "Equipment",
+      "range": "-",
+      "rules": "Cause Confusion: Success Rolls taken for Melee Attacks that target a model with a Takwin Anqā Bird become Risky Success Rolls (there is no additional effect if they are Risky Success Rolls already). In addition, before an enemy model within 1\" of a model with Takwin Anqā Bird makes a retreat, the opposing player must take a Risky Success Roll for the model. If the Roll is a Failure the enemy model cannot retreat and its Activation ends. If the Roll is a Success or a Critical Success, the enemy model can retreat normally."
+     }
+    },
+    {
+     "name": "Troop Flag",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Alchemical Ammunition",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Mountaineer Kit",
+     "ducats": 3,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Gas Mask",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Medikit",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Shovel",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Binoculars",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "ELITE only"
+    },
+    {
+     "name": "Wind Amulet",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "note": "Limit: 2"
+    },
+    {
+     "name": "Marid Shovel",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "Brazen Bull only"
+    },
+    {
+     "name": "Medicine",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "This Alchemist is a student of Ibn Sina’s School of Medicine.\nThis Alchemist cannot have a Medi-kit. Instead, when you Activate this Alchemist it can take a School of Medicine ACTION as part of the Activation. If it does so, take a Success Roll for the Alchemist and add +1 DICE to the roll. If the roll is a Failure, nothing happens. If it is a Success or a Critical Success, you can do one of the following things:\n* Remove 2 BLOOD MARKERS or 1 INFECTION MARKER from the Alchemist or a friendly model within 1\" of the Alchemist.\n* Stand up a friendly model that is Down and which is within 1\" of the Alchemist."
+     }
+    },
+    {
+     "name": "Musical Instrument",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "note": "Limit: 1"
+    },
+    {
+     "name": "Cartography & Geometry",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "The Alchemist has studied long and hard the sciences of cartography and Geometry. At the start of the game, before deployment, you can pick up to 2 models in the Warband that are mounted on a base of 32mm or less, giving them the INFILTRATOR Keyword for that game."
+     }
+    },
+    {
+     "name": "Philosophy, Poetry and Theology",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "keywords": [
+       "NEGATE FEAR"
+      ],
+      "rules": "The Alchemist is well-versed in the hidden truths of the Universe and of the Divine and has a calm and clearmind. Add +1 DICE to Morale Check Success Rolls for this Alchemist’s Warband, as long as the Alchemist is not Down or Out of Action. In addition, if this Alchemist’s Warband becomes Shaken, ignore the requirement that all Success Rolls become Risky Success Rolls (however you still need to see if the Warband flees in the following Turn’s Morale Phase). The Alchemist has the NEGATE FEAR Keyword"
+     }
+    },
+    {
+     "name": "Secrets of Takwin",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "The Alchemist has bound their Takwin creature to themselves with unbreakable bonds. If this Alchemist is hit by an attack while within 1\" of their Takwin Homunculus, you can apply the hit to the Homunculus and make the Injury Roll for it instead of the Alchemist."
+     }
+    },
+    {
+     "name": "Chemistry & Alchemy",
+     "ducats": 25,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "At the start of the first Turn of the game, before any models have been Activated, you can set up an Elemental Obstacle terrain piece that is up to 2” wide and 6” long. It must be set up more than 1” away from any other terrain pieces and more than 6” from any models. The Elemental Obstacle has the DIFFICULT TERRAIN and DANGEROUS TERRAIN (X) Keywords. After setting it up, you must say if X is the FIRE, GAS, or SHRAPNEL Keyword."
+     }
+    },
+    {
+     "name": "Cloak of Alamut",
+     "ducats": 25,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "note": "ELITE only, Limit: 1"
+    },
+    {
+     "name": "Banner of Desert Wind",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "type": "Equipment",
+      "keywords": [
+       "HELD",
+       "LEADER"
+      ],
+      "rules": "Models that start an Activation within 24” of an enemy model that has the Banner of the Desert Wind have 1 subtracted from their Movement Characteristic until the end of the Activation. This rule does not apply if the model with the Banner of Desert Wind is Down."
+     }
+    }
+   ]
+  },
+  {
+   "key": "blackGrail",
+   "name": "The Cult of the Black Grail",
+   "alignment": "Fallen",
+   "lore": "Plague-bearers of Beelzebub, spreading the corruption of the Black Grail across No Man's Land.",
+   "special": [
+    "A Cult of the Black Grail warband must include at least 1 Lord of Tumours or 1 Plague Knight."
+   ],
+   "requires": [
+    {
+     "anyOf": [
+      "Lord of Tumours",
+      "Plague Knight"
+     ],
+     "min": 1
+    }
+   ],
+   "units": [
+    {
+     "name": "Plague Knight",
+     "type": "elite",
+     "ducats": 60,
+     "glory": 0,
+     "min": 0,
+     "max": 2,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+2 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "BLACK GRAIL",
+      "STRONG",
+      "FEAR",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Undead Fortitude",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Plague Knight unless the attack has the FIRE Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Plague Knight Rank",
+      "Butcher Knight Rank"
+     ]
+    },
+    {
+     "name": "Hound of the Black Grail",
+     "type": "troop",
+     "ducats": 55,
+     "glory": 0,
+     "min": 0,
+     "max": 3,
+     "stats": {
+      "movement": "8\"/Infantry",
+      "ranged": "-",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "30x60mm"
+     },
+     "keywords": [
+      "BLACK GRAIL",
+      "FEAR",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Frightening Speed",
+       "text": "Add +1 DICE to the Risky Success Roll for a Hound of the Cult of the Black Grail that is taking a Dash ACTION. In addition, do not halve the Movement Characteristic of a Hound of the Cult of the Black Grail when it stands up at the start of an Activation."
+      },
+      {
+       "name": "Disease Carrier",
+       "text": "If an enemy model is Activated while it is within 1\" of a Hound of the Cult of the Black Grail, place 1 INFECTION MARKER next to the enemy model before it carries out any Actions."
+      },
+      {
+       "name": "Undead Fortitude",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Hound of the Cult of the Black Grail unless the attack has the FIRE Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Grasping Maw"
+     ]
+    },
+    {
+     "name": "Grail Thrall",
+     "type": "troop",
+     "ducats": 25,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "5\"/Infantry",
+      "ranged": "-",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "BLACK GRAIL",
+      "FEAR",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Overwhelming Horde",
+       "text": "A Grail Thrall or Fly Thrall can make a Melee Attack even though it does not have a Melee Weapon. In addition, add +1 DICE to the Success Roll for a Melee Attack made by a Grail Thrall or Fly Thrall for each other friendly model within 3\" of the attacking model (not including the attacking model itself)."
+      },
+      {
+       "name": "Undead Fortitude",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Grail Thrall unless the attack has the FIRE Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "altProfiles": [
+      {
+       "name": "Fly Thrall",
+       "movement": "6\"/Flying",
+       "ranged": "-",
+       "melee": "-1 DICE",
+       "armour": "0",
+       "base": "25mm"
+      }
+     ],
+     "note": "A Thrall cannot have any battlekit. Grail Thralls (not Fly Thralls) have Undead Fortitude: add -1 INJURY DICE to Injury Rolls against them unless the attack has the FIRE keyword."
+    },
+    {
+     "name": "Heralds of Beelzebub",
+     "type": "troop",
+     "ducats": 50,
+     "glory": 0,
+     "min": 0,
+     "max": 4,
+     "stats": {
+      "movement": "10\"/Flying",
+      "ranged": "+0 DICE",
+      "melee": "+0 DICE",
+      "armour": "0",
+      "base": "40mm"
+     },
+     "keywords": [
+      "BLACK GRAIL",
+      "FEAR",
+      "SKIRMISHER",
+      "NEGATE GAS"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Compound Eyes Helmet"
+     ]
+    },
+    {
+     "name": "Amalgam",
+     "type": "troop",
+     "ducats": 140,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+0 DICE",
+      "armour": "0",
+      "base": "60mm"
+     },
+     "keywords": [
+      "FEAR",
+      "TOUGH",
+      "BLACK GRAIL",
+      "NEGATE GAS",
+      "STRONG"
+     ],
+     "abilities": [
+      {
+       "name": "Corpulent",
+       "text": "Add -2 DICE to Injury Rolls for any attacks that target an Amalgam model."
+      },
+      {
+       "name": "Unstoppable",
+       "text": "Enemy models that are mounted on a base of 32mm or less are not allowed to make a Melee Attack when an Amalgam that is within 1\" of them retreats. In addition, an Amalgam can use a normal move or a charge move if all enemy models within 1\" of it are mounted on bases of 32mm or less."
+      },
+      {
+       "name": "Trample",
+       "text": "An Amalgam can take a Trample ACTION. If it does so, it can make a Melee Attack that must target an enemy model that is Down. A Trample Melee Attack does not use a Melee Weapon and has the IGNORE ARMOUR Keyword"
+      },
+      {
+       "name": "Six-armed Monstrosity",
+       "text": "The rules for making more than one Ranged or Melee Attack do not apply to an Amalgam. Instead an Amalgam can take 1 Shoot ACTION per Activation with each Ranged Weapon it is equipped with, and can take 1 Fight ACTION per Activation with each Melee Weapon it is equipped with. The Off-Hand Weapon modifier does not apply to any of its Melee Attacks"
+      },
+      {
+       "name": "Strong-ish",
+       "text": "Two of the arms of the Amalgam have the Keyword STRONG. It can wield any two HEAVY weapons of its choice, each using one hand regardless of the weapon rules."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     }
+    },
+    {
+     "name": "Lord of Tumours",
+     "type": "elite",
+     "ducats": 130,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+4 DICE",
+      "armour": "0",
+      "base": "50mm"
+     },
+     "keywords": [
+      "BLACK GRAIL",
+      "FEAR",
+      "STRONG",
+      "TOUGH",
+      "LEADER",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Undead Fortitude",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Lord of Tumours unless the attack has the FIRE Keyword."
+      },
+      {
+       "name": "Beelzebub’s Touch",
+       "text": "Whenever a Melee Attack made by a Lord of Tumours causes any BLOOD MARKERS or INFECTION MARKERS to be placed on the target, place 1 extra INFECTION MARKER next to the target model"
+      },
+      {
+       "name": "Crushing Blows",
+       "text": "A Lord of Tumours can make a Crushing Blows Melee Attack even if it does not have any Melee Weapons, or instead of using any Melee Weapons that it has. If it does so, this Melee Attack has the CLEAVE 2 Keyword."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Corpse Guard",
+     "type": "elite",
+     "ducats": 55,
+     "glory": 0,
+     "min": 0,
+     "max": 3,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "BLACK GRAIL",
+      "FEAR",
+      "NEGATE GAS"
+     ],
+     "abilities": [
+      {
+       "name": "Undead Fortitude",
+       "text": "Add -1 INJURY DICE to Injury Rolls for a Corpse Guard unless the attack has the FIRE Keyword."
+      },
+      {
+       "name": "Bodyguard",
+       "text": "If a friendly Cult of the Black Grail model within 1\" of a Corpse Guard is hit by a Ranged Attack or Melee Attack, you can say that the Corpse Guard will take the hit. If you do so, make an Injury Roll for the Corpse Guard instead of the original target. This ability cannot be used against attacks that have the BLAST Keyword."
+      },
+      {
+       "name": "Parasitic Tick",
+       "text": "Whenever a Melee Attack made by a Corpse Guard causes any BLOOD MARKERS or INFECTION MARKERS to be placed on the target, you can remove up to 1 BLOOD MARKER or INFECTION MARKER from the attacking Corpse Guard model."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     }
+    }
+   ],
+   "armoury": [
+    {
+     "name": "Blasphemous Staff",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Trench Knife",
+     "ducats": 1,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Trench Club",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sword/Axe",
+     "ducats": 4,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Infected",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "melee",
+     "profile": {
+      "type": "Special",
+      "range": "Melee",
+      "keywords": [
+       "INFECTION MARKERS"
+      ]
+     }
+    },
+    {
+     "name": "Polearm",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Hammer/Maul",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Sword/Axe",
+     "ducats": 12,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sacrificial Blade",
+     "ducats": 23,
+     "glory": 0,
+     "limit": 2,
+     "category": "melee"
+    },
+    {
+     "name": "Anti-Material Rifle",
+     "ducats": 0,
+     "glory": 3,
+     "limit": 1,
+     "category": "ranged"
+    },
+    {
+     "name": "Blunderbuss",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Musket",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Pistol",
+     "ducats": 6,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Plague Blade",
+     "ducats": 7,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged",
+     "note": "ELITE only, Limit: 3"
+    },
+    {
+     "name": "Bolt-Action Rifle",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Shotgun",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Automatic Shotgun",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Infested Rifle",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "Bayonet Lug"
+    },
+    {
+     "name": "Semi-Automatic Rifle",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Silenced Pistol",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Automatic Pistol",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged"
+    },
+    {
+     "name": "Black Grail Shield",
+     "ducats": 20,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged",
+     "note": "ELITE only, Shield Combo"
+    },
+    {
+     "name": "Heavy Shotgun",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged"
+    },
+    {
+     "name": "Miasma of Pestilence",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "profile": {
+      "type": "Spell (Cost 2)",
+      "range": "6\"",
+      "keywords": [
+       "-"
+      ],
+      "rules": "You must take a Cast Spell ACTION with the spellcaster in order for it to cast this spell. If you do so, add -1 DICE to Success Rolls for Ranged Attacks that target a friendly model within 6” of the spellcaster (including the spellcaster themselves) until the end of the Turn."
+     }
+    },
+    {
+     "name": "Putrid Shotgun",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "Bayonet Lug, Shield Combo, Limit: 2"
+    },
+    {
+     "name": "Vile Churning",
+     "ducats": 20,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "profile": {
+      "type": "Spell (Cost 1-2)",
+      "range": "1\"",
+      "keywords": [
+       "-"
+      ],
+      "rules": "You must take a Cast Spell ACTION with the spellcaster in order for it to cast this spell. If you do so, place 1 BLOOD MARKER next to every model without the ARTIFICIAL or DEMONIC Keywords within 1” of the spellcaster (apart from the spellcaster itself) for every INFECTION MARKER that was paid to cast this spell."
+     }
+    },
+    {
+     "name": "Beelzebub's Axe",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "note": "ELITE only, Limit: 1"
+    },
+    {
+     "name": "Flamethrower",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 6,
+     "category": "ranged"
+    },
+    {
+     "name": "Grenade Launcher",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 4,
+     "category": "ranged"
+    },
+    {
+     "name": "Submachine Gun",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged"
+    },
+    {
+     "name": "Sniper Rifle",
+     "ducats": 35,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged"
+    },
+    {
+     "name": "Automatic Rifle",
+     "ducats": 40,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged"
+    },
+    {
+     "name": "Vomitus",
+     "ducats": 40,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged",
+     "profile": {
+      "type": "Spell (Cost 1-3)",
+      "range": "8\"",
+      "keywords": [
+       "-"
+      ],
+      "rules": "You must take a Cast Spell ACTION with the spellcaster in order for it to cast this spell. If you do so, the spellcaster can make a Ranged Attack. Do not make a Success Roll for the attack. Instead, measure a straight line 1mm wide and up to 8” long from the attacking model to a point on the ground or a model’s base. The line stops if it reaches a terrain piece that is taller than the model making the Attack. Make an Injury Roll for every model (friend or foe) that is touched by the line, apart from the attacking model itself. This attack has the INFECTION MARKERS Keyword, and Injury Rolls for this attack has the +1 INJURY MODIFIER Keyword if 2 INFECTION MARKERS were paid to cast this spell, or the +2 INJURY MODIFIER Keyword if 3 INFECTION MARKERS were paid to cast this spell."
+     }
+    },
+    {
+     "name": "Machine Gun",
+     "ducats": 50,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged"
+    },
+    {
+     "name": "Viscera Cannon",
+     "ducats": 50,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged",
+     "note": "ELITE only, Limit: 2"
+    },
+    {
+     "name": "Heavy Flamethrower",
+     "ducats": 55,
+     "glory": 0,
+     "limit": 3,
+     "category": "ranged"
+    },
+    {
+     "name": "Frag Grenades",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Gas Grenades",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Incendiary Grenades",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Parasite Grenades",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Satchel Charge",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 3,
+     "category": "grenade"
+    },
+    {
+     "name": "Combat Helmet",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Trench Shield",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Standard Armour",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Reinforced Armour",
+     "ducats": 40,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Field Shrine",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Second Grail Devotee",
+     "ducats": 0,
+     "glory": 2,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "rules": "Up to 2 models can have up to 2 Grail Devotees each. Add +1 INJURY MODIFIER to Injury Rolls for Melee attacks made by the model for each Grail Devotee that it has. Each Grail Devotee can be represented by a model if you wish. Place them adjacent to the model that they are following but note that Grail Devotees are not treated as models for any rules purposes, just move them out of the way if they get in the way of a “proper” model."
+     }
+    },
+    {
+     "name": "Knight of the Rotten Cross",
+     "ducats": 5,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "You can purchase 1 Ranged Weapon or 1 Melee Weapon from the New Antioch or Heretic Legions Armoury Tables for this model. Any stipulations that apply to the Weapon must be followed (so there is no point in taking a Weapon that can only be used by a specific model). The Weapon cannot be sold or reallocated in the Quartermaster Step of the Campaign Phase (▶ see Campaign in the Trench Crusade Digital Rulebook), but can be replaced if it is lost for any reason."
+     }
+    },
+    {
+     "name": "Compound Eyes Helmet",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 3,
+     "category": "equipment",
+     "note": "ELITE & Heralds only",
+     "profile": {
+      "keywords": [
+       "NEGATE SHRAPNEL"
+      ],
+      "rules": "Enhanced Vision: Add +1 DICE to the Success Roll of Ranged Attacks taken for a model that has a Compound Eyes Helmet."
+     }
+    },
+    {
+     "name": "Maddening Buzz",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "rules": "Success Rolls taken for enemy models within 8\" of a model with this ability become Risky Success Rolls (there is no additional effect if they are Risky Success Rolls already)"
+     }
+    },
+    {
+     "name": "Plague Almoner",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "rules": "If you convert an Injury Roll into a Bloodbath Roll for an attack made by this Plague Knight, the cost in BLOOD MARKERS and/or INFECTION MARKERS of the Bloodbath Roll is reduced by 1."
+     }
+    },
+    {
+     "name": "Troop Flag",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Grail Devotee",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "profile": {
+      "rules": "Up to 2 models can have up to 2 Grail Devotees each. Add +1 INJURY MODIFIER to Injury Rolls for Melee attacks made by the model for each Grail Devotee that it has. Each Grail Devotee can be represented by a model if you wish. Place them adjacent to the model that they are following but note that Grail Devotees are not treated as models for any rules purposes, just move them out of the way if they get in the way of a “proper” model."
+     }
+    },
+    {
+     "name": "Musical Instrument",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Unholy Trinket",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Virulent Clot",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "type": "Spell (Cost 2/4/6)",
+      "range": "-",
+      "keywords": [
+       "-"
+      ],
+      "rules": "Once per Turn, you can cast this spell before an Injury Roll is made for the spellcaster. If you do so, add a -1 INJURY MODIFIER to the roll for every 2 INFECTION MARKERS that were paid to cast this spell, and the spellcaster has the NEGATE FIRE Keyword for the roll."
+     }
+    }
+   ]
+  },
+  {
+   "key": "court",
+   "name": "Court of the Seven-Headed Serpent",
+   "alignment": "Fallen",
+   "lore": "Demonic embassy of the Leviathan, devils and their thralls trading in souls and sin.",
+   "special": [
+    "A Court warband must include either a Praetor or a Sorcerer, and it can include both.",
+    "The number of Wretched in the warband must be outnumbered by the number of models with the DEMONIC keyword."
+   ],
+   "requires": [
+    {
+     "anyOf": [
+      "Praetor",
+      "Sorcerer"
+     ],
+     "min": 1
+    }
+   ],
+   "units": [
+    {
+     "name": "Praetor",
+     "type": "elite",
+     "ducats": 115,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "8\"/Flying",
+      "ranged": "+3 DICE",
+      "melee": "+3 DICE",
+      "armour": "0",
+      "base": "50mm"
+     },
+     "keywords": [
+      "DEMONIC",
+      "STRONG",
+      "TOUGH",
+      "FEAR",
+      "THE COURT",
+      "LEADER",
+      "NEGATE FIRE"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Goetic Powers"
+     ]
+    },
+    {
+     "name": "Sorcerer",
+     "type": "elite",
+     "ducats": 75,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Flying",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "50mm"
+     },
+     "keywords": [
+      "DEMONIC",
+      "FEAR",
+      "THE COURT",
+      "NEGATE FIRE"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": false,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Goetic Powers"
+     ]
+    },
+    {
+     "name": "Hunter of the Left-hand Path",
+     "type": "elite",
+     "ducats": 110,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+2 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "DEMONIC",
+      "THE COURT",
+      "INFILTRATOR",
+      "NEGATE FIRE"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": true,
+      "armour": true
+     }
+    },
+    {
+     "name": "Hell Knight",
+     "type": "elite",
+     "ducats": 100,
+     "glory": 0,
+     "min": 0,
+     "max": 3,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+2 DICE",
+      "armour": "-2",
+      "base": "40mm"
+     },
+     "keywords": [
+      "DEMONIC",
+      "THE COURT",
+      "STRONG",
+      "NEGATE FIRE"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": false
+     },
+     "extra": [
+      "Goetic Powers"
+     ]
+    },
+    {
+     "name": "Yoke Fiend",
+     "type": "troop",
+     "ducats": 30,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+1 DICE",
+      "armour": "0",
+      "base": "32mm"
+     },
+     "keywords": [
+      "THE COURT",
+      "DEMONIC",
+      "NEGATE FIRE"
+     ],
+     "abilities": [
+      {
+       "name": "Hateful",
+       "text": "When a yoke fiend is Activated, if there is an enemy model without the Keyword BLACK GRAIL or DEMONIC within 12” that it can see, it must make a Charge against the closest enemy model without the Keyword BLACK GRAIL or DEMONIC as its first ACTION. If it begins its Activation Down and the above conditions are true, it must stand and then Charge, unless it cannot stand. If it begins its Activation in melee combat, it ignores this ability."
+      },
+      {
+       "name": "Torturer",
+       "text": "When a Yoke Fiend makes a Melee Attack, it can target a friendly model that does not have the DEMONIC Keyword. If it does so, it cannot attack again during the same Activation."
+      },
+      {
+       "name": "Hateful",
+       "text": "When a Cultist is Activated, if it is more than 1\"from any enemy models and there is an enemy model within 12\" of it, then the Cultist must take a Charge ACTION with the closest enemy model as the target of the charge. If the Cultist was Down at the start of the Activation, it will stand up if it can do so and must then attempt to make the charge"
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": true
+     },
+     "extra": [
+      "Goetic Powers"
+     ]
+    },
+    {
+     "name": "Wretched",
+     "type": "troop",
+     "ducats": 20,
+     "glory": 0,
+     "min": 0,
+     "max": null,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-1 DICE",
+      "melee": "-1 DICE",
+      "armour": "0",
+      "base": "25mm"
+     },
+     "keywords": [
+      "THE COURT"
+     ],
+     "abilities": [
+      {
+       "name": "Law of Hell",
+       "text": "If an attack made by a Wretched takes an enemy model with the ELITE Keyword out of Action, the Wretched model gains its freedom and is immediately removed from the game. It no longer counts as being part of the Warband for the purposes of Morale Checks, and is removed from the Warband Roster."
+      }
+     ],
+     "equip": {
+      "weapons": true,
+      "grenades": true,
+      "equipment": true,
+      "armour": false
+     },
+     "note": "May only carry battlekit costing up to 10 ducats per item and must have at least 1 weapon."
+    },
+    {
+     "name": "Pit Locust",
+     "type": "troop",
+     "ducats": 90,
+     "glory": 0,
+     "min": 0,
+     "max": 3,
+     "stats": {
+      "movement": "8\"/Flying",
+      "ranged": "+0 DICE",
+      "melee": "+2 DICE",
+      "armour": "-2",
+      "base": "30x60mm"
+     },
+     "keywords": [
+      "THE COURT",
+      "DEMONIC",
+      "LIMITED POTENTIAL",
+      "FEAR",
+      "NEGATE FIRE"
+     ],
+     "abilities": [
+      {
+       "name": "Poison Stingers",
+       "text": "A Pit Locust can make a Melee Attack with the CLEAVE 2 and SHRAPNEL Keywords even though it does not have a Melee Weapon."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Crown of Hellfire",
+      "Reinforced Armour"
+     ]
+    },
+    {
+     "name": "Desecrated Saint",
+     "type": "troop",
+     "ducats": 140,
+     "glory": 0,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-",
+      "melee": "+3 DICE",
+      "armour": "-3",
+      "base": "60mm"
+     },
+     "keywords": [
+      "TOUGH",
+      "STRONG",
+      "FEAR",
+      "THE COURT",
+      "DEMONIC",
+      "LIMITED POTENTIAL",
+      "NEGATE FIRE"
+     ],
+     "abilities": [
+      {
+       "name": "Annihilator",
+       "text": "The rules for making more than one Melee Attack do not apply to a Desecrated Saint. Instead a Desecrated Saint can take 1 Fight ACTION per Activation with each Melee Weapon it is equipped with. The Off-hand Weapon modifier does not apply to any of its Melee Attacks."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Orphaned Failures"
+     ]
+    }
+   ],
+   "armoury": [
+    {
+     "name": "Trench Knife",
+     "ducats": 1,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Trench Club",
+     "ducats": 3,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Sword/Axe",
+     "ducats": 4,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Polearm",
+     "ducats": 7,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Hammer/Maul",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Great Sword/Axe",
+     "ducats": 12,
+     "glory": 0,
+     "limit": null,
+     "category": "melee"
+    },
+    {
+     "name": "Blunderbuss",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Pistol",
+     "ducats": 6,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Shotgun",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "ranged"
+    },
+    {
+     "name": "Flamethrower",
+     "ducats": 30,
+     "glory": 0,
+     "limit": 2,
+     "category": "ranged"
+    },
+    {
+     "name": "Heavy Flamethrower",
+     "ducats": 55,
+     "glory": 0,
+     "limit": 1,
+     "category": "ranged"
+    },
+    {
+     "name": "Gas Grenades",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "grenade"
+    },
+    {
+     "name": "Incendiary Grenades",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 2,
+     "category": "grenade"
+    },
+    {
+     "name": "Combat Helmet",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Trench Shield",
+     "ducats": 10,
+     "glory": 0,
+     "limit": null,
+     "category": "armour"
+    },
+    {
+     "name": "Troop Flag",
+     "ducats": 0,
+     "glory": 1,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Gas Mask",
+     "ducats": 5,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Coagulation",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 2,
+     "category": "equipment",
+     "profile": {
+      "type": "Spell (Cost 3)",
+      "rules": "You must take a Cast Spell ACTION with the spellcaster in order to cast this spell. If you do so, pick an enemy model within 18” of the spellcaster. The targeted model’s Movement is reduced by 2” until the end of its next activation."
+     }
+    },
+    {
+     "name": "Dark Innervation",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 3,
+     "category": "equipment",
+     "profile": {
+      "type": "Spell (Cost 2-3)",
+      "rules": "You can cast this spell once per Turn after the spellcaster or a friendly model with at least 2 BLOOD MARKER on it hits with an attack without the BLAST keyword. If you do so, the chosen model gains either +1 INJURY DICE or +2 INJURY DICE, one less than the amount of Blood Markers used to pay this spell’s costs."
+     }
+    },
+    {
+     "name": "Restraining Muzzle",
+     "ducats": 10,
+     "glory": 0,
+     "limit": 3,
+     "category": "equipment",
+     "note": "Yoke Fiend only, Limit: 3"
+    },
+    {
+     "name": "Beauty in Suffering",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 3,
+     "category": "equipment",
+     "profile": {
+      "type": "Spell (Cost 1)",
+      "rules": "You must take a Cast Spell ACTION with the spellcaster in order to cast this spell. If you do so, make an ACTION roll. If the roll is a Failure, nothing happens. If the roll is a Success or a Critical Success, every model (friend or foe, including the spellcaster) within 6” of the spellcaster gains 1 Blessing Marker for every 2 Blood Markers on themselves, rounding down."
+     }
+    },
+    {
+     "name": "Crown of Hellfire",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "note": "ELITE & Pit Locusts only"
+    },
+    {
+     "name": "Final Frenzy",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment",
+     "profile": {
+      "type": "Spell (Cost 2)",
+      "rules": "You can cast this spell once per turn after a friendly model (including the spellcaster) that is eligible to pay this spell’s cost is hit by an attack, before the injury roll is made. If you do so, the chosen model pays this spell’s cost and ignores all Minor Injury and Downed Injury results, and cannot gain Blood Markers in any way, including paying the cost of any other Goetic Spells, until the end of its next activation."
+     }
+    },
+    {
+     "name": "Incendiary Ammunition",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Musical Instrument",
+     "ducats": 15,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment"
+    },
+    {
+     "name": "Unholy Relic",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Unholy Trinket",
+     "ducats": 15,
+     "glory": 0,
+     "limit": null,
+     "category": "equipment"
+    },
+    {
+     "name": "Dust to Dust",
+     "ducats": 25,
+     "glory": 0,
+     "limit": 1,
+     "category": "equipment",
+     "profile": {
+      "type": "Spell (Cost 3)",
+      "rules": "You must take a Cast Spell ACTION with the spellcaster in order to cast this spell. If you do so, take a Risky Action for the model and add +1 DICE to the roll. If the roll is a Failure, the spellcaster’s Activation ends immediately. If the roll is a Success or a Critical Success, you can choose a friendly model within 12” of the spellcaster, and inflict an Out of Action injury on it. It accepts this fate with open arms, and inflicts 3 Blood Markers on every model within 3” of itself as it dies in a painfully beautiful implosion, fracturing reality itself. If the dying model had at least 3 Blood Markers on it before it died, the caster of this spell gains a Blessing Marker.\n\n\nThe spellcaster’s Activation then ends immediately."
+     }
+    }
+   ]
+  },
+  {
+   "key": "mercenaries",
+   "name": "Mercenaries",
+   "alignment": "Any",
+   "lore": "Sellswords and specialists that faithful and fallen warbands alike can hire with Glory.",
+   "special": [
+    "Mercenaries are hired with Glory Points earned in campaign play (or by agreement for one-off games).",
+    "Mercenaries do not benefit from the faction special rules of the warband that hires them.",
+    "Each mercenary entry lists which warbands may hire it; a warband can include each mercenary once (0-1)."
+   ],
+   "requires": [],
+   "units": [
+    {
+     "name": "Sister of Saint Cosmas",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 2,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "0",
+      "melee": "0",
+      "armour": "-1",
+      "base": "25mm"
+     },
+     "keywords": [],
+     "abilities": [
+      {
+       "name": "Finish the Fallen",
+       "text": "Due to their knowledge of anatomy and physiology, the Sisters are experts at inflicting debilitating injuries and excruciating pain. Add +1 DICE to Injury Rolls for Melee Attacks made by a Sister of Saint Cosmas if the target is Down and does not have the BLACK GRAIL or DEMONIC Keywords."
+      },
+      {
+       "name": "Expert Medic",
+       "text": "Add +2 DICE to the Risky Success Roll when a Sister of Saint Cosmas carries out a Treat ACTION with their Medi-kit."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Gas Mask",
+      "Medikit",
+      "Misericordia",
+      "Standard Armour"
+     ],
+     "hiredBy": [
+      "trenchPilgrims"
+     ]
+    },
+    {
+     "name": "Observer",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 3,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "8\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+2 DICE",
+      "armour": "-1",
+      "base": "32mm"
+     },
+     "keywords": [],
+     "abilities": [
+      {
+       "name": "Eye of God",
+       "text": "You can re-roll failed Success Rolls and Risky Success Rolls for an Observer. If you do so and any of the re-rolled dice show a 1, then the roll is treated as a Failure, the Observer is taken Down and their Activation immediately ends."
+      },
+      {
+       "name": "Lightning Speed",
+       "text": "An Observer’s Polearm has the CLEAVE 2 Keyword."
+      },
+      {
+       "name": "Temporal Fugue",
+       "text": "Add -1 DICE to rolls for Ranged Attacks and Melee Attacks that target an Observer."
+      },
+      {
+       "name": "Voice of God",
+       "text": "ACTION: An Observer can take a Voice of God ACTION. If they do so, take a Risky Success Roll for the Observer. If the roll is a Failure, the Observer’s Activation ends. If the roll is a Success or Critical Success, pick 1 model (friend or foe), anywhere on the battlefield, that has not been Activated this Turn. The Observer’s Activation then ends, and the other model’s Activation immediately begins."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Polearm",
+      "Medikit",
+      "Standard Armour"
+     ],
+     "hiredBy": [
+      "newAntioch",
+      "trenchPilgrims"
+     ]
+    },
+    {
+     "name": "Communicant Anti-Tank Hunter",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 5,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "-1",
+      "base": "40mm"
+     },
+     "keywords": [
+      "STRONG",
+      "TOUGH"
+     ],
+     "abilities": [
+      {
+       "name": "Iron Fists",
+       "text": "The flesh of a Communicant Anti-Tank Hunter is as hard as iron, which makes their fists deadly weapons in their own right. A Communicant Anti-Tank Hunter can make a Melee Attack with the CLEAVE 2 Keyword even though it does not have a Melee Weapon. In addition, the Off-Hand Weapon modifier applies to the second attack."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Anti-Material Rifle",
+      "Combat Helmet"
+     ],
+     "hiredBy": [
+      "newAntioch",
+      "trenchPilgrims"
+     ]
+    },
+    {
+     "name": "Witchburner",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 5,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "0",
+      "melee": "1",
+      "armour": "-2",
+      "base": "32mm"
+     },
+     "keywords": [
+      "ELITE",
+      "NEGATE FEAR"
+     ],
+     "abilities": [],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Combat Helmet",
+      "Reinforced Armour"
+     ],
+     "hiredBy": [
+      "newAntioch",
+      "trenchPilgrims"
+     ]
+    },
+    {
+     "name": "Sin Eater",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 6,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-",
+      "melee": "+2 DICE",
+      "armour": "-2",
+      "base": "50mm"
+     },
+     "keywords": [
+      "HERETIC",
+      "STRONG",
+      "TOUGH",
+      "FEAR"
+     ],
+     "abilities": [
+      {
+       "name": "Devour the Guilty",
+       "text": "Devour the Guilty ACTION: A Sin Eater can take a Devour the Guilty ACTION. If they do so, pick 1 model (friend or foe) that is within 1\"of the Sin Eater and is mounted on a base that is 40mm or smaller. If the model is an enemy, take a Risky Success Roll for the Sin Eater. If the model is friendly, take a Success Roll for the Sin Eater with +1 DICE. If the roll is a Failure, the Sin Eater’s Activation ends, if it was a Risky Success Roll, and nothing happens if it was a normal Success Roll. If the roll is a Success or a Critical Success, the model you picked is devoured, and the following rules apply to it:\n\nPlace the model to one side, along with any MARKERS it may have. It is inside the Sin Eater and cannot be affected in any way or carry out any ACTIONS except as described below. While it is in the Sin Eater it is considered to be Down for the purposes of Morale Checks. A Sin Eater can only have 1 devoured model at a time.\n\nWhen it is Activated, it can take a Fight ACTION and must target the Sin Eater. Add -3 DICE to the roll for the Melee Attack, and do not use any of the model’s abilities or any of the special rules for its weapons.\n\nIf the Sin Eater is taken Out of Action, before removing them from the battlefield, deploy the devoured model within 1\" of the Sin Eater and place it Down. If this is impossible, the model is taken Out of Action. In either case, the Sin Eater is then removed from the battlefield.\n\nIf a devoured model is still inside a Sin Eater when the game ends, it is considered to have been taken Out of Action.\n\nEach time the Sin Eater is Activated, place 1 BLOOD MARKER next to the devoured model. As soon as a devoured model has 6 BLOOD MARKERS, it is immediately taken Out of Action and is no longer considered to be inside the Sin Eater.\n\nA Sin Eater that has a devoured model inside it can take a Purge ACTION.If it does so, take a Success Roll for the Sin Eater with +4 DICE. If the roll is a Failure, nothing happens. If the roll is a Success or Critical Success, deploy the devoured model within 1\" of the Sin Eater and place it Down. If this is impossible, the devoured model remains inside the Sin Eater. Once released the model can be Activated normally."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Combat Helmet",
+      "Reinforced Armour"
+     ],
+     "hiredBy": [
+      "hereticLegion",
+      "blackGrail",
+      "court"
+     ]
+    },
+    {
+     "name": "Mendelist Ammo Monk",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 2,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-1 DICE",
+      "melee": "-1 DICE",
+      "armour": "-",
+      "base": "25mm"
+     },
+     "keywords": [],
+     "abilities": [
+      {
+       "name": "The Ammunition Sacrement",
+       "text": "Ammunition Sacrament ACTION: A Mendelist Ammo Monk can take an Ammunition Sacrament ACTION. If they do so, take a Risky Success Roll for the Mendelist Ammo Monk. If the roll is a Failure, the Mendelist Ammo Monk’s Activation ends. If the roll is a Success or a Critical Success, pick 1 friendly model within 1\" of the Mendelist Ammo Monk and in their Line of Sight, and then pick one of the following Ammunition Sacraments. The Sacrament you pick applies to the model until the end of its next Activation.\n\n\n* Bullet of the Guided Path Sacrament: Add +1 DICE to rolls for Ranged Attacks made by the model.\n* Cartridge of his Wrath Sacrament: Add the BLAST 2\" and SHRAPNEL Keywords to Ranged Weapons used by the model that do not have the BLAST or FLAMETHROWER Keywords.\n* Echo of his Word Sacrament: Add +1 INJURY DICE to rolls for Ranged Attacks made by the model ."
+      },
+      {
+       "name": "Faithful Followers",
+       "text": "When you Activate a model within 1\" of a Mendelist Ammo Monk, you can also Activate the Mendelist Monk if they have not yet been Activated during the Turn. If you do so, the two models can take their ACTIONS in any order you wish, and you can switch between the two models freely. If the Activation of either model ends (due to a failed Risky Success Roll, for example), the other model can carry on with its Activation normally."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Gas Mask"
+     ],
+     "hiredBy": [
+      "newAntioch",
+      "trenchPilgrims"
+     ]
+    },
+    {
+     "name": "Combat Biologist",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 3,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+0 DICE",
+      "melee": "+1 DICE",
+      "armour": "-1",
+      "base": "32mm"
+     },
+     "keywords": [],
+     "abilities": [],
+     "equip": {
+      "weapons": false,
+      "grenades": true,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Gas Mask",
+      "Standard Armour"
+     ],
+     "hiredBy": [
+      "newAntioch",
+      "ironSultanate"
+     ]
+    },
+    {
+     "name": "Mamluk Faris",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 4,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "-2",
+      "base": "32mm"
+     },
+     "keywords": [],
+     "abilities": [
+      {
+       "name": "Sworn Brethren",
+       "text": "When you recruit a Mamluk Faris to your Warband, before adding it to your roster, you can say it will form a FIRETEAM with 1 other model from your Warband that has the ELITE Keyword. Both of the models gain the FIRETEAM Keyword. Note that the Mamluk Faris’s FIRETEAM is in addition to any other FIRETEAMS your Warband can have, and that if a Mamluk Faris is in a FIRETEAM with a model from a New Antioch Warband, then only the model from the New Antioch Warband can use the Concentrated Fire special rule."
+      },
+      {
+       "name": "Martial Prowess",
+       "text": "Mamluks are disciples of furūsiyya, the knightly discipline passed on through generations, they practice ceaselessly and thus have few equals. The Mamluk’s Greatsword does not have the HEAVY Keyword, and the Jezzail carried by a Mamluk Faris has the ASSAULT Keyword and Shield Combo stipulation."
+      },
+      {
+       "name": "Automaton Destrier",
+       "text": "If the scenario you are playing allows Infiltrators to use their special deployment rules, after any Infiltrators have deployed, you can deploy the Mamluk Faris within 1\" of any edge of the battlefield and more than 8\" away from any enemy models."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "hiredBy": [
+      "newAntioch",
+      "ironSultanate"
+     ]
+    },
+    {
+     "name": "Scripture Guardian",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 7,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "-",
+      "melee": "+1 DICE",
+      "armour": "-2",
+      "base": "40mm"
+     },
+     "keywords": [
+      "GOLEM"
+     ],
+     "abilities": [
+      {
+       "name": "Slow",
+       "text": "Scripture Guardian has a half Dash distance (i.e. 3”)."
+      },
+      {
+       "name": "Vengeful Scripture",
+       "text": "The Scripture Guardian reads words from the holy (or unholy!) text it carries. This is an attack ACTION with 18” range, and it can be used in either Melee or as a Ranged attack (though not both during the same Activation). Use Ranged and Melee Characteristics as appropriate. This attack ignores armour and cover. For each BLOOD MARKER the target has, add +1 to the Injury roll. Note that if armed with a melee weapon, both the Melee attack and the use of the Vengeageful Scripture can be used simultaneously."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "hiredBy": "any"
+    },
+    {
+     "name": "Goetic Warlock",
+     "type": "mercenary",
+     "ducats": 0,
+     "glory": 4,
+     "min": 0,
+     "max": 1,
+     "stats": {
+      "movement": "6\"/Infantry",
+      "ranged": "+1 DICE",
+      "melee": "+1 DICE",
+      "armour": "-2",
+      "base": "40mm"
+     },
+     "keywords": [
+      "DEMONIC",
+      "ARTIFICIAL",
+      "FEAR"
+     ],
+     "abilities": [
+      {
+       "name": "Barbed Embrace",
+       "text": "An enemy model within 1\" of a Goetic Warlock cannot take a Retreat ACTION."
+      },
+      {
+       "name": "Goetic Portal",
+       "text": "ACTION: A Goetic Warlock can take a Goetic Portal ACTION. If they do so, take a Risky Success Roll for the Goetic Warlock with +1 DICE. If the roll is a Failure, the Goetic Warlock’s Activation ends. If the roll is a Success or Critical Success, you can pick up the Goetic Warlock and deploy them on the battlefield anywhere within 6\" of the location they originally occupied (measured from the centre of its base to the centre of its base). If this is impossible for any reason, the Goetic Warlock must stay in their original position. Note that the Goetic Warlock can redeploy even if they are down or within 1\" of an enemy model (in which case the enemy model cannot make a Melee Attack before the Goetic Warlock is redeployed), and can deploy within 1\" of an enemy model. In addition, if the roll is a Success or Critical Success and the Goetic Warlock is within 1\" of any enemy models mounted on a 32mm base or smaller, then the Goetic Warlock can take 1 of the enemy models with them. If they do so, you must deploy the Goetic Warlock first and then deploy the enemy model within 1\" of the Goetic Warlock. If you cannot deploy the enemy model within 1\" of the Goetic Warlock, then the enemy model stays in its original position."
+      },
+      {
+       "name": "Goetic Gaze",
+       "text": "ACTION: A Goetic Warlock can take a Goetic Gaze ACTION. If they do so, take a Success Roll for the Goetic Warlock. If the roll is a Failure, nothing happens. If the roll is a Success, place 1 BLOOD MARKER next to an enemy model within 24\" of the Goetic Warlock and in their Line of Sight. If the roll is a Critical Success, place 2 BLOOD MARKERS next to an enemy model within 24\" of the Goetic Warlock and in their Line of Sight instead of only 1."
+      }
+     ],
+     "equip": {
+      "weapons": false,
+      "grenades": false,
+      "equipment": false,
+      "armour": false
+     },
+     "extra": [
+      "Reinforced Armour"
+     ],
+     "hiredBy": [
+      "hereticLegion",
+      "court"
+     ]
+    }
+   ],
+   "armoury": []
+  }
+ ]
+}
