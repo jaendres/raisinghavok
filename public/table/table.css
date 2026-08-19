@@ -290,3 +290,101 @@ details[open].sheet-sec > summary.sec-title::before { content: '▾'; }
   width: 100%; font-size: 14px; padding: 8px; background: var(--ink);
   color: var(--bone); border: 1px solid #4a3d31; resize: vertical;
 }
+
+/* ==== My Lists ==== */
+
+/* lobby: library header + game groups */
+.lists-head { display: flex; align-items: center; gap: 14px; }
+.lists-head h2 { margin: 0; flex: 1; }
+.list-group { font-family: 'Black Ops One'; font-size: 13px; color: var(--dust);
+  text-transform: uppercase; letter-spacing: .12em; margin: 14px 0 8px; }
+.list-card { border-top-color: #4a3d31; }
+
+/* new-list flow */
+.nl-h3 { color: var(--bone); font-size: 15px; margin: 16px 0 8px; }
+
+/* reading view: sticky bar (reuses .play-head) */
+.list-head input#l-search {
+  flex: 1; min-width: 140px; max-width: 340px; min-height: 40px;
+  font-size: 16px; padding: 6px 10px;
+  background: var(--ink); color: var(--bone); border: 1px solid #4a3d31;
+}
+.list-actions { display: inline-flex; gap: 8px; margin-left: auto; }
+.list-actions .btn.small, .list-foot .btn.small { min-height: 40px; }
+.list-foot { display: flex; gap: 10px; margin-top: 20px; }
+.danger-btn { color: #ff7b6b; border-color: var(--blood); }
+
+/* unit column: one column, two on a landscape iPad and wider */
+.list-grid { display: grid; grid-template-columns: 1fr; gap: 14px; align-items: start; margin-top: 14px; }
+@media (min-width: 1024px) { .list-grid { grid-template-columns: 1fr 1fr; } }
+
+/* collapsible unit shells */
+.lst-unit { background: var(--panel); border: 1px solid #2b221b; border-top: 3px solid var(--rust-dk); }
+.lst-unit > .lst-head {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px;
+  background: none; border: 0; cursor: pointer; padding: 8px 14px; text-align: left;
+}
+.lst-caret::before { content: '▾'; color: var(--rust); font-size: 14px; }
+.lst-unit.collapsed .lst-caret::before { content: '▸'; }
+.lst-head-name {
+  font-family: 'Black Ops One'; font-size: 16px; color: var(--bone);
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.lst-head-stat { font-family: 'Black Ops One'; font-size: 12.5px; color: var(--rust); white-space: nowrap; }
+.lst-unit.collapsed .lst-body { display: none; }
+.lst-unit.filtered-out { display: none; }
+.lst-unit.unit-down .lst-head-name { text-decoration: line-through; opacity: .55; }
+.lst-body .unit-card { border: 0; border-top: 1px dashed #2b221b; }
+
+/* reference mode: hide the tap-pips and live-tracking chrome, keep the stats */
+.ref-mode .u-foot,
+.ref-mode .pip-row,
+.ref-mode .crit-grid,
+.ref-mode .wound-row,
+.ref-mode .loc-pips,
+.ref-mode .heat-track,
+.ref-mode .heat-legend,
+.ref-mode .pilot-track,
+.ref-mode .crew-row,
+.ref-mode .wout-btn { display: none; }
+.ref-mode .sheet-sec:has(> .wound-row),
+.ref-mode .sheet-sec:has(> .heat-track),
+.ref-mode .sheet-sec:has(> .pilot-track) { display: none; }
+.ref-mode .crit-slot { pointer-events: none; }
+.ref-stat { display: none; }
+.ref-mode .ref-stat { display: inline; }
+
+/* army rules panel */
+.army-panel { margin-top: 14px; }
+.army-panel details.army-sec { border-top: 1px dashed #2b221b; padding: 8px 0; }
+.army-panel details.army-sec > summary.sec-title {
+  cursor: pointer; list-style: none; min-height: 40px; display: flex; align-items: center; gap: 8px;
+  font-size: 13px;
+}
+.army-panel details.army-sec > summary.sec-title::before { content: '▸'; color: var(--rust); }
+.army-panel details[open].army-sec > summary.sec-title::before { content: '▾'; }
+.army-sec-body { padding: 4px 0 8px; }
+.rule-block { margin-bottom: 12px; font-size: 15px; color: var(--dust); line-height: 1.45; }
+.rule-block b { color: var(--bone); }
+.rule-name { font-family: 'Black Ops One'; font-size: 14px; color: var(--bone); margin-bottom: 4px; }
+.rule-name .strat-cost { margin-left: 8px; }
+.rule-block .ShowFluff, .rule-block .abLegend { font-style: italic; }
+.rule-block .h_number, .rule-block .tt { display: none; }
+
+.strat { border: 1px solid #2b221b; background: var(--ink); padding: 10px 12px; margin-bottom: 10px; }
+.strat-top { display: flex; align-items: baseline; gap: 10px; }
+.strat-name { font-family: 'Black Ops One'; font-size: 14px; color: var(--bone); flex: 1; }
+.strat-cost {
+  font-family: 'Black Ops One'; font-size: 13px; color: #0c0a08; background: var(--rust);
+  padding: 1px 8px; white-space: nowrap;
+}
+.strat-meta { font-size: 13px; color: var(--rust); text-transform: uppercase; letter-spacing: .06em; margin: 2px 0 6px; }
+.strat-body { font-size: 15px; color: var(--dust); line-height: 1.45; }
+.strat-body b { color: var(--bone); }
+.strat-body .ShowFluff, .strat-body .abLegend { font-style: italic; }
+.strat-body .h_number, .strat-body .tt { display: none; }
+
+/* simple stat cards (necromunda / mcp / trench crusade) */
+.simple-card .statline-txt b { font-family: 'Barlow Condensed'; font-size: 15.5px; letter-spacing: .02em; }
+.simple-card .profile-txt { font-size: 14px; }
+.simple-card .ability-txt { font-size: 14.5px; margin: 4px 0; }

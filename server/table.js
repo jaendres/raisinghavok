@@ -21,6 +21,7 @@
 //   as at the physical table.
 const crypto = require('crypto');
 const store = require('./tablestore');
+const lists = require('./liststore');   // My Lists: solo play-reference lists
 const alphaStrike = require('../public/builders/alphastrike.js');
 const wh40k = require('./wh40k');       // module functions called directly, not over HTTP
 const classic = require('./classic');   // classic_sheets reader (same DB as builders)
@@ -31,6 +32,16 @@ const GAMES = {
   'battletech-as': { name: 'BattleTech — Alpha Strike', leagueGame: 'battletech' },
   'battletech-classic': { name: 'BattleTech — Classic', leagueGame: 'battletech' },
   'wh40k': { name: 'Warhammer 40k', leagueGame: 'wh40k' },
+};
+
+// My Lists covers everything the tables do plus the paste-only games: their
+// units come from a text export of our own builders (or any list that follows
+// the same shape), parsed into simple stat cards — the paste carries the data.
+const LIST_GAMES = {
+  ...GAMES,
+  necromunda: { name: 'Necromunda' },
+  mcp: { name: 'Marvel Crisis Protocol' },
+  trenchcrusade: { name: 'Trench Crusade' },
 };
 
 // Alpha Strike critical-hit maxima (per the master unit card):
@@ -362,6 +373,253 @@ function applyWh40kPatch(u, field, value) {
 }
 
 // ---------------------------------------------------------------------------
+// Simple stat cards (Necromunda / MCP / Trench Crusade) — paste-parsed lists
+// ---------------------------------------------------------------------------
+
+// One card shape for every paste-only game: a name line, one-line statlines,
+// gear + profiles, abilities as text. Tracking is a single wound counter
+// (when the export carries one) plus the shared notes/destroyed fields.
+function snapshotSimpleUnit(p) {
+  const line = (s, n) => String(s ?? '').slice(0, n);
+  return {
+    uid: crypto.randomBytes(4).toString('hex'),
+    name: line(p.name || 'Unit', 60),
+    subtitle: line(p.subtitle, 90),
+    cost: line(p.cost, 30) || null,
+    statlines: (p.statlines || []).slice(0, 6).map((s) => line(s, 180)),
+    gear: (p.gear || []).slice(0, 30).map((s) => line(s, 120)),
+    gearProfiles: (p.gearProfiles || []).slice(0, 40).map((s) => line(s, 220)),
+    keywords: (p.keywords || []).slice(0, 20).map((s) => line(s, 60)),
+    abilities: (p.abilities || []).slice(0, 25)
+      .map((a) => ({ name: line(a.name, 80), text: line(a.text, 1200) })),
+    // Live state
+    maxWounds: Number.isFinite(Number(p.maxWounds)) && Number(p.maxWounds) >= 1
+      ? Math.min(Math.round(Number(p.maxWounds)), 40) : null,
+    woundsTaken: 0,
+    notes: '',
+    destroyed: false,
+  };
+}
+
+function applySimplePatch(u, field, value) {
+  if (field === 'woundsTaken') {
+    if (!(u.maxWounds >= 1)) return { error: 'dis unit has no wound track' };
+    const n = toInt(value);
+    if (!(n >= 0 && n <= u.maxWounds)) return { error: `wounds are 0-${u.maxWounds}` };
+    u.woundsTaken = n;
+    u.destroyed = n >= u.maxWounds;
+    return { msg: `${u.name}: ${u.maxWounds - n}/${u.maxWounds} wounds${u.destroyed ? ' — DOWN' : ''}` };
+  }
+  return { error: 'unknown field' };
+}
+
+// ---- paste parsers (match our own builders' text exports) ------------------
+// Coverage note: each parser reports the non-blank lines it could not place
+// in `unparsed`, so the client can show what got dropped instead of hiding it.
+
+// public/builders/necromunda exportSheet(): header / "=== fence" / fighter
+// blocks ("LABEL — Type (Category) — 130cr", statline, "Gear: …", indented
+// weapon profile lines) / "=== fence" / footer.
+function parseNecromundaExport(text) {
+  const lines = String(text ?? '').split(/\r?\n/);
+  const header = [];
+  const units = [];
+  const unparsed = [];
+  let inBody = false;
+  let cur = null;
+  for (const raw of lines) {
+    const s = raw.trim();
+    if (/^={4,}$/.test(s)) {
+      if (inBody) break;                 // second fence: footer starts
+      inBody = true;
+      continue;
+    }
+    if (!s) continue;
+    if (!inBody) { header.push(s); continue; }
+
+    const start = s.match(/^(.+?) — (.+?) \((.+?)\) — (\d+)cr$/);
+    if (start && !/^\s/.test(raw)) {
+      cur = {
+        name: start[1], subtitle: `${start[2]} (${start[3]})`, cost: `${start[4]}cr`,
+        statlines: [], gear: [], gearProfiles: [], keywords: [], abilities: [], maxWounds: null,
+      };
+      units.push(cur);
+      continue;
+    }
+    if (cur && /^M[\d-]/.test(s) && /\bWS/.test(s)) {
+      cur.statlines.push(s);
+      const w = s.match(/\bW(\d+)\b/);
+      if (w) cur.maxWounds = Number(w[1]);
+      continue;
+    }
+    if (cur && /^Gear:/i.test(s)) {
+      const g = s.replace(/^Gear:\s*/i, '');
+      if (!/^none$/i.test(g)) cur.gear = g.split(/,\s+/);
+      continue;
+    }
+    if (cur && /^\s{2}/.test(raw) && s.includes(':')) {
+      cur.gearProfiles.push(s);
+      continue;
+    }
+    unparsed.push(s);
+  }
+  return { header, sections: [], units, unparsed };
+}
+
+// public/builders/mcp rosterText(): name/threat header, then labelled sections
+// — characters carry "[threat] Name (stamina h/i, mv M, size S)"; tactics and
+// crises are plain indented names (kept as reference sections, not units).
+function parseMcpExport(text) {
+  const lines = String(text ?? '').split(/\r?\n/);
+  const header = [];
+  const units = [];
+  const sections = [];
+  const unparsed = [];
+  let section = null;
+  for (const raw of lines) {
+    const s = raw.trim();
+    if (!s) continue;
+    const sec = s.match(/^(CHARACTERS|TONIGHT'S SQUAD|TEAM TACTICS|EXTRACT CRISES|SECURE CRISES)\b(.*)$/);
+    if (sec) {
+      section = { title: s, kind: sec[1], items: [] };
+      if (sec[1] !== 'CHARACTERS') sections.push(section);
+      continue;
+    }
+    if (!section) {
+      header.push(s);
+      continue;
+    }
+    // Section entries are indented in the export; a flush-left line after the
+    // sections is the catalog warning footer — report it, don't absorb it.
+    if (!/^\s/.test(raw)) { unparsed.push(s); continue; }
+    if (section.kind === 'CHARACTERS') {
+      const m = s.match(/^\[(\d+)\]\s+(.+?)(\s*\*LEADER\*)?\s*\(stamina ([^,]+), mv ([^,]+), size ([^)]+)\)$/);
+      if (m) {
+        const healthy = Number(m[4].split('/')[0]);
+        const injured = Number(m[4].split('/')[1]);
+        units.push({
+          name: m[2], subtitle: `Threat ${m[1]}${m[3] ? ' — LEADER' : ''}`, cost: `${m[1]} threat`,
+          statlines: [`Stamina ${m[4]} — Mv ${m[5]} — Size ${m[6]}`],
+          gear: [], gearProfiles: [], keywords: [], abilities: [],
+          maxWounds: Number.isFinite(healthy)
+            ? healthy + (Number.isFinite(injured) ? injured : 0) : null,
+        });
+        continue;
+      }
+      unparsed.push(s);
+      continue;
+    }
+    // squad / tactics / crises entries ride along as reference sections
+    section.items.push(s.replace(/^\[(\d+)\]\s+/, '[$1] '));
+  }
+  return { header, sections: sections.filter((x) => x.items.length).map(({ title, items }) => ({ title, items })), units, unparsed };
+}
+
+// public/builders/trenchcrusade exportSheet(): header (incl. "* special"
+// lines) / fence / unit blocks ("LABEL — Name (type) — 90d 1g", indented
+// statline/Keywords/abilities/Battlekit, deeper-indented item profiles).
+function parseTrenchcrusadeExport(text) {
+  const lines = String(text ?? '').split(/\r?\n/);
+  const header = [];
+  const units = [];
+  const unparsed = [];
+  let inBody = false;
+  let cur = null;
+  for (const raw of lines) {
+    const s = raw.trim();
+    if (/^={4,}$/.test(s)) {
+      if (inBody) break;
+      inBody = true;
+      continue;
+    }
+    if (!s) continue;
+    if (!inBody) { header.push(s); continue; }
+
+    if (!/^\s/.test(raw)) {
+      const start = s.match(/^(.+?) — (.+?) \((.+?)\)(?: — (.*))?$/);
+      if (start) {
+        cur = {
+          name: start[1], subtitle: `${start[2]} (${start[3]})`, cost: start[4] || null,
+          statlines: [], gear: [], gearProfiles: [], keywords: [], abilities: [], maxWounds: null,
+        };
+        units.push(cur);
+        continue;
+      }
+      unparsed.push(s);
+      continue;
+    }
+    if (!cur) { unparsed.push(s); continue; }
+    if (/^\s{4,}/.test(raw)) { cur.gearProfiles.push(s); continue; }   // item profiles
+    if (/Armour/i.test(s) && !s.includes(': ')) { cur.statlines.push(s); continue; }
+    const kw = s.match(/^Keywords:\s*(.*)$/i);
+    if (kw) { cur.keywords = kw[1].split(/,\s+/); continue; }
+    const kit = s.match(/^Battlekit:\s*(.*)$/i);
+    if (kit) { cur.gear = kit[1].split(/,\s+/); continue; }
+    const ab = s.match(/^([^:]{1,60}):\s+(.*)$/);
+    if (ab) {
+      // alt profiles print as "Name: <statline> — base N" — keep them with the stats
+      if (/Armour/i.test(ab[2])) cur.statlines.push(s);
+      else cur.abilities.push({ name: ab[1], text: ab[2] });
+      continue;
+    }
+    unparsed.push(s);
+  }
+  return { header, sections: [], units, unparsed };
+}
+
+const SIMPLE_PARSERS = {
+  necromunda: parseNecromundaExport,
+  mcp: parseMcpExport,
+  trenchcrusade: parseTrenchcrusadeExport,
+};
+
+// ---------------------------------------------------------------------------
+// BattleTech pasted-list resolution (any builder's text export)
+// ---------------------------------------------------------------------------
+
+const normaliseBt = (s) => String(s)
+  .toLowerCase()
+  .replace(/[’']s\b/g, 's')
+  .replace(/[^a-z0-9 ]+/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+// Pull a unit name (+ optional skill / crew) out of one pasted line. Handles
+// our own force lists, MUL/Flechs-style "Atlas AS7-D (52)" cost tags, and
+// MegaMek-ish "Atlas AS7-D — Gunnery 3 / Piloting 4".
+function parseBtLine(raw) {
+  let s = raw.trim();
+  if (!s) return null;
+  if (/^\s/.test(raw) || /^[•◦*·>]/.test(s)) return null;
+  if (/^[=~_#+*-]{3,}/.test(s)) return null;
+  if (/^(total|force|lance|star|binary|company|era|faction|rules|tech|catalog|raising havok|built|exported|created|battle value|point value|pv\b|bv\b)/i.test(s)) return null;
+
+  let count = 1;
+  const lead = s.match(/^(\d+)\s*[x×]\s+/i);
+  if (lead) { count = Math.min(Number(lead[1]), 10); s = s.slice(lead[0].length); }
+
+  let gunnery = null;
+  let piloting = null;
+  const crew = s.match(/g(?:unnery)?\s*:?\s*(\d)\s*[/,]\s*p(?:iloting)?\s*:?\s*(\d)/i);
+  if (crew) { gunnery = Number(crew[1]); piloting = Number(crew[2]); s = s.replace(crew[0], ' '); }
+
+  let skill = null;
+  const sk = s.match(/[([]\s*(?:skill|sk)\s*:?\s*(\d)\s*[)\]]/i) || s.match(/\bskill\s*:?\s*(\d)\b/i);
+  if (sk) { skill = Number(sk[1]); s = s.replace(sk[0], ' '); }
+
+  // cost tags: "(52 pts)", "[52pv]", "BV 2000", "@ 52", bare trailing "(52)"
+  s = s.replace(/[([{]?\s*\d+\s*(?:pts?|points|pv|bv)\s*[)\]}]?/ig, ' ');
+  s = s.replace(/[@—-]\s*\d+\s*$/g, ' ');
+  const bare = s.match(/\(\s*(\d)\s*\)\s*$/);
+  if (bare && skill === null) { skill = Number(bare[1]); s = s.slice(0, bare.index); }
+  s = s.replace(/\(\s*\d+\s*\)\s*$/g, ' ');
+
+  s = s.replace(/[[\]()|]+/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!s || /^\d+$/.test(s) || s.length < 2) return null;
+  return { name: s, count, skill, gunnery, piloting };
+}
+
+// ---------------------------------------------------------------------------
 // Shared patch dispatch
 // ---------------------------------------------------------------------------
 
@@ -378,7 +636,31 @@ function applyPatch(t, u, field, value) {
   }
   if (t.game === 'battletech-classic') return applyClassicPatch(u, field, value, t.status);
   if (t.game === 'wh40k') return applyWh40kPatch(u, field, value);
+  if (SIMPLE_PARSERS[t.game]) return applySimplePatch(u, field, value);
   return applyUnitPatch(u, field, value);
+}
+
+// Zero a unit's live tracking state back to the snapshot (list reset).
+function resetTracking(game, u) {
+  u.notes = '';
+  u.destroyed = false;
+  if (game === 'battletech-as') {
+    u.armorHit = 0;
+    u.structHit = 0;
+    u.heat = 0;
+    u.crits = { engine: 0, fireControl: 0, mp: 0, weapons: 0 };
+  } else if (game === 'battletech-classic') {
+    for (const k of Object.keys(u.armorHit || {})) u.armorHit[k] = 0;
+    for (const k of Object.keys(u.structHit || {})) u.structHit[k] = 0;
+    for (const k of Object.keys(u.critHits || {})) u.critHits[k] = [];
+    u.weaponsOut = [];
+    u.heat = 0;
+    u.pilotHits = 0;
+  } else if (game === 'wh40k') {
+    u.wounds = u.wounds.map(() => 0);
+  } else {
+    u.woundsTaken = 0;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -461,31 +743,29 @@ function mount(app, io, deps) {
     return user;
   };
 
-  // Build a side's units from one of the CALLER's saved forces. For classic,
-  // every unit also needs a classic_sheets row; crew skills come from the
-  // saved force entries (hydrateForce strips them, so they are re-paired from
-  // the raw save, which preserves order).
+  // Build units from raw force entries [{ id, skill, gunnery?, piloting? }].
+  // For classic, every unit also needs a classic_sheets row; crew skills come
+  // from the entries (hydrateForce strips them, so they are re-paired from
+  // the raw entries, which preserves order).
   // Returns { units } or { status, error }.
-  async function buildForceUnits(user, forceName, game) {
-    const saved = db.forces(user.name)[String(forceName)];
-    if (!saved) return { status: 404, error: `No saved force called "${String(forceName).slice(0, 60)}".` };
+  async function buildEntriesUnits(entries, game) {
     if (!builders.available()) return { status: 503, error: 'Da unit database ain\'t hooked up — can\'t load dat force.' };
     if (game === 'battletech-classic' && !classic.available()) {
       return { status: 503, error: 'Da classic sheets database ain\'t hooked up.' };
     }
     let hydrated;
     try {
-      hydrated = await builders.hydrateForce(saved.units);
+      hydrated = await builders.hydrateForce(entries);
     } catch (err) {
       console.error('[table] hydrate:', err.message);
       return { status: 502, error: 'Unit database is not answering.' };
     }
     if (game !== 'battletech-classic') return { units: hydrated.map(snapshotUnit) };
 
-    // Pair hydrated units back to their raw saved entries (order-preserving).
+    // Pair hydrated units back to their raw entries (order-preserving).
     const pairs = [];
     let j = 0;
-    for (const e of saved.units || []) {
+    for (const e of entries || []) {
       if (j < hydrated.length && Number(e.id) === Number(hydrated[j].id)) {
         pairs.push([hydrated[j], e]);
         j++;
@@ -510,6 +790,14 @@ function mount(app, io, deps) {
     return { units };
   }
 
+  // Build a side's units from one of the CALLER's saved forces — same
+  // snapshot path as pasted-list entries above.
+  async function buildForceUnits(user, forceName, game) {
+    const saved = db.forces(user.name)[String(forceName)];
+    if (!saved) return { status: 404, error: `No saved force called "${String(forceName).slice(0, 60)}".` };
+    return buildEntriesUnits(saved.units || [], game);
+  }
+
   // Build a wh40k side from a confirmed army list: [{ id, models? }].
   // The client resolves the pasted text first (POST /api/builders/wh40k/
   // resolve-list) and sends only picked datasheet ids here.
@@ -518,6 +806,7 @@ function mount(app, io, deps) {
     const list = (Array.isArray(army) ? army : []).slice(0, MAX_ARMY_UNITS);
     if (!list.length) return { status: 400, error: 'Army list came through empty.' };
     const units = [];
+    let factionId = null;
     for (const entry of list) {
       let ds;
       try {
@@ -527,9 +816,10 @@ function mount(app, io, deps) {
         return { status: 502, error: '40k database is not answering.' };
       }
       if (!ds) return { status: 404, error: `No datasheet with id "${String(entry?.id).slice(0, 20)}".` };
+      if (!factionId && ds.faction?.id) factionId = ds.faction.id;
       units.push(snapshotWh40kUnit(ds, entry?.models));
     }
-    return { units };
+    return { units, factionId };
   }
 
   // ---- create a table ----
@@ -719,6 +1009,258 @@ function mount(app, io, deps) {
   // The lobby renders games from this registry so more games can slot in.
   app.get('/api/table-games', memberReader, (req, res) => {
     res.json(Object.entries(GAMES).map(([id, g]) => ({ id, name: g.name })));
+  });
+
+  // =========================================================================
+  // My Lists — solo play-reference lists. Saved server-side on the user so a
+  // list built on the desktop reads on the iPad. Same snapshot shapes and the
+  // same per-field patch validation as the tables, minus the sockets.
+  // =========================================================================
+
+  const MAX_LIST_UNITS = 60;
+
+  // Match pasted unit names against mul_units by name (exact → normalized →
+  // fuzzy containment), reporting honest unmatched lines. Works with a list
+  // pasted from ANY BattleTech builder: skill defaults to 4 (AS) and crew to
+  // 4/5 (classic) unless the paste carries them.
+  async function resolveBtList(text, game) {
+    if (!builders.available()) return { status: 503, error: 'Da unit database ain\'t hooked up.' };
+    const mode = game === 'battletech-classic' ? 'tw' : undefined;
+    const units = [];
+    const unmatched = [];
+    for (const raw of String(text ?? '').split(/\r?\n/)) {
+      const parsed = parseBtLine(raw);
+      if (!parsed) continue;
+      const lower = parsed.name.toLowerCase();
+      const norm = normaliseBt(parsed.name);
+      let rows;
+      try {
+        rows = (await builders.search({ q: parsed.name, limit: 100, mode })).units;
+      } catch (err) {
+        console.error('[lists] bt search:', err.message);
+        return { status: 502, error: 'Unit database is not answering.' };
+      }
+      let matches = rows.filter((r) => r.name.toLowerCase() === lower);
+      let how = 'exact';
+      if (!matches.length) { matches = rows.filter((r) => normaliseBt(r.name) === norm); how = 'normalized'; }
+      if (!matches.length && rows.length) { matches = rows; how = 'fuzzy'; }
+      if (!matches.length) {
+        // Punctuation differences defeat ILIKE — retry on the chassis word,
+        // then keep only names that contain (or are contained by) the paste.
+        const chassis = parsed.name.split(/\s+/)[0];
+        if (chassis && chassis.length >= 3) {
+          try {
+            const alt = (await builders.search({ q: chassis, limit: 300, mode })).units;
+            matches = alt.filter((r) => {
+              const rn = normaliseBt(r.name);
+              return rn.includes(norm) || norm.includes(rn);
+            });
+            how = 'fuzzy';
+          } catch { /* reported as unmatched below */ }
+        }
+      }
+      if (!matches.length) {
+        unmatched.push({ line: raw.trim(), parsedName: parsed.name });
+        continue;
+      }
+      units.push({
+        line: raw.trim(),
+        parsedName: parsed.name,
+        count: parsed.count,
+        skill: parsed.skill,
+        gunnery: parsed.gunnery,
+        piloting: parsed.piloting,
+        matchedBy: how,
+        ambiguous: matches.length > 1,
+        matches: matches.slice(0, 8).map((m) => ({ id: m.id, name: m.name, pv: m.pv, bv: m.bv })),
+      });
+    }
+    return { units, unmatched };
+  }
+
+  const listSummary = (l) => ({
+    id: l.id,
+    game: l.game,
+    gameName: LIST_GAMES[l.game]?.name ?? l.game,
+    name: l.name,
+    units: l.units.length,
+    faction: l.army?.factionName || null,
+    detachment: l.army?.detachment?.name || null,
+    created: l.created,
+    updated: l.updated,
+  });
+
+  // Lists are private: a wrong id and someone else's id answer the same way.
+  const myList = (req, res) => {
+    const user = needUser(req, res);
+    if (!user) return null;
+    const l = lists.get(req.params.id);
+    if (!l || String(l.owner).toLowerCase() !== user.name.toLowerCase()) {
+      res.status(404).json({ error: 'No such list.' });
+      return null;
+    }
+    return { user, l };
+  };
+
+  app.get('/api/list-games', memberReader, (req, res) => {
+    res.json(Object.entries(LIST_GAMES).map(([id, g]) => ({ id, name: g.name })));
+  });
+
+  app.get('/api/lists', memberReader, (req, res) => {
+    const user = needUser(req, res);
+    if (!user) return;
+    res.json({ lists: lists.byUser(user.name).map(listSummary) });
+  });
+
+  // Resolve a pasted list without saving: wh40k → datasheet matching plus
+  // faction/detachment detection; battletech → mul_units name matching;
+  // paste-only games → a parse preview (units + honest unparsed lines).
+  app.post('/api/lists/resolve', memberReader, async (req, res) => {
+    const user = needUser(req, res);
+    if (!user) return;
+    const { game, text } = req.body || {};
+    if (!LIST_GAMES[game]) return res.status(400).json({ error: 'unknown game' });
+    if (typeof text !== 'string' || !text.trim()) return res.status(400).json({ error: 'Paste a list first.' });
+    try {
+      if (game === 'wh40k') {
+        if (!wh40k.available()) return res.status(503).json({ error: 'Da 40k database ain\'t hooked up.' });
+        return res.json(await wh40k.resolveList(text));
+      }
+      if (SIMPLE_PARSERS[game]) {
+        const parsed = SIMPLE_PARSERS[game](text);
+        return res.json({
+          header: parsed.header,
+          sections: parsed.sections,
+          units: parsed.units.map(snapshotSimpleUnit),
+          unparsed: parsed.unparsed,
+        });
+      }
+      const r = await resolveBtList(text, game);
+      if (r.error) return res.status(r.status).json({ error: r.error });
+      res.json(r);
+    } catch (err) {
+      console.error('[lists] resolve:', err.message);
+      res.status(502).json({ error: 'Reference database is not answering.' });
+    }
+  });
+
+  // Create a list — body by game:
+  //   battletech: { game, name, forceName }                       (saved force)
+  //            or { game, name, units: [{id, skill, gunnery?, piloting?}] }
+  //   wh40k:      { game, name, army: [{id, models?}], detachmentId? | detachmentName? }
+  //   paste games:{ game, name, text }                            (builder export)
+  app.post('/api/lists', memberReader, async (req, res) => {
+    const user = needUser(req, res);
+    if (!user) return;
+    const { game, forceName, army: armyEntries, detachmentId, detachmentName, text } = req.body || {};
+    if (!LIST_GAMES[game]) return res.status(400).json({ error: 'unknown game' });
+    const name = String(req.body?.name || '').trim().slice(0, 60);
+    if (!name) return res.status(400).json({ error: 'Give da list a name first.' });
+
+    let units = [];
+    let army = null;
+    try {
+      if (game === 'wh40k') {
+        const r = await buildArmyUnits(armyEntries);
+        if (r.error) return res.status(r.status).json({ error: r.error });
+        units = r.units;
+        try {
+          const rules = await wh40k.getArmyRules({ factionId: r.factionId, detachmentId, detachmentName });
+          if (rules) {
+            army = {
+              factionId: rules.faction?.id ?? r.factionId ?? null,
+              factionName: rules.faction?.name ?? null,
+              armyRules: rules.armyRules,
+              detachment: rules.detachment,
+              stratagems: rules.stratagems,
+              enhancements: rules.enhancements,
+              coreStratagems: rules.coreStratagems,
+            };
+          }
+        } catch (err) {
+          // The datasheets alone are still worth saving — flag the gap.
+          console.error('[lists] army rules:', err.message);
+          army = { factionId: r.factionId ?? null, factionName: null, error: 'army rules lookup failed' };
+        }
+      } else if (SIMPLE_PARSERS[game]) {
+        if (typeof text !== 'string' || !text.trim()) {
+          return res.status(400).json({ error: 'Paste yer builder\'s text export.' });
+        }
+        const parsed = SIMPLE_PARSERS[game](text);
+        if (!parsed.units.length) {
+          return res.status(400).json({ error: 'Could not find any units in dat paste — use da builder\'s Export text.' });
+        }
+        units = parsed.units.slice(0, MAX_LIST_UNITS).map(snapshotSimpleUnit);
+        army = {
+          header: parsed.header.slice(0, 12),
+          sections: parsed.sections,
+          unparsed: parsed.unparsed.slice(0, 30),
+        };
+      } else if (forceName) {
+        const r = await buildForceUnits(user, forceName, game);
+        if (r.error) return res.status(r.status).json({ error: r.error });
+        units = r.units;
+      } else {
+        const entries = (Array.isArray(req.body?.units) ? req.body.units : [])
+          .slice(0, MAX_LIST_UNITS)
+          .map((e) => ({ id: Number(e?.id), skill: e?.skill, gunnery: e?.gunnery, piloting: e?.piloting }))
+          .filter((e) => Number.isFinite(e.id));
+        if (!entries.length) return res.status(400).json({ error: 'List came through empty.' });
+        const r = await buildEntriesUnits(entries, game);
+        if (r.error) return res.status(r.status).json({ error: r.error });
+        units = r.units;
+      }
+    } catch (err) {
+      console.error('[lists] create:', err.message);
+      return res.status(502).json({ error: 'Reference database is not answering.' });
+    }
+    if (!units.length) return res.status(400).json({ error: 'List came through empty.' });
+
+    const made = lists.create({ owner: user.name, game, name, units, army });
+    if (made.error) return res.status(400).json({ error: made.error });
+    res.json(made.list);
+  });
+
+  app.get('/api/lists/:id', memberReader, (req, res) => {
+    const got = myList(req, res);
+    if (!got) return;
+    res.json(got.l);
+  });
+
+  // Solo damage tracking — the same per-field validation the tables run,
+  // no sockets needed (one reader, one screen).
+  app.post('/api/lists/:id/track', memberReader, (req, res) => {
+    const got = myList(req, res);
+    if (!got) return;
+    const { l } = got;
+    const { uid, field, value } = req.body || {};
+    if (typeof field !== 'string') return res.status(400).json({ error: 'patch needs a field' });
+    const unit = l.units.find((u) => u.uid === uid);
+    if (!unit) return res.status(404).json({ error: 'no such unit' });
+    // status 'setup' keeps classic crew skills editable — it's YOUR list
+    const r = applyPatch({ game: l.game, status: 'setup' }, unit, field, value);
+    if (r.error) return res.status(400).json({ error: r.error });
+    lists.update(l);
+    res.json({ ok: true, unit });
+  });
+
+  app.post('/api/lists/:id/reset', memberReader, (req, res) => {
+    const got = myList(req, res);
+    if (!got) return;
+    for (const u of got.l.units) resetTracking(got.l.game, u);
+    lists.update(got.l);
+    res.json(got.l);
+  });
+
+  app.delete('/api/lists/:id', memberReader, (req, res) => {
+    const user = needUser(req, res);
+    if (!user) return;
+    const l = lists.get(req.params.id);
+    if (!l) return res.json({ ok: true });
+    if (String(l.owner).toLowerCase() !== user.name.toLowerCase()) {
+      return res.status(404).json({ error: 'No such list.' });
+    }
+    res.json(lists.remove(l.id));
   });
 }
 

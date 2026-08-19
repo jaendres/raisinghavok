@@ -1,14 +1,25 @@
-// Game Night — live at-the-table play tracker.
+// Game Night — My Lists (solo play reference) + live at-the-table play tracker.
 // Hash-routed like the league SPA, same account (mol_token), plain vanilla JS.
 //
 // iPad-first: every control is a real tap target, nothing needs hover, and
 // updates are optimistic — tap the pip, see it fill, the server patch and the
 // socket echo reconcile everyone else's screen.
 //
-// Three game modes, all snapshot-at-create (see server/table.js):
+// Two modes on one page:
+//   My Lists — a personal reference library: save a list per game system,
+//   prop the iPad next to the table, read your units' stats/abilities and
+//   the army rules while playing. Tracking (the tap-pips) is optional and
+//   off by default so the reading view stays uncluttered. The list JSON is
+//   loaded once; everything renders from that snapshot, so it stays readable
+//   if the connection drops mid-game.
+//   Tables — the shared live tracker (unchanged).
+//
+// Table/list snapshot game modes (see server/table.js):
 //   battletech-as      — Alpha Strike cards (this file renders them)
 //   battletech-classic — Total Warfare record sheets (classic.js renders)
 //   wh40k              — Warhammer 40k datasheets (wh40k.js renders)
+//   necromunda / mcp / trenchcrusade — lists only: simple stat cards parsed
+//   from our own builders' text exports (this file renders them)
 
 // Discord SSO hands the session token back in the URL fragment.
 (() => {
@@ -28,6 +39,14 @@ let discordSso = false;
 let T = null;            // the current table object
 let socket = null;
 const undoStacks = new Map();  // uid -> [{ field, prev }]
+
+// list reading-view state
+let LST = null;              // the current list object (never set while T is)
+let listTracking = false;    // tap-pips shown/hidden (reference mode default)
+let collapsedAll = false;    // remember collapse-all across redraws
+
+// which game a card belongs to (table or list, whichever is open)
+const curGame = () => (T ? T.game : LST ? LST.game : null);
 
 const CRIT_ROWS = [
   ['engine', 'Engine', 2],
@@ -88,6 +107,9 @@ const isBattletech = (game) => game === 'battletech-as' || game === 'battletech-
 
 async function viewLobby() {
   const [mine, games] = await Promise.all([api('/table'), api('/table-games')]);
+  // My Lists is the lobby's first citizen — the solo reference library.
+  let myLists = [];
+  try { myLists = (await api('/lists')).lists || []; } catch { /* fresh account / hiccup */ }
   // Saved forces power "attach my force to a side"; the lobby still works if
   // the unit database is down — you just start with empty sides.
   let forces = [];
@@ -100,13 +122,39 @@ async function viewLobby() {
     : t.status === 'playing' ? `<span class="tag" style="color:var(--ok)">round ${t.round}</span>`
     : '<span class="tag">setting up</span>';
 
-  // The action leads: start a table (pick game, attach force, play), join code
-  // right beside it, then the table list.
+  // Group the list library by game system so "my Custodes" and "my lance"
+  // never mix on the shelf.
+  const byGame = new Map();
+  for (const l of myLists) {
+    if (!byGame.has(l.gameName)) byGame.set(l.gameName, []);
+    byGame.get(l.gameName).push(l);
+  }
+  const listLibrary = myLists.length
+    ? [...byGame.entries()].map(([gameName, ls]) => `
+        <h3 class="list-group">${esc(gameName)}</h3>
+        <div class="card-grid">
+          ${ls.map((l) => `
+            <div class="card tbl-card list-card" data-openlist="${l.id}">
+              <h3>${esc(l.name)}</h3>
+              <div class="meta">${l.units} unit${l.units === 1 ? '' : 's'}${l.faction ? ' • ' + esc(l.faction) : ''}${l.detachment ? ' • ' + esc(l.detachment) : ''}</div>
+              <div class="meta">updated ${new Date(l.updated).toLocaleDateString()}</div>
+            </div>`).join('')}
+        </div>`).join('')
+    : '<p class="muted">No lists yet — save one an\' yer units\' stats, abilities an\' army rules are always a tap away at da table.</p>';
+
+  // My Lists leads (the solo reference library IS the point of the iPad),
+  // then the shared live tracker below it.
   $app.innerHTML = `
     <h1>Game Night</h1>
-    <div class="sub">Live table tracker — one sheet, every screen</div>
+    <div class="sub">Yer lists at da table — an' da live tracker beside 'em</div>
 
-    <div class="lobby-top">
+    <div class="lists-head">
+      <h2>My Lists</h2>
+      <a class="btn" href="#/lists/new">+ New List</a>
+    </div>
+    ${listLibrary}
+
+    <div class="lobby-top" style="margin-top:26px">
       <div class="card start-card">
         <h2 style="margin-top:0">Start a Table</h2>
         <div class="form-grid">
@@ -142,6 +190,9 @@ async function viewLobby() {
 
   $app.querySelectorAll('[data-open]').forEach((el) => {
     el.onclick = () => { location.hash = '#/t/' + el.dataset.open; };
+  });
+  $app.querySelectorAll('[data-openlist]').forEach((el) => {
+    el.onclick = () => { location.hash = '#/l/' + el.dataset.openlist; };
   });
 
   const goJoin = () => {
@@ -282,9 +333,381 @@ function renderResolveScreen(sides, onConfirm) {
   };
 }
 
+// ============================================================================
+// My Lists — add-list flow + the reading view
+// ============================================================================
+
+const isSimpleGame = (game) => game === 'necromunda' || game === 'mcp' || game === 'trenchcrusade';
+
+const PASTE_HINTS = {
+  'battletech-as': 'paste a list — one unit per line, any builder\'s export ("Atlas AS7-D (4)", "2x Locust LCT-1V")',
+  'battletech-classic': 'paste a list — one \'Mech per line ("Atlas AS7-D G3/P4")',
+  wh40k: 'paste an army list (GW app / BattleScribe / New Recruit) — da detachment line comes along for free',
+  necromunda: 'paste da text export from our Necromunda gang builder (Export → Copy text)',
+  mcp: 'paste da text export from our Crisis Protocol roster builder (Text → Copy)',
+  trenchcrusade: 'paste da text export from our Trench Crusade warband builder (Export → Copy text)',
+};
+
+// ---- add-list flow ----
+async function viewNewList() {
+  const games = await api('/list-games');
+  let forces = [];
+  try { forces = (await api('/builders/forces')).forces || []; } catch { /* db down / none saved */ }
+  forces.sort((a, b) => (b.updated || 0) - (a.updated || 0));
+
+  $app.innerHTML = `
+    <div class="crumb"><a href="#/">Game Night</a> / new list</div>
+    <h1>New List</h1>
+    <div class="sub">Save a list once — read yer stats, abilities an' army rules at any table</div>
+    <div class="card">
+      <div class="form-grid">
+        <label>Game <select id="nl-game">${games.map((g) => `<option value="${g.id}">${esc(g.name)}</option>`).join('')}</select></label>
+        <label>List name <input id="nl-name" maxlength="60" placeholder="Tuesday Custodes"></label>
+      </div>
+      <div id="nl-src"></div>
+      <div class="error" id="nl-err"></div>
+    </div>
+    <div id="nl-result"></div>`;
+
+  const $game = $app.querySelector('#nl-game');
+  const $src = $app.querySelector('#nl-src');
+  const $err = $app.querySelector('#nl-err');
+  const listName = () => $app.querySelector('#nl-name').value.trim();
+
+  const renderSource = () => {
+    const game = $game.value;
+    const paste = `
+      <textarea id="nl-paste" rows="8" class="claim-army" placeholder="${esc(PASTE_HINTS[game] || 'paste yer list here')}"></textarea>
+      <div style="margin-top:10px"><button class="btn" id="nl-check">Check da List</button></div>`;
+    if (isBattletech(game)) {
+      $src.innerHTML = `
+        <h3 class="nl-h3">From a saved force</h3>
+        <div class="join-row">
+          <select id="nl-force" style="min-width:220px"><option value="">— pick a saved force —</option>
+            ${forces.map((f) => `<option value="${esc(f.name)}">${esc(f.name)}${f.totalPV != null ? ` (${f.totalPV} PV)` : ''}</option>`).join('')}
+          </select>
+          <button class="btn" id="nl-fromforce">Save List</button>
+        </div>
+        <h3 class="nl-h3">…or paste a list from any builder</h3>
+        ${paste}`;
+      $src.querySelector('#nl-fromforce').onclick = async () => {
+        $err.textContent = '';
+        const forceName = $src.querySelector('#nl-force').value;
+        if (!forceName) { $err.textContent = 'Pick a saved force first.'; return; }
+        if (!listName()) { $err.textContent = 'Give da list a name first.'; return; }
+        try {
+          const l = await api('/lists', { method: 'POST', body: JSON.stringify({ game, name: listName(), forceName }) });
+          location.hash = '#/l/' + l.id;
+        } catch (e) { $err.textContent = e.message; }
+      };
+    } else {
+      $src.innerHTML = `<h3 class="nl-h3">Paste yer list</h3>${paste}`;
+    }
+    $src.querySelector('#nl-check').onclick = async () => {
+      $err.textContent = '';
+      const text = $src.querySelector('#nl-paste').value.trim();
+      if (!text) { $err.textContent = 'Paste a list first.'; return; }
+      if (!listName()) { $err.textContent = 'Give da list a name first.'; return; }
+      try {
+        const resolve = await api('/lists/resolve', { method: 'POST', body: JSON.stringify({ game, text }) });
+        if (game === 'wh40k') render40kListResolve(game, listName(), resolve);
+        else if (isSimpleGame(game)) renderSimpleListPreview(game, listName(), text, resolve);
+        else renderBtListResolve(game, listName(), resolve);
+      } catch (e) { $err.textContent = e.message; }
+    };
+  };
+  renderSource();
+  $game.onchange = renderSource;
+}
+
+// ---- battletech paste resolve: pick the right unit, set skills, save ----
+function renderBtListResolve(game, name, resolve) {
+  const classic = game === 'battletech-classic';
+  const $out = $app.querySelector('#nl-result');
+  $out.innerHTML = `
+    <h2>Check da Units</h2>
+    <div class="card">
+      ${resolve.units.map((u, ui) => `
+        <div class="rs-row">
+          <span class="rs-line" title="${esc(u.line)}">${esc(u.parsedName)}${u.count > 1 ? ` ×${u.count}` : ''}</span>
+          <select class="rs-pick" data-unit="${ui}">
+            ${u.matches.map((m, mi) => `<option value="${mi}"${mi === 0 ? ' selected' : ''}>${esc(m.name)}${classic ? (m.bv != null ? ` (BV ${m.bv})` : '') : (m.pv != null ? ` (${m.pv} PV)` : '')}</option>`).join('')}
+            <option value="-1">— drop dis line —</option>
+          </select>
+          ${classic
+            ? `<label class="rs-models">G <input type="number" min="0" max="8" class="rs-gun" data-unit="${ui}" value="${u.gunnery ?? 4}"></label>
+               <label class="rs-models">P <input type="number" min="0" max="8" class="rs-pil" data-unit="${ui}" value="${u.piloting ?? 5}"></label>`
+            : `<label class="rs-models">skill <input type="number" min="0" max="8" class="rs-skill" data-unit="${ui}" value="${u.skill ?? 4}"></label>`}
+          ${u.ambiguous ? '<span class="tag" style="color:var(--rust)">ambiguous</span>' : ''}
+        </div>`).join('') || '<p class="muted">No units matched in dat paste.</p>'}
+      ${resolve.unmatched.length ? `
+        <div class="rs-unmatched">
+          <b>Not matched (dropped):</b>
+          ${resolve.unmatched.map((x) => `<div class="muted">${esc(x.line)}</div>`).join('')}
+        </div>` : ''}
+      <div style="margin-top:14px"><button class="btn big" id="nl-save">Save List</button></div>
+      <div class="error" id="nl-err2"></div>
+    </div>`;
+  $out.querySelector('#nl-save').onclick = async () => {
+    const units = [];
+    resolve.units.forEach((u, ui) => {
+      const pick = +$out.querySelector(`.rs-pick[data-unit="${ui}"]`).value;
+      if (pick < 0 || !u.matches[pick]) return;
+      const entry = { id: u.matches[pick].id };
+      if (classic) {
+        entry.gunnery = +$out.querySelector(`.rs-gun[data-unit="${ui}"]`).value;
+        entry.piloting = +$out.querySelector(`.rs-pil[data-unit="${ui}"]`).value;
+        entry.skill = 4;
+      } else {
+        entry.skill = +$out.querySelector(`.rs-skill[data-unit="${ui}"]`).value;
+      }
+      for (let n = 0; n < Math.min(u.count || 1, 10); n++) units.push({ ...entry });
+    });
+    try {
+      const l = await api('/lists', { method: 'POST', body: JSON.stringify({ game, name, units }) });
+      location.hash = '#/l/' + l.id;
+    } catch (e) { $out.querySelector('#nl-err2').textContent = e.message; }
+  };
+  $out.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ---- wh40k paste resolve: units + detachment (detected or picked), save ----
+function render40kListResolve(game, name, resolve) {
+  const $out = $app.querySelector('#nl-result');
+  const candidates = resolve.detachmentCandidates || [];
+  const detected = resolve.detachment?.matches?.[0] || null;
+  $out.innerHTML = `
+    <h2>Check da List</h2>
+    <div class="card">
+      ${resolve.faction ? `<div class="u-line"><b>Faction:</b> ${esc(resolve.faction.name)}</div>` : ''}
+      <div class="rs-row">
+        <span class="rs-line">Detachment${detected ? ' (detected from da paste)' : ''}</span>
+        <select class="rs-pick" id="nl-det">
+          <option value="">— no detachment —</option>
+          ${candidates.map((d) => `<option value="${d.id}"${detected && d.id === detected.id ? ' selected' : ''}>${esc(d.name)}</option>`).join('')}
+          ${detected && !candidates.some((d) => d.id === detected.id)
+            ? `<option value="${detected.id}" selected>${esc(detected.name)}</option>` : ''}
+        </select>
+      </div>
+      ${resolve.units.map((u, ui) => `
+        <div class="rs-row">
+          <span class="rs-line" title="${esc(u.line)}">${esc(u.parsedName)}${u.count > 1 ? ` ×${u.count}` : ''}</span>
+          <select class="rs-pick" data-unit="${ui}">
+            ${u.matches.map((m, mi) => `<option value="${mi}"${mi === 0 ? ' selected' : ''}>${esc(m.name)} (${esc(m.factionId)})</option>`).join('')}
+            <option value="-1">— drop dis line —</option>
+          </select>
+          <label class="rs-models">models <input type="number" min="1" max="30" placeholder="auto" data-unit="${ui}" class="rs-count"></label>
+          ${u.ambiguous ? '<span class="tag" style="color:var(--rust)">ambiguous</span>' : ''}
+        </div>`).join('') || '<p class="muted">No units matched in dat paste.</p>'}
+      ${resolve.unmatched.length ? `
+        <div class="rs-unmatched">
+          <b>Not matched (dropped):</b>
+          ${resolve.unmatched.map((x) => `<div class="muted">${esc(x.line)}</div>`).join('')}
+        </div>` : ''}
+      <div style="margin-top:14px"><button class="btn big" id="nl-save">Save List</button></div>
+      <div class="error" id="nl-err2"></div>
+    </div>`;
+  $out.querySelector('#nl-save').onclick = async () => {
+    const army = [];
+    resolve.units.forEach((u, ui) => {
+      const pick = +$out.querySelector(`.rs-pick[data-unit="${ui}"]`).value;
+      if (pick < 0 || !u.matches[pick]) return;
+      const modelsRaw = $out.querySelector(`.rs-count[data-unit="${ui}"]`).value;
+      const models = modelsRaw === '' ? undefined : Math.min(Math.max(+modelsRaw || 1, 1), 30);
+      for (let n = 0; n < Math.min(u.count || 1, 10); n++) army.push({ id: u.matches[pick].id, models });
+    });
+    const detachmentId = $out.querySelector('#nl-det').value || undefined;
+    try {
+      const l = await api('/lists', { method: 'POST', body: JSON.stringify({ game, name, army, detachmentId }) });
+      location.hash = '#/l/' + l.id;
+    } catch (e) { $out.querySelector('#nl-err2').textContent = e.message; }
+  };
+  $out.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ---- paste-only games: parse preview with honest coverage, then save ----
+function renderSimpleListPreview(game, name, text, resolve) {
+  const $out = $app.querySelector('#nl-result');
+  $out.innerHTML = `
+    <h2>Check da Parse</h2>
+    <div class="card">
+      ${(resolve.header || []).length ? `<div class="u-line muted">${resolve.header.map(esc).join(' • ')}</div>` : ''}
+      ${resolve.units.map((u) => `
+        <div class="rs-row">
+          <span class="rs-line">${esc(u.name)}</span>
+          <span class="muted">${esc(u.subtitle || '')}${u.cost ? ' • ' + esc(u.cost) : ''}${u.statlines?.length ? '' : ' • no statline parsed'}</span>
+        </div>`).join('') || '<p class="muted">No units parsed — is dat da builder\'s text export?</p>'}
+      ${(resolve.unparsed || []).length ? `
+        <div class="rs-unmatched">
+          <b>Lines dat didn't parse (kept out):</b>
+          ${resolve.unparsed.map((x) => `<div class="muted">${esc(x)}</div>`).join('')}
+        </div>` : ''}
+      ${resolve.units.length ? '<div style="margin-top:14px"><button class="btn big" id="nl-save">Save List</button></div>' : ''}
+      <div class="error" id="nl-err2"></div>
+    </div>`;
+  const save = $out.querySelector('#nl-save');
+  if (save) {
+    save.onclick = async () => {
+      try {
+        const l = await api('/lists', { method: 'POST', body: JSON.stringify({ game, name, text }) });
+        location.hash = '#/l/' + l.id;
+      } catch (e) { $out.querySelector('#nl-err2').textContent = e.message; }
+    };
+  }
+  $out.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ---- the reading view ----
+
+// One-line key stat for a collapsed card, per game.
+function listKeyStat(u) {
+  const game = curGame();
+  if (game === 'battletech-as') return `SK ${u.skill} • PV ${u.pv}`;
+  if (game === 'battletech-classic') {
+    return `${u.sheet?.mass != null ? u.sheet.mass + 't • ' : ''}G${u.gunnery}/P${u.piloting}${u.bv != null ? ' • BV ' + u.bv : ''}`;
+  }
+  if (game === 'wh40k') {
+    const m = u.statline?.[0];
+    return m ? `T${m.t} • Sv${m.sv} • ${u.modelCount}×${u.woundsPer}W` : `${u.modelCount} models`;
+  }
+  return u.cost || u.subtitle || '';
+}
+
+function listUnitShell(u) {
+  return `
+  <div class="lst-unit${collapsedAll ? ' collapsed' : ''}${u.destroyed ? ' unit-down' : ''}" data-lunit="${u.uid}" data-name="${esc(String(u.name).toLowerCase())}">
+    <button class="lst-head" data-collapse="${u.uid}">
+      <span class="lst-caret"></span>
+      <span class="lst-head-name">${esc(u.name)}</span>
+      <span class="lst-head-stat">${esc(listKeyStat(u))}</span>
+    </button>
+    <div class="lst-body">${cardHTML(u)}</div>
+  </div>`;
+}
+
+// Sanitizer for rules text: reuse the 40k card's (Wahapedia HTML), fall back
+// to plain-text escaping if that script didn't load.
+const ruleHTML = (html) => (window.W40kCard ? W40kCard.sanitize(html) : esc(html));
+
+function stratBlock(s) {
+  return `
+    <div class="strat">
+      <div class="strat-top">
+        <span class="strat-name">${esc(s.name)}</span>
+        <span class="strat-cost">${esc(s.cost)}CP</span>
+      </div>
+      <div class="strat-meta">${esc([s.turn, s.phase].filter(Boolean).join(' • '))}</div>
+      <div class="strat-body">${ruleHTML(s.description)}</div>
+    </div>`;
+}
+
+function armyPanelHTML(l) {
+  const a = l.army;
+  if (!a) return '';
+  if (l.game === 'wh40k') {
+    const sec = (title, open, body) => body
+      ? `<details class="army-sec"${open ? ' open' : ''}><summary class="sec-title">${title}</summary><div class="army-sec-body">${body}</div></details>`
+      : '';
+    return `
+    <div class="card army-panel">
+      <h2 style="margin-top:0">Army Rules${a.factionName ? ` — ${esc(a.factionName)}` : ''}${a.detachment ? ` <span class="tag">${esc(a.detachment.name)}</span>` : ''}</h2>
+      ${a.error ? `<p class="error">Army rules lookup failed when dis list was saved — datasheets only.</p>` : ''}
+      ${sec('Army Rule', true, (a.armyRules || []).map((r) => `
+        <div class="rule-block"><div class="rule-name">${esc(r.name)}</div>${ruleHTML(r.description)}</div>`).join(''))}
+      ${a.detachment ? sec(`Detachment — ${esc(a.detachment.name)}`, true, (a.detachment.rules || []).map((r) => `
+        <div class="rule-block"><div class="rule-name">${esc(r.name)}</div>${ruleHTML(r.description)}</div>`).join('')) : ''}
+      ${sec(`Stratagems (${(a.stratagems || []).length})`, true, (a.stratagems || []).map(stratBlock).join(''))}
+      ${sec(`Enhancements (${(a.enhancements || []).length})`, false, (a.enhancements || []).map((e) => `
+        <div class="rule-block"><div class="rule-name">${esc(e.name)} <span class="strat-cost">${esc(e.cost)} pts</span></div>${ruleHTML(e.description)}</div>`).join(''))}
+      ${sec(`Core Stratagems (${(a.coreStratagems || []).length})`, false, (a.coreStratagems || []).map(stratBlock).join(''))}
+    </div>`;
+  }
+  // paste-only games: the export's header block + reference sections
+  const bits = [];
+  if ((a.header || []).length) bits.push(a.header.map((h) => `<div class="u-line">${esc(h)}</div>`).join(''));
+  for (const s of a.sections || []) {
+    bits.push(`<div class="rule-block"><div class="rule-name">${esc(s.title)}</div>${s.items.map((i) => `<div class="u-line">${esc(i)}</div>`).join('')}</div>`);
+  }
+  if ((a.unparsed || []).length) {
+    bits.push(`<details class="army-sec"><summary class="sec-title">Lines dat didn't parse (${a.unparsed.length})</summary><div class="army-sec-body">${a.unparsed.map((x) => `<div class="muted">${esc(x)}</div>`).join('')}</div></details>`);
+  }
+  return bits.length ? `<div class="card army-panel">${bits.join('')}</div>` : '';
+}
+
+function renderListView() {
+  const l = LST;
+  const gameName = ({ 'battletech-as': 'BattleTech — Alpha Strike', 'battletech-classic': 'BattleTech — Classic', wh40k: 'Warhammer 40k', necromunda: 'Necromunda', mcp: 'Marvel Crisis Protocol', trenchcrusade: 'Trench Crusade' })[l.game] || l.game;
+  $app.innerHTML = `
+    <div class="crumb"><a href="#/">Game Night</a> / ${esc(l.name)}</div>
+    <div class="play-head list-head">
+      <h1>${esc(l.name)}</h1>
+      <span class="tag">${esc(gameName)}</span>
+      <input id="l-search" type="search" placeholder="filter units…" autocomplete="off">
+      <span class="list-actions">
+        <button class="btn ghost small" id="l-track">${listTracking ? 'Tracking: ON' : 'Tracking: OFF'}</button>
+        <button class="btn ghost small" id="l-collapse">${collapsedAll ? 'Expand all' : 'Collapse all'}</button>
+      </span>
+    </div>
+    <div class="error" id="p-err"></div>
+    ${armyPanelHTML(l)}
+    <div class="list-grid${listTracking ? '' : ' ref-mode'}" id="list-grid">
+      ${l.units.map(listUnitShell).join('') || '<p class="muted">Dis list is empty.</p>'}
+    </div>
+    <div class="list-foot">
+      <button class="btn ghost small" id="l-reset">Reset damage</button>
+      <button class="btn ghost small danger-btn" id="l-delete">Delete list</button>
+    </div>`;
+
+  // live name filter — pure DOM, works offline
+  $app.querySelector('#l-search').oninput = (ev) => {
+    const q = ev.target.value.trim().toLowerCase();
+    $app.querySelectorAll('.lst-unit').forEach((el) => {
+      el.classList.toggle('filtered-out', Boolean(q) && !el.dataset.name.includes(q));
+    });
+  };
+  $app.querySelector('#l-track').onclick = () => {
+    listTracking = !listTracking;
+    const grid = $app.querySelector('#list-grid');
+    if (grid) grid.classList.toggle('ref-mode', !listTracking);
+    $app.querySelector('#l-track').textContent = listTracking ? 'Tracking: ON' : 'Tracking: OFF';
+  };
+  $app.querySelector('#l-collapse').onclick = () => {
+    collapsedAll = !collapsedAll;
+    $app.querySelectorAll('.lst-unit').forEach((el) => el.classList.toggle('collapsed', collapsedAll));
+    $app.querySelector('#l-collapse').textContent = collapsedAll ? 'Expand all' : 'Collapse all';
+  };
+  $app.querySelector('#l-reset').onclick = async () => {
+    if (!confirm('Clear all damage trackin\' on dis list?')) return;
+    try {
+      LST = await api(`/lists/${l.id}/reset`, { method: 'POST' });
+      undoStacks.clear();
+      renderListView();
+    } catch (e) { playErr(e.message); }
+  };
+  $app.querySelector('#l-delete').onclick = async () => {
+    if (!confirm(`Delete "${l.name}" for good?`)) return;
+    try {
+      await api(`/lists/${l.id}`, { method: 'DELETE' });
+      location.hash = '#/';
+    } catch (e) { playErr(e.message); }
+  };
+}
+
+async function viewList(id) {
+  try {
+    LST = await api('/lists/' + id);
+  } catch (e) {
+    $app.innerHTML = `<h1>Game Night</h1><div class="card"><p class="error">${esc(e.message)}</p><a class="btn ghost" href="#/">Back to da lobby</a></div>`;
+    return;
+  }
+  undoStacks.clear();
+  renderListView();
+}
+
 // ---- play screen ----
 
 function unitByUid(uid) {
+  if (LST) return LST.units.find((x) => x.uid === uid) || null;
   if (!T) return null;
   for (const s of T.sides) {
     const u = s.units.find((x) => x.uid === uid);
@@ -320,12 +743,16 @@ function applyLocal(u, field, value) {
   else if (field === 'heat') u.heat = value;
   else if (field === 'notes') u.notes = value;
   else if (field === 'destroyed') u.destroyed = value;
-  else if (field.startsWith('crits.')) u.crits[field.slice(6)] = value;
+  else if (field === 'woundsTaken') {
+    u.woundsTaken = value;
+    u.destroyed = u.maxWounds != null && value >= u.maxWounds;
+  } else if (field.startsWith('crits.')) u.crits[field.slice(6)] = value;
 
-  if (T.game === 'battletech-as' && (field === 'structHit' || field === 'crits.engine')) {
+  const game = curGame();
+  if (game === 'battletech-as' && (field === 'structHit' || field === 'crits.engine')) {
     u.destroyed = u.structHit >= u.maxStruct || u.crits.engine >= 2;
   }
-  if (T.game === 'battletech-classic' && window.ClassicCard
+  if (game === 'battletech-classic' && window.ClassicCard
     && (field.startsWith('structHit.') || field.startsWith('crit.') || field === 'pilotHits')) {
     u.destroyed = ClassicCard.autoDestroyed(u);
   }
@@ -349,7 +776,30 @@ function playErr(msg) {
   if (el) { el.textContent = msg; if (msg) setTimeout(() => { if (el.textContent === msg) el.textContent = ''; }, 4000); }
 }
 
+// One optimistic patch path for lists (solo — POST /api/lists/:id/track).
+async function patchList(uid, field, value, { undoable = true } = {}) {
+  const u = unitByUid(uid);
+  if (!u || !LST) return;
+  const prev = readField(u, field);
+  if (undoable) {
+    const stack = undoStacks.get(uid) || [];
+    stack.push({ field, prev });
+    undoStacks.set(uid, stack.slice(-20));
+  }
+  applyLocal(u, field, value);
+  redrawCard(uid);
+  try {
+    await api(`/lists/${LST.id}/track`, { method: 'POST', body: JSON.stringify({ uid, field, value }) });
+  } catch (e) {
+    if (undoable) (undoStacks.get(uid) || []).pop();
+    applyLocal(u, field, prev);
+    redrawCard(uid);
+    playErr(e.message);
+  }
+}
+
 async function patch(uid, field, value, { undoable = true } = {}) {
+  if (LST) return patchList(uid, field, value, { undoable });
   const u = uid ? unitByUid(uid) : null;
   const prev = u ? readField(u, field) : T.round;
   // optimistic
@@ -435,7 +885,7 @@ function asCardHTML(u) {
       <span class="u-name">${esc(u.name)}</span>
       <span class="u-pv">SK ${u.skill} • PV ${u.pv}</span>
     </div>
-    <div class="u-line">MV <b>${esc(u.move ?? '?')}</b> • TMM <b>${u.tmm ?? '?'}</b> • DMG <b>${esc(dmg)}</b>${u.overheat ? ` • OV <b>${u.overheat}</b>` : ''}</div>
+    <div class="u-line">MV <b>${esc(u.move ?? '?')}</b> • TMM <b>${u.tmm ?? '?'}</b> • DMG <b>${esc(dmg)}</b>${u.overheat ? ` • OV <b>${u.overheat}</b>` : ''}<span class="ref-stat"> • A <b>${u.maxArmor}</b> • S <b>${u.maxStruct}</b></span></div>
     ${u.abilities ? `<div class="u-line" style="font-size:12.5px;margin-top:-4px">${esc(u.abilities)}</div>` : ''}
     <div class="pip-row"><span class="plabel">Armor</span>${u.maxArmor ? pips(u, 'armorHit', u.maxArmor, u.armorHit, 'armor') : '<span class="muted">—</span>'}</div>
     <div class="pip-row"><span class="plabel">Struct</span>${pips(u, 'structHit', u.maxStruct, u.structHit, 'struct')}</div>
@@ -452,10 +902,47 @@ function asCardHTML(u) {
   </div>`;
 }
 
+// Simple stat card for the paste-only list games (necromunda / mcp /
+// trenchcrusade): statline + gear + abilities as text, one optional wound
+// track. Same data-uid/data-field wiring as every other card.
+function simpleCardHTML(u) {
+  const canUndo = (undoStacks.get(u.uid) || []).length > 0;
+  return `
+  <div class="unit-card simple-card${u.destroyed ? ' destroyed' : ''}" data-card="${u.uid}">
+    ${u.destroyed ? '<span class="wreck-badge">Down</span>' : ''}
+    <div class="u-top">
+      <span class="u-name">${esc(u.name)}</span>
+      ${u.cost ? `<span class="u-pv">${esc(u.cost)}</span>` : ''}
+    </div>
+    ${u.subtitle ? `<div class="u-line">${esc(u.subtitle)}</div>` : ''}
+    ${(u.statlines || []).map((s) => `<div class="u-line statline-txt"><b>${esc(s)}</b></div>`).join('')}
+    ${u.maxWounds ? `<div class="pip-row"><span class="plabel">Wounds</span>${pips(u, 'woundsTaken', u.maxWounds, u.woundsTaken || 0, 'wound')}</div>` : ''}
+    ${(u.gear || []).length ? `<div class="u-line"><b>Gear:</b> ${esc(u.gear.join(', '))}</div>` : ''}
+    ${(u.gearProfiles || []).length ? `
+      <div class="sheet-sec"><div class="sec-title">Weapon profiles</div>
+        ${u.gearProfiles.map((p) => `<div class="u-line profile-txt">${esc(p)}</div>`).join('')}
+      </div>` : ''}
+    ${(u.abilities || []).length ? `
+      <div class="sheet-sec"><div class="sec-title">Abilities</div>
+        ${u.abilities.map((a) => `<div class="u-line ability-txt"><b>${esc(a.name)}:</b> ${esc(a.text)}</div>`).join('')}
+      </div>` : ''}
+    ${(u.keywords || []).length ? `<div class="kw-line"><b>Keywords:</b> ${esc(u.keywords.join(', '))}</div>` : ''}
+    <div class="u-foot">
+      <input class="notes" data-uid="${u.uid}" maxlength="200" placeholder="notes…" value="${esc(u.notes)}">
+      <button class="ubtn" data-undo="${u.uid}" ${canUndo ? '' : 'disabled'}>↩ Undo</button>
+      <button class="ubtn danger" data-wreck="${u.uid}">${u.destroyed ? 'Revive' : 'Down'}</button>
+    </div>
+  </div>`;
+}
+
 function cardHTML(u) {
   const canUndo = (undoStacks.get(u.uid) || []).length > 0;
-  if (T.game === 'battletech-classic' && window.ClassicCard) return ClassicCard.html(u, T.status, canUndo);
-  if (T.game === 'wh40k' && window.W40kCard) return W40kCard.html(u, canUndo);
+  const game = curGame();
+  // Lists render classic cards with 'setup' status so crew skills stay
+  // editable — it's your own list, not a locked live game.
+  if (game === 'battletech-classic' && window.ClassicCard) return ClassicCard.html(u, T ? T.status : 'setup', canUndo);
+  if (game === 'wh40k' && window.W40kCard) return W40kCard.html(u, canUndo);
+  if (game === 'necromunda' || game === 'mcp' || game === 'trenchcrusade') return simpleCardHTML(u);
   return asCardHTML(u);
 }
 
@@ -463,6 +950,12 @@ function redrawCard(uid) {
   const u = unitByUid(uid);
   const el = document.querySelector(`[data-card="${uid}"]`);
   if (u && el) el.outerHTML = cardHTML(u);
+  if (LST) {
+    // keep the collapsed one-line header honest about a downed unit
+    const wrap = document.querySelector(`.lst-unit[data-lunit="${uid}"]`);
+    if (wrap && u) wrap.classList.toggle('unit-down', Boolean(u.destroyed));
+    return;
+  }
   redrawSideTotals();
 }
 
@@ -704,9 +1197,20 @@ async function viewPlay(id) {
 }
 
 // ---- tap handling: one delegated listener survives every re-render ----
+
+// Tracking taps are live on an unfinished table, or on a list with the
+// tracking toggle ON (reference mode leaves the stats read-only).
+const canTrack = () => (T && T.status !== 'done') || (LST && listTracking);
+
 $app.addEventListener('click', (ev) => {
+  // list view: collapse/expand one unit card to its one-line header
+  const head = ev.target.closest('[data-collapse]');
+  if (head && LST) {
+    head.closest('.lst-unit')?.classList.toggle('collapsed');
+    return;
+  }
   const pip = ev.target.closest('.pip[data-uid][data-field], .sq[data-uid][data-field]');
-  if (pip && T && T.status !== 'done') {
+  if (pip && canTrack()) {
     const { uid, field } = pip.dataset;
     const k = +pip.dataset.n;
     const u = unitByUid(uid);
@@ -717,7 +1221,7 @@ $app.addEventListener('click', (ev) => {
   }
   // boolean toggles: crit slots, weapon-out buttons
   const tgl = ev.target.closest('[data-uid][data-toggle]');
-  if (tgl && T && T.status !== 'done') {
+  if (tgl && canTrack()) {
     const u = unitByUid(tgl.dataset.uid);
     if (u) patch(u.uid, tgl.dataset.toggle, !readField(u, tgl.dataset.toggle));
     return;
@@ -725,7 +1229,7 @@ $app.addEventListener('click', (ev) => {
   const undoBtn = ev.target.closest('[data-undo]');
   if (undoBtn) { undoLast(undoBtn.dataset.undo); return; }
   const wreckBtn = ev.target.closest('[data-wreck]');
-  if (wreckBtn && T && T.status !== 'done') {
+  if (wreckBtn && canTrack()) {
     const u = unitByUid(wreckBtn.dataset.wreck);
     if (u) patch(u.uid, 'destroyed', !u.destroyed);
     return;
@@ -771,20 +1275,27 @@ $app.addEventListener('click', (ev) => {
 });
 $app.addEventListener('change', (ev) => {
   const notes = ev.target.closest('input.notes[data-uid]');
-  if (notes && T && T.status !== 'done') { patch(notes.dataset.uid, 'notes', notes.value, { undoable: false }); return; }
-  // classic crew skills, editable during setup only
+  if (notes && canTrack()) { patch(notes.dataset.uid, 'notes', notes.value, { undoable: false }); return; }
+  // classic crew skills: editable during table setup, and any time on a list
   const crew = ev.target.closest('select.crew-sel[data-uid][data-field]');
-  if (crew && T && T.status === 'setup') patch(crew.dataset.uid, crew.dataset.field, +crew.value, { undoable: false });
+  if (crew && ((T && T.status === 'setup') || (LST && listTracking))) {
+    patch(crew.dataset.uid, crew.dataset.field, +crew.value, { undoable: false });
+  }
 });
 
 // ---- router ----
 
 async function route() {
-  if (socket && !location.hash.startsWith('#/t/')) { socket.disconnect(); socket = null; T = null; }
+  if (socket && !location.hash.startsWith('#/t/')) { socket.disconnect(); socket = null; }
+  if (!location.hash.startsWith('#/t/')) T = null;
+  if (!location.hash.startsWith('#/l/')) { LST = null; collapsedAll = false; }
   if (!me) return loginWall();
-  const m = location.hash.match(/^#\/t\/([0-9a-f]{6})/);
+  const mt = location.hash.match(/^#\/t\/([0-9a-f]{6})/);
+  const ml = location.hash.match(/^#\/l\/([0-9a-f]{6,16})/);
   try {
-    if (m) await viewPlay(m[1]);
+    if (mt) await viewPlay(mt[1]);
+    else if (ml) await viewList(ml[1]);
+    else if (location.hash.startsWith('#/lists/new')) await viewNewList();
     else await viewLobby();
   } catch (e) {
     $app.innerHTML = `<p class="error">${esc(e.message)}</p>`;

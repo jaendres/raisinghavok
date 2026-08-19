@@ -285,10 +285,47 @@ async function resolveList(text) {
     push(byNorm, normalise(r.name));
   }
 
+  // Header detection: the GW app (and most builders) print the faction and
+  // detachment on their own lines ("Adeptus Custodes", "Shield Host"). Match
+  // every line against the faction/detachment catalogs so those lines become
+  // structure instead of unmatched noise.
+  const [detachments, factions] = await Promise.all([
+    query('SELECT id, name, faction_id FROM wh40k_detachments'),
+    query('SELECT id, name FROM wh40k_factions'),
+  ]);
+  const detByNorm = new Map();
+  for (const d of detachments) {
+    const k = normalise(d.name);
+    if (!detByNorm.has(k)) detByNorm.set(k, []);
+    detByNorm.get(k).push(d);
+  }
+  const factionByNorm = new Map(factions.map((f) => [normalise(f.name), f]));
+
+  let headerFaction = null;   // faction named on its own header line
+  let detachmentHit = null;   // { name, matches } from a header line
+
   const units = [];
   const unmatched = [];
   const lines = String(text ?? '').split(/\r?\n/);
   for (const raw of lines) {
+    // A line that IS a faction or detachment name is a header, not a unit —
+    // unless it is also a datasheet name, in which case the unit wins.
+    const rawNorm = normalise(raw);
+    if (rawNorm && !byNorm.has(rawNorm)) {
+      if (!headerFaction && factionByNorm.has(rawNorm)) {
+        headerFaction = factionByNorm.get(rawNorm);
+        continue;
+      }
+      if (!detachmentHit && detByNorm.has(rawNorm)) {
+        const hits = detByNorm.get(rawNorm);
+        detachmentHit = {
+          name: hits[0].name,
+          matches: hits.map((d) => ({ id: d.id, name: d.name, factionId: d.faction_id })),
+        };
+        continue;
+      }
+    }
+
     const parsed = parseLine(raw);
     if (!parsed) continue;
 
@@ -339,7 +376,141 @@ async function resolveList(text) {
     });
   }
 
-  return { units, unmatched };
+  // Resolve the list's faction: an explicit header line wins, else the
+  // majority faction among confidently matched units.
+  let factionId = headerFaction?.id || null;
+  if (!factionId) {
+    const tally = new Map();
+    for (const u of units) {
+      if (u.confidence < 0.9 || !u.matches.length) continue;
+      const fid = u.matches[0].factionId;
+      tally.set(fid, (tally.get(fid) || 0) + 1);
+    }
+    factionId = [...tally.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] || null;
+  }
+  const faction = factionId
+    ? (headerFaction && headerFaction.id === factionId
+      ? { id: headerFaction.id, name: headerFaction.name }
+      : (() => { const f = factions.find((x) => x.id === factionId); return f ? { id: f.id, name: f.name } : null; })())
+    : null;
+
+  // Candidate detachments for the resolved faction; the detected header
+  // detachment (narrowed to that faction when possible) rides along.
+  const detachmentCandidates = factionId
+    ? detachments.filter((d) => d.faction_id === factionId)
+      .map((d) => ({ id: d.id, name: d.name, factionId: d.faction_id }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+    : [];
+  let detachment = detachmentHit;
+  if (detachment && factionId) {
+    const inFaction = detachment.matches.filter((m) => m.factionId === factionId);
+    if (inFaction.length) detachment = { name: detachment.name, matches: inFaction };
+  }
+
+  return { units, unmatched, faction, detachment, detachmentCandidates };
+}
+
+// ---- army rules ------------------------------------------------------------
+
+// Everything a player needs beside their datasheets at the table, in one call:
+// the faction's army rule(s), the chosen detachment's rules, its stratagems
+// (cost/turn/phase/text), its enhancements, and the core stratagems.
+//
+// Where army rules live: wh40k_abilities rows WITH a faction_id are the
+// faction-level rules ("Martial Ka'tah" for AC, "Oath of Moment" + the chapter
+// rules for SM); rows with faction_id NULL are core USR text (Deep Strike,
+// Stealth, ...) and are not army rules. Detachment rules live in
+// wh40k_detachment_abilities, stratagems/enhancements carry a detachment_id.
+async function getArmyRules({ factionId, detachmentId, detachmentName } = {}) {
+  // Resolve the detachment row first — it can name the faction on its own.
+  let det = null;
+  if (detachmentId) {
+    [det] = await query('SELECT id, name, faction_id, legend FROM wh40k_detachments WHERE id = $1', [String(detachmentId)]);
+  } else if (detachmentName) {
+    const rows = await query(
+      'SELECT id, name, faction_id, legend FROM wh40k_detachments WHERE LOWER(name) = LOWER($1)',
+      [String(detachmentName)],
+    );
+    det = (factionId && rows.find((r) => r.faction_id === String(factionId))) || rows[0] || null;
+  }
+  const fid = String(factionId || det?.faction_id || '');
+  if (!fid && !det) return null;
+
+  const [faction] = fid ? await query('SELECT id, name FROM wh40k_factions WHERE id = $1', [fid]) : [null];
+
+  const [armyRules, detRules, stratagems, enhancements, coreRows] = await Promise.all([
+    fid
+      ? query('SELECT id, name, legend, description FROM wh40k_abilities WHERE faction_id = $1 ORDER BY name', [fid])
+      : [],
+    det
+      ? query('SELECT id, name, legend, description FROM wh40k_detachment_abilities WHERE detachment_id = $1 ORDER BY name', [det.id])
+      : [],
+    det
+      ? query(
+        `SELECT id, name, type, cp_cost, turn, phase, legend, description
+           FROM wh40k_stratagems WHERE detachment_id = $1 ORDER BY cp_cost, name`,
+        [det.id],
+      )
+      : [],
+    det
+      ? query(
+        `SELECT id, name, cost, legend, description
+           FROM wh40k_enhancements WHERE detachment_id = $1 ORDER BY cost, name`,
+        [det.id],
+      )
+      : [],
+    // Core stratagems exist twice (older "Core Stratagem" rows and newer
+    // "Core – ..." typed rows) — dedupe by normalised name, newer type wins.
+    query(
+      `SELECT id, name, type, cp_cost, turn, phase, legend, description
+         FROM wh40k_stratagems
+        WHERE (detachment_id IS NULL OR detachment_id = '') AND type ILIKE 'Core%'
+        ORDER BY name`,
+    ),
+  ]);
+
+  const strat = (s) => ({
+    id: s.id,
+    name: s.name,
+    type: s.type,
+    cost: Number.isFinite(Number(s.cp_cost)) ? Number(s.cp_cost) : s.cp_cost,
+    turn: s.turn,
+    phase: s.phase,
+    legend: s.legend,
+    description: s.description,
+  });
+
+  const coreByNorm = new Map();
+  for (const s of coreRows) {
+    // spaceless key: "COUNTER-OFFENSIVE" and "COUNTEROFFENSIVE" are one strat
+    const k = normalise(s.name).replace(/ /g, '');
+    const prev = coreByNorm.get(k);
+    if (!prev || /^Core – /.test(String(s.type))) coreByNorm.set(k, s);
+  }
+  const coreStratagems = [...coreByNorm.values()].map(strat)
+    .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+
+  return {
+    faction: faction ? { id: faction.id, name: faction.name } : null,
+    armyRules: armyRules.map((a) => ({ id: a.id, name: a.name, legend: a.legend, description: a.description })),
+    detachment: det
+      ? {
+        id: det.id,
+        name: det.name,
+        legend: det.legend,
+        rules: detRules.map((r) => ({ id: r.id, name: r.name, legend: r.legend, description: r.description })),
+      }
+      : null,
+    stratagems: stratagems.map(strat),
+    enhancements: enhancements.map((e) => ({
+      id: e.id,
+      name: e.name,
+      cost: Number.isFinite(Number(e.cost)) ? Number(e.cost) : e.cost,
+      legend: e.legend,
+      description: e.description,
+    })),
+    coreStratagems,
+  };
 }
 
 // ---- routes ----------------------------------------------------------------
@@ -407,5 +578,6 @@ module.exports = {
   searchDatasheets,
   getDatasheet,
   resolveList,
+  getArmyRules,
   mount,
 };
