@@ -360,6 +360,22 @@ function renderForce() {
   document.getElementById('force-empty').style.display = bt.force.length ? 'none' : '';
 }
 
+// After a save, the next thing anyone wants is to play the thing — so say so.
+// One persistent line under the force pane, not a toast that vanishes.
+function showGameNightHandoff(name) {
+  let el = document.getElementById('gamenight-handoff');
+  if (!el) {
+    const bar = document.getElementById('force-saved');
+    if (!bar) return;
+    el = document.createElement('div');
+    el.id = 'gamenight-handoff';
+    el.style.cssText = 'margin:0 0 10px;padding:8px 10px;border:1px solid var(--rust-dk);background:#1d1210;font-size:14px';
+    bar.insertAdjacentElement('afterend', el);
+  }
+  el.innerHTML = `&#9876; <b>${name.replace(/[&<>"']/g, (c) => ('&#' + c.charCodeAt(0) + ';'))}</b> is ready to play &mdash;
+    <a href="/table/" style="color:var(--rust)">track damage at Game Night &rarr;</a>`;
+}
+
 async function refreshSavedForces() {
   const sel = document.getElementById('force-saved');
   if (!sel) return;
@@ -432,6 +448,7 @@ function wireBattleTech() {
       await refreshSavedForces();
       document.getElementById('force-saved').value = name;
       toast(`Saved "${name}"`);
+      showGameNightHandoff(name);
     } catch (err) { toast(err.message); }
   });
 
