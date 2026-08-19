@@ -156,7 +156,14 @@ function saveForce(name, forceName, units) {
 
   const cleaned = (Array.isArray(units) ? units : [])
     .slice(0, MAX_UNITS_PER_FORCE)
-    .map(u => ({ id: Number(u.id), skill: Math.min(Math.max(Math.round(Number(u.skill)) || 4, 0), 8) }))
+    .map(u => {
+      const entry = { id: Number(u.id), skill: Math.min(Math.max(Math.round(Number(u.skill)) || 4, 0), 8) };
+      // Total Warfare crew skills, persisted additively: only when the client
+      // sends finite numbers, so Alpha Strike saves keep their exact old shape.
+      if (Number.isFinite(Number(u.gunnery))) entry.gunnery = Math.min(Math.max(Math.round(Number(u.gunnery)), 0), 8);
+      if (Number.isFinite(Number(u.piloting))) entry.piloting = Math.min(Math.max(Math.round(Number(u.piloting)), 0), 8);
+      return entry;
+    })
     .filter(u => Number.isFinite(u.id));
 
   if (!user.forces) user.forces = {};
