@@ -70,6 +70,65 @@ const GAME_STATS = {
       { id: 'factionLocked', name: 'Lock each team to one faction', type: 'bool', default: true },
     ],
   },
+
+  // Warhammer 40k. Missions decide games on VP, so credit mirrors BattleTech:
+  // kills outweigh objective points and the MVP award matches the other games.
+  wh40k: {
+    name: 'Warhammer 40k',
+    score: 'vp',
+    stats: [
+      { id: 'vp', name: 'Victory Points' },
+      { id: 'kills', name: 'Units Destroyed' },
+      { id: 'lost', name: 'Units Lost' },
+    ],
+    spp: { vp: 1, kills: 2, lost: 0, mvp: 4 },
+    settings: [
+      { id: 'points', name: 'Points cap', type: 'number', default: 2000 },
+      { id: 'edition', name: 'Rules edition', type: 'select', options: ['11th'], default: '11th' },
+      { id: 'missionPack', name: 'Mission pack', type: 'select',
+        options: ['Chapter Approved', 'Crusade', 'Custom'], default: 'Chapter Approved' },
+    ],
+    races: ['Adepta Sororitas', 'Adeptus Custodes', 'Adeptus Mechanicus', 'Adeptus Titanicus', 'Aeldari', 'Astra Militarum', 'Black Templars', 'Blood Angels', 'Chaos Daemons', 'Chaos Knights', 'Chaos Space Marines', 'Dark Angels', 'Death Guard', 'Deathwatch', 'Drukhari', "Emperor's Children", 'Genestealer Cults', 'Grey Knights', 'Imperial Agents', 'Imperial Knights', 'Leagues of Votann', 'Necrons', 'Orks', 'Space Marines', 'Space Wolves', "T'au Empire", 'Thousand Sons', 'Tyranids', 'World Eaters'],
+  },
+
+  // Necromunda. Campaign play is the point, so gangs are locked by default and
+  // credit follows the VP/takedown split the other skirmish games use.
+  necromunda: {
+    name: 'Necromunda',
+    score: 'vp',
+    stats: [
+      { id: 'vp', name: 'Victory Points' },
+      { id: 'oop', name: 'Enemies Out of Action' },
+      { id: 'lost', name: 'Fighters Lost' },
+    ],
+    spp: { vp: 1, oop: 2, lost: 0, mvp: 4 },
+    settings: [
+      { id: 'startingCredits', name: 'Starting credits', type: 'number', default: 1000 },
+      { id: 'campaign', name: 'Campaign', type: 'select',
+        options: ['Dominion', 'Law & Misrule', 'Uprising', 'Skirmish only'], default: 'Dominion' },
+      { id: 'gangLocked', name: 'Lock each team to one gang', type: 'bool', default: true },
+    ],
+    races: ['House Orlock', 'House Goliath', 'House Escher', 'House Van Saar', 'House Delaque', 'House Cawdor', 'Palanite Enforcers', 'Corpse Grinder Cult', 'Ash Waste Nomads', 'Ironhead Squat Prospectors', 'Genestealer Cult', 'Chaos Cult', 'Venators', 'Slave Ogryns'],
+  },
+
+  // Marvel Crisis Protocol. A "race" here is the affiliation a roster leans on;
+  // KOs earn the extra credit the way kills and casualties do elsewhere.
+  mcp: {
+    name: 'Marvel Crisis Protocol',
+    score: 'vp',
+    stats: [
+      { id: 'vp', name: 'Victory Points' },
+      { id: 'kos', name: 'KOs' },
+      { id: 'lost', name: 'Characters Lost' },
+    ],
+    spp: { vp: 1, kos: 2, lost: 0, mvp: 4 },
+    settings: [
+      { id: 'threat', name: 'Threat level', type: 'number', default: 17 },
+      { id: 'crisisSelection', name: 'Crisis selection', type: 'select',
+        options: ['Random', 'Player choice'], default: 'Random' },
+    ],
+    races: ['Avengers', 'X-Men', 'Brotherhood of Mutants', 'Guardians of the Galaxy', 'Asgard', 'Cabal', 'Criminal Syndicate', 'Defenders', 'Inhumans', 'Web Warriors', 'S.H.I.E.L.D.', 'Hydra', 'A-Force', 'Black Order', 'Convocation', 'Dark Dimension', 'Midnight Sons', 'Wakanda', 'Winter Guard', 'X-Force', 'Sentinels', 'Unaffiliated'],
+  },
 };
 
 // Validate and normalise the organiser's settings against a game's definition,
