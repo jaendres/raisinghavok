@@ -396,3 +396,21 @@ details[open].sheet-sec > summary.sec-title::before { content: '▾'; }
 .simple-card .statline-txt b { font-family: 'Barlow Condensed'; font-size: 15.5px; letter-spacing: .02em; }
 .simple-card .profile-txt { font-size: 14px; }
 .simple-card .ability-txt { font-size: 14.5px; margin: 4px 0; }
+
+/* Delete a list from the shelf. Sits in the card's corner, stays quiet until
+   pointed at, and is a real 34px target on a tablet. */
+.list-card { position: relative; }
+.list-card .list-rm {
+  position: absolute; top: 6px; right: 6px;
+  width: 34px; height: 34px; line-height: 1;
+  display: grid; place-items: center;
+  background: transparent; border: 1px solid transparent;
+  color: var(--dust); font-family: 'Barlow Condensed', sans-serif; font-size: 17px;
+  cursor: pointer; padding: 0;
+}
+.list-card .list-rm:hover,
+.list-card .list-rm:focus-visible {
+  color: #ff7b6b; border-color: var(--blood); background: #3a1210;
+}
+.list-card .list-rm:disabled { opacity: .4; cursor: default; }
+.list-card h3 { padding-right: 34px; }

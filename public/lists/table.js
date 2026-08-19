@@ -194,6 +194,8 @@ async function viewLobby() {
         <div class="card-grid">
           ${ls.map((l) => `
             <div class="card tbl-card list-card" data-openlist="${l.id}">
+              <button class="list-rm" data-dellist="${l.id}" data-delname="${esc(l.name)}"
+                      title="Delete dis list" aria-label="Delete ${esc(l.name)}">&#10005;</button>
               <h3>${esc(l.name)}</h3>
               <div class="meta">${l.units} unit${l.units === 1 ? '' : 's'}${l.faction ? ' • ' + esc(l.faction) : ''}${l.detachment ? ' • ' + esc(l.detachment) : ''}</div>
               <div class="meta">updated ${new Date(l.updated).toLocaleDateString()}</div>
@@ -253,6 +255,23 @@ async function viewLobby() {
   });
   $app.querySelectorAll('[data-openlist]').forEach((el) => {
     el.onclick = () => { location.hash = '#/l/' + el.dataset.openlist; };
+  });
+  // Tidying up is done from the shelf, not by opening each list first. The
+  // click must not also open the list underneath it.
+  $app.querySelectorAll('[data-dellist]').forEach((el) => {
+    el.onclick = async (ev) => {
+      ev.stopPropagation();
+      const { dellist, delname } = el.dataset;
+      if (!confirm(`Delete "${delname}" for good?`)) return;
+      el.disabled = true;
+      try {
+        await api('/lists/' + dellist, { method: 'DELETE' });
+        viewLobby();
+      } catch (e) {
+        el.disabled = false;
+        alert(e.message);
+      }
+    };
   });
 
   // Everything below wires the head-to-head tracker's lobby controls,
