@@ -139,7 +139,9 @@ main { width: min(1280px, 97vw); }
 .lobby-top { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; align-items: start; }
 @media (max-width: 900px) { .lobby-top { grid-template-columns: 1fr; } }
 .side-row-40k { grid-template-columns: 1fr 44px; }
-.side-row-40k .s-army {
+.side-row-40k .s-army,
+.side-row-40k .s-text,
+.side-row-40k .s-bbteam {
   grid-column: 1 / -1; width: 100%; font-size: 14px; padding: 8px;
   background: var(--ink); color: var(--bone); border: 1px solid #4a3d31; resize: vertical;
 }
@@ -284,12 +286,18 @@ details[open].sheet-sec > summary.sec-title::before { content: '▾'; }
 }
 .side-track .rbtn:active { background: var(--rust-dk); }
 
+/* The whole tracker strip in a side header — repainted as one block, so the
+   VP stepper and Necromunda's bottle chip stay on the same baseline. */
+.side-tracks { display: inline-flex; align-items: center; flex-wrap: wrap; row-gap: 6px; }
+
 /* claim-a-side cards */
 .claim-card { grid-column: 1 / -1; }
 .claim-army {
   width: 100%; font-size: 14px; padding: 8px; background: var(--ink);
   color: var(--bone); border: 1px solid #4a3d31; resize: vertical;
 }
+.claim-card .claim-army { margin-top: 8px; }
+.claim-bb { min-width: 240px; }
 
 /* ==== My Lists ==== */
 

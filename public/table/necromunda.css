@@ -1,0 +1,155 @@
+/* Game Night — Necromunda fighter card.
+   Loaded after table.css; every selector is scoped under .nec-card (or a
+   nec- prefixed class) so nothing leaks into the other games' cards.
+   House style: dark ink, rust accents, Black Ops One headings, no rounded
+   corners except the record-sheet pips, minimum 34px tap targets, iPad-first. */
+
+/* the card sits a touch wider than the 40k one: 12 stat columns */
+.nec-card { min-width: 0; }
+.nec-card .nec-paste {
+  font-family: 'Black Ops One'; font-size: 10px; color: #ffd23f;
+  border: 1px solid #7a5c2e; padding: 0 5px; letter-spacing: .08em;
+}
+
+/* ---- 12-stat statline ---- */
+
+.nec-card .nec-stat-wrap { margin: 2px 0 6px; }
+.nec-card table.nec-stats { width: 100%; font-size: 15px; }
+.nec-card table.nec-stats th { font-size: 10.5px; padding: 3px 4px; text-align: center; }
+.nec-card table.nec-stats td { padding: 4px; text-align: center; font-variant-numeric: tabular-nums; }
+.nec-card table.nec-stats th.nec-t-head { color: #ff7b6b; }
+.nec-card table.nec-stats td.nec-t-cut { color: #ff7b6b; font-weight: 700; background: #2a1210; }
+.nec-card table.nec-stats td.nec-t-cut s { color: var(--dust); font-weight: 400; }
+
+/* ---- wound + flesh-wound tracks ---- */
+
+.nec-card .nec-tracks { margin-top: 4px; }
+.nec-card .nec-row { gap: 5px; margin: 5px 0; }
+.nec-card .nec-count {
+  font-family: 'Black Ops One'; font-size: 12px; color: var(--rust);
+  margin-left: 6px; white-space: nowrap;
+}
+.nec-card .nec-injury {
+  font-family: 'Black Ops One'; font-size: 11px; color: #0c0a08; background: #ffd23f;
+  padding: 2px 8px; margin-left: 6px; letter-spacing: .06em; white-space: nowrap;
+}
+
+/* circular wound pips — 34px, never under 28px on a touch layout */
+.nec-card .pip.nec-pip { width: 34px; height: 34px; }
+.nec-card .pip.nec-pip.nec-mini { width: 28px; height: 28px; }
+.nec-card .pip.nec-wound { border: 2px solid var(--blood); }
+.nec-card .pip.nec-wound.hit {
+  background: var(--blood); border-color: #ff7b6b; box-shadow: inset 0 0 0 3px #0c0a08;
+}
+
+/* flesh wounds are squares: they are not part of the wound track */
+.nec-card .sq.nec-fw { border-color: #7a5c2e; color: var(--dust); }
+.nec-card .sq.nec-fw::after { content: '−1T'; font-size: 10px; }
+.nec-card .sq.nec-fw.hit { background: #b8860b; border-color: #ffd23f; color: #0c0a08; }
+.nec-card .sq.nec-fw.nec-fw-fatal { border-color: var(--blood); }
+.nec-card .sq.nec-fw.nec-fw-fatal::after { content: 'OOA'; font-size: 9.5px; }
+.nec-card .sq.nec-fw.nec-fw-fatal.hit { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+
+.nec-card .nec-reason {
+  font-family: 'Black Ops One'; font-size: 11px; color: #ff7b6b;
+  background: #2a1210; border-left: 3px solid var(--blood);
+  padding: 4px 8px; margin: 6px 0 2px; letter-spacing: .04em; text-transform: uppercase;
+}
+
+/* ---- condition chips ---- */
+
+.nec-card .nec-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.nec-card .nec-chip {
+  flex: 1 1 auto; min-width: 92px; min-height: 44px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: 1px; padding: 4px 8px; text-align: left;
+  background: var(--ink); color: var(--dust); border: 2px solid #4a3d31;
+}
+.nec-card .nec-chip .nec-chip-n {
+  font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .05em; line-height: 1.15;
+}
+.nec-card .nec-chip .nec-chip-h { font-size: 11.5px; opacity: .7; line-height: 1.1; }
+.nec-card .nec-chip:active { background: var(--panel2); }
+.nec-card .nec-chip.on { color: #0c0a08; box-shadow: 2px 2px 0 #000; }
+.nec-card .nec-chip-active.on { background: var(--ok); border-color: var(--ok); }
+.nec-card .nec-chip-pinned.on { background: #ffd23f; border-color: #ffd23f; }
+.nec-card .nec-chip-seriouslyInjured.on { background: var(--rust); border-color: var(--rust); }
+.nec-card .nec-chip-outOfAction.on { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+.nec-card .nec-chip.on .nec-chip-h { opacity: .85; }
+
+/* ---- status flags ---- */
+
+.nec-card .nec-flags { display: flex; flex-wrap: wrap; gap: 5px; }
+.nec-card .nec-flag {
+  min-height: 34px; min-width: 62px; padding: 0 10px; cursor: pointer;
+  background: var(--ink); color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .05em;
+}
+.nec-card .nec-flag:active { background: var(--panel2); }
+.nec-card .nec-flag.on { background: var(--rust-dk); border-color: var(--rust); color: var(--bone); }
+.nec-card .nec-flag-blaze.on { background: #b8860b; border-color: #ffd23f; color: #0c0a08; }
+.nec-card .nec-flag-broken.on { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+
+/* ---- weapons ---- */
+
+.nec-card .nec-wpn {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--ink); border: 1px solid #2b221b; padding: 5px 8px; margin-bottom: 4px;
+}
+.nec-card .nec-wpn-txt { flex: 1; min-width: 0; }
+.nec-card .nec-wpn-name {
+  font-family: 'Black Ops One'; font-size: 12.5px; color: var(--bone); letter-spacing: .03em;
+}
+.nec-card .nec-wpn-prof {
+  font-size: 13.5px; color: var(--dust); font-variant-numeric: tabular-nums; line-height: 1.3;
+}
+.nec-card .nec-wpn.out { border-color: var(--blood); background: #1a0f0d; }
+.nec-card .nec-wpn.out .nec-wpn-name { color: #ff7b6b; text-decoration: line-through; }
+.nec-card .nec-wpn.out .nec-wpn-prof { opacity: .55; }
+.nec-card .nec-ammo {
+  flex: none; min-width: 72px; height: 38px; cursor: pointer; padding: 0 8px;
+  background: var(--panel2); color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 10.5px; letter-spacing: .06em;
+  box-shadow: 2px 2px 0 #000;
+}
+.nec-card .nec-ammo:active { background: var(--rust-dk); }
+.nec-card .nec-ammo.on { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+
+.nec-card .nec-gear { margin-top: 8px; font-size: 13.5px; }
+.nec-card .nec-gear b { color: var(--rust); font-family: 'Black Ops One'; font-size: 11px; }
+
+/* ---- gang bottle indicator (side header) ---- */
+
+.nec-bottle {
+  display: inline-flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  background: var(--panel2); border: 2px solid #4a3d31; padding: 3px 10px; margin-left: 10px;
+}
+.nec-bottle .lbl {
+  font-family: 'Black Ops One'; font-size: 10.5px; color: var(--dust);
+  text-transform: uppercase; letter-spacing: .15em;
+}
+.nec-bottle b { font-family: 'Black Ops One'; font-size: 15px; color: var(--bone); }
+.nec-bottle .nec-bottle-st { font-size: 13px; color: var(--dust); }
+.nec-bottle.testing { border-color: #ffd23f; }
+.nec-bottle.testing .nec-bottle-st { color: #ffd23f; }
+.nec-bottle.bottled { border-color: var(--blood); background: #2a1210; }
+.nec-bottle.bottled b, .nec-bottle.bottled .nec-bottle-st { color: #ff7b6b; }
+
+/* ---- narrow screens ---- */
+
+@media (max-width: 620px) {
+  .nec-card table.nec-stats { font-size: 14px; }
+  .nec-card table.nec-stats th, .nec-card table.nec-stats td { padding: 3px 2px; }
+  .nec-card .nec-chip { min-width: calc(50% - 3px); }
+  .nec-card .pip.nec-pip.nec-mini { width: 30px; height: 30px; }
+}
+
+/* ---- My Lists reference mode: hide the live tracking, keep the sheet ---- */
+
+.ref-mode .nec-card .nec-tracks,
+.ref-mode .nec-card .nec-chips,
+.ref-mode .nec-card .nec-flags,
+.ref-mode .nec-card .nec-ammo,
+.ref-mode .nec-card .nec-reason { display: none; }
+.ref-mode .nec-card .sheet-sec:has(> .nec-chips),
+.ref-mode .nec-card .sheet-sec:has(> .nec-flags) { display: none; }

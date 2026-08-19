@@ -1,0 +1,116 @@
+/* Game Night — Marvel Crisis Protocol character card.
+   Loaded after table.css, which owns the shared record-sheet chrome
+   (.unit-card, .pip, .u-foot, .sheet-sec). Everything here is prefixed mcp-
+   and only ever reaches inside an MCP card — no global selectors, so adding
+   this file cannot move a pixel on any other game's table.
+   Same house rules as the rest: dark ink, rust accents, Black Ops One for
+   anything that shouts, square everything except the pips, and no tap target
+   under 34px because this is played on an iPad between dice rolls. */
+
+.mcp-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+@media (max-width: 760px) { .mcp-grid { grid-template-columns: 1fr; } }
+
+.mcp-card .mcp-star { color: var(--rust); font-size: 15px; }
+.mcp-sub { font-size: 13px; margin: 2px 0 8px; }
+.mcp-sub .warn { color: #ff7b6b; }
+
+/* ---- the flip strip: which side of the card is face up ------------------
+   The single most important thing on the card, so it gets the most ink:
+   three states side by side, the live one filled and named in Black Ops One,
+   the dead ones dim outlines you can still tap to correct a mis-flip. */
+
+.mcp-flip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin: 8px 0 10px; }
+.mcp-state {
+  min-height: 46px; padding: 4px 2px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  background: var(--ink); border: 2px solid #4a3d31; color: var(--dust);
+  box-shadow: 2px 2px 0 #000;
+}
+.mcp-state-name { font-family: 'Black Ops One'; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+.mcp-state-sub { font-family: 'Barlow Condensed'; font-size: 11px; letter-spacing: .04em; opacity: .8; }
+.mcp-state:active { background: var(--panel2); }
+
+.mcp-state.mcp-healthy.on { background: #1d3a1a; border-color: var(--ok); color: var(--ok); }
+.mcp-state.mcp-injured.on { background: #4a2a08; border-color: var(--rust); color: var(--rust); }
+.mcp-state.mcp-ko.on { background: #3a1210; border-color: var(--blood); color: #ff7b6b; }
+.mcp-state.on .mcp-state-name { text-shadow: 2px 2px 0 #000; font-size: 13px; }
+
+/* the face-up side gets a matching rule down the left edge of the whole card */
+.mcp-card.mcp-side-healthy { border-left: 3px solid #2f6b28; }
+.mcp-card.mcp-side-injured { border-left: 3px solid var(--rust); }
+.mcp-card.mcp-side-ko { border-left: 3px solid var(--blood); }
+
+/* ---- damage against the face-up side's stamina -------------------------- */
+
+.mcp-dmg-row { margin: 2px 0 6px; }
+.mcp-dmg { border: 2px solid var(--blood); }
+.mcp-dmg.hit { background: var(--blood); border-color: #ff7b6b; box-shadow: inset 0 0 0 3px #0c0a08; }
+/* the last pip is the breakpoint — filling it flips the card */
+.mcp-dmg.mcp-brk { border-color: var(--rust); border-style: dashed; }
+.mcp-dmg.mcp-brk.hit { background: var(--rust); border-color: #ff8b4a; border-style: solid; }
+.mcp-dmg-now {
+  font-family: 'Black Ops One'; font-size: 12px; color: var(--bone);
+  margin-left: 6px; white-space: nowrap;
+}
+.mcp-brk-hint { color: var(--dust); font-family: 'Barlow Condensed'; font-size: 12.5px; letter-spacing: 0; }
+.mcp-out { font-family: 'Black Ops One'; font-size: 12px; color: #ff7b6b; letter-spacing: .06em; }
+
+/* ---- power: a counter, not a track ------------------------------------- */
+
+.mcp-power-row { display: flex; align-items: center; gap: 8px; margin: 6px 0 8px; }
+.mcp-power-row .plabel {
+  width: 58px; flex: none; font-family: 'Black Ops One'; font-size: 10.5px;
+  color: var(--dust); letter-spacing: .08em; text-transform: uppercase;
+}
+.mcp-step {
+  width: 46px; height: 40px; flex: none; cursor: pointer; padding: 0;
+  background: var(--panel2); color: var(--bone); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 22px; line-height: 1;
+  box-shadow: 2px 2px 0 #000;
+}
+.mcp-step:active { background: var(--rust-dk); }
+.mcp-power {
+  font-family: 'Black Ops One'; font-size: 24px; color: #ffd23f;
+  min-width: 44px; text-align: center; text-shadow: 2px 2px 0 #000;
+}
+
+/* ---- compact stat line: defenses, movement, size ----------------------- */
+
+.mcp-stats { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 4px; }
+.mcp-def i { font-style: normal; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--dust); }
+.mcp-def b { font-family: 'Black Ops One'; font-size: 14px; color: var(--bone); margin-left: 3px; }
+
+/* ---- status effects + objective ---------------------------------------- */
+
+.mcp-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.mcp-chip {
+  min-height: 34px; padding: 0 10px; cursor: pointer;
+  background: var(--ink); color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Barlow Condensed'; font-weight: 600; font-size: 14px;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.mcp-chip:active { background: var(--panel2); }
+.mcp-chip.on { background: var(--rust-dk); border-color: var(--rust); color: #fff; box-shadow: 2px 2px 0 #000; }
+.mcp-chip.mcp-fx-bleed.on,
+.mcp-chip.mcp-fx-poison.on { background: var(--blood); border-color: #ff7b6b; }
+.mcp-chip.mcp-fx-incinerate.on { background: #8a3a06; border-color: #ff8b4a; }
+.mcp-chip.mcp-fx-shock.on { background: #6b5a08; border-color: #ffd23f; color: #0c0a08; }
+.mcp-chip.mcp-obj { border-color: #7a5c2e; color: #ffd23f; }
+.mcp-chip.mcp-obj.on { background: #b8860b; border-color: #ffd23f; color: #0c0a08; }
+
+.mcp-carrying {
+  margin-top: 8px; padding: 4px 8px;
+  border: 2px solid #ffd23f; background: #2a2205; color: #ffd23f;
+  font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+}
+
+/* KO'd characters dim with the rest of the sheet, but the flip strip stays
+   readable so you can tell what happened (and undo it). */
+.unit-card.destroyed .mcp-flip { opacity: 1; }
+
+/* reference mode (My Lists with tracking off) hides the tap chrome — the
+   shared .pip-row / .u-foot rules already cover the damage track. */
+.ref-mode .mcp-flip,
+.ref-mode .mcp-power-row,
+.ref-mode .mcp-fx-sec,
+.ref-mode .mcp-carrying { display: none; }

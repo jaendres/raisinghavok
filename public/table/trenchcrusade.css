@@ -1,0 +1,153 @@
+/* Game Night — Trench Crusade model card.
+   Every selector is scoped to .tc-* so this file can be loaded next to the
+   other games without touching them. House style: no border-radius except the
+   record-sheet pips (which ARE bubbles), Black Ops One for anything that
+   shouts, Barlow Condensed for anything you read, 34px minimum tap targets,
+   laid out iPad-first. */
+
+/* ---- card shell -------------------------------------------------------- */
+
+.tc-card { padding-bottom: 10px; }
+
+/* A model that has already gone this round gets visibly stood down: the whole
+   card greys out and takes a hazard stripe down its left edge, so a glance
+   across the table shows who is left. */
+.tc-card.tc-gone { opacity: .62; border-left: 4px solid var(--rust-dk); }
+.tc-card.tc-gone .u-name { color: var(--dust); }
+
+/* ---- statline strip ---------------------------------------------------- */
+
+.tc-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  background: #2b221b; border: 1px solid #2b221b; margin: 6px 0 10px;
+}
+.tc-stat { background: var(--ink); padding: 5px 6px; min-width: 0; text-align: center; }
+.tc-stat-l {
+  display: block; font-family: 'Black Ops One'; font-size: 9.5px; color: var(--dust);
+  text-transform: uppercase; letter-spacing: .1em;
+}
+.tc-stat-v {
+  display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+  font-size: 15px; color: var(--bone); white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.tc-alt { font-size: 13px; color: var(--dust); margin: -4px 0 8px; }
+.tc-alt b { color: var(--bone); font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .04em; }
+.tc-unmatched { color: #ff7b6b; font-size: 12.5px; }
+
+/* ---- BLOOD MARKERS: the loudest thing on the card ---------------------- */
+
+.tc-blood {
+  background: var(--ink); border: 2px solid var(--blood); border-left-width: 6px;
+  padding: 8px 10px; margin: 10px 0;
+}
+.tc-blood.bleeding { background: #1a0d0c; box-shadow: inset 0 0 0 1px #3a1210; }
+.tc-blood-head {
+  font-family: 'Black Ops One'; font-size: 12px; color: #ff7b6b;
+  text-transform: uppercase; letter-spacing: .16em; margin-bottom: 6px;
+}
+.tc-blood-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.tc-blood-n {
+  font-family: 'Black Ops One'; font-size: 40px; line-height: 1; color: var(--bone);
+  min-width: 62px; text-align: center; text-shadow: 3px 3px 0 #000;
+  font-variant-numeric: tabular-nums;
+}
+.tc-blood.bleeding .tc-blood-n { color: #ff7b6b; }
+
+.tc-card .sq.tc-bstep {
+  width: 54px; height: 54px; font-size: 28px; line-height: 1;
+  border-color: var(--blood); color: #ff7b6b; background: var(--panel2);
+  box-shadow: 3px 3px 0 #000;
+}
+.tc-card .sq.tc-bstep:active { background: var(--blood); color: #fff; }
+.tc-card .sq.tc-bstep:disabled { opacity: .3; }
+
+.tc-bpips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; min-width: 0; }
+.tc-card .pip.tc-bpip { width: 36px; height: 36px; border: 2px solid var(--blood); background: var(--ink); }
+.tc-card .pip.tc-bpip.hit {
+  background: var(--blood); border-color: #ff7b6b; box-shadow: inset 0 0 0 3px #0c0a08;
+}
+@media (max-width: 480px) { .tc-bpips { display: none; } }
+
+/* ---- activation toggle -------------------------------------------------- */
+
+.tc-act {
+  display: block; width: 100%; min-height: 44px; cursor: pointer; margin: 0 0 10px;
+  background: var(--panel2); color: var(--dust); border: 2px dashed #4a3d31;
+  font-family: 'Black Ops One'; font-size: 13px; letter-spacing: .1em;
+  text-transform: uppercase; padding: 8px;
+}
+.tc-act:active { background: var(--rust-dk); }
+.tc-act.on {
+  background: var(--rust-dk); color: #0c0a08; border: 2px solid var(--rust);
+  box-shadow: 3px 3px 0 #000;
+}
+.tc-act:disabled { opacity: .4; cursor: default; }
+
+/* ---- injuries + state --------------------------------------------------- */
+
+.tc-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 6px 0; }
+.tc-lbl {
+  width: 58px; flex: none; font-family: 'Black Ops One'; font-size: 10.5px;
+  color: var(--dust); letter-spacing: .08em; text-transform: uppercase;
+}
+.tc-card .pip.tc-wpip { width: 34px; height: 34px; border: 2px solid var(--rust-dk); background: var(--ink); }
+.tc-card .pip.tc-wpip.hit {
+  background: var(--rust); border-color: var(--rust); box-shadow: inset 0 0 0 3px #0c0a08;
+}
+
+.tc-chips { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
+.tc-chip {
+  min-height: 34px; padding: 4px 10px; cursor: pointer; flex: 1;
+  background: var(--panel2); color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 10.5px; letter-spacing: .06em;
+  text-transform: uppercase; white-space: nowrap;
+}
+.tc-chip:active { background: var(--rust-dk); }
+.tc-chip.on { color: #0c0a08; background: var(--dust); border-color: var(--bone); }
+.tc-chip-injured.on { background: #b8860b; border-color: #ffd23f; }
+.tc-chip-outOfAction.on { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+
+/* ---- battlekit ---------------------------------------------------------- */
+
+.tc-hint { font-family: 'Barlow Condensed', sans-serif; text-transform: none; letter-spacing: 0; margin-left: 8px; }
+.tc-items { display: flex; flex-direction: column; gap: 6px; }
+.tc-item { display: flex; align-items: flex-start; gap: 8px; }
+.tc-item.spent { opacity: .45; }
+.tc-item.spent .tc-item-name { text-decoration: line-through; }
+.tc-spend {
+  width: 34px; height: 34px; flex: none; cursor: pointer; padding: 0;
+  background: var(--ink); border: 2px solid #4a3d31; color: #ff7b6b;
+  font-family: 'Black Ops One'; font-size: 15px; line-height: 1;
+}
+.tc-spend:active { background: var(--rust-dk); }
+.tc-spend.on { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+.tc-item-body { display: flex; flex-direction: column; min-width: 0; flex: 1; padding-top: 1px; }
+.tc-item-name { font-family: 'Black Ops One'; font-size: 12.5px; color: var(--bone); letter-spacing: .03em; }
+.tc-oneuse {
+  margin-left: 8px; padding: 1px 6px; background: var(--blood); color: #fff;
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+}
+.tc-item-prof { font-size: 13.5px; color: var(--rust); }
+.tc-item-rules { font-size: 13.5px; color: var(--dust); line-height: 1.35; margin-top: 2px; }
+.tc-item-note { font-size: 12.5px; color: var(--dust); font-style: italic; }
+
+/* ---- abilities ---------------------------------------------------------- */
+
+.tc-ability { margin-bottom: 4px; }
+.tc-ability > summary {
+  cursor: pointer; list-style: none; min-height: 34px; display: flex; align-items: center;
+  font-family: 'Black Ops One'; font-size: 12.5px; color: var(--bone); letter-spacing: .04em;
+}
+.tc-ability > summary::-webkit-details-marker { display: none; }
+.tc-ability > summary::before { content: '▸'; color: var(--rust); margin-right: 6px; }
+.tc-ability[open] > summary::before { content: '▾'; }
+.tc-ability-body { font-size: 14px; color: var(--dust); line-height: 1.4; padding: 2px 0 8px 18px; white-space: pre-wrap; }
+
+/* ---- reference mode (My Lists with tracking off) ------------------------ */
+
+.ref-mode .tc-blood,
+.ref-mode .tc-act,
+.ref-mode .tc-row,
+.ref-mode .tc-spend { display: none; }

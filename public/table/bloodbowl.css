@@ -1,0 +1,225 @@
+/* Game Night — Blood Bowl match bar + player cards.
+   Loaded after table.css, so the club palette (--ink/--panel/--rust/--bone/
+   --dust/--blood), the fonts and the shared .unit-card frame come from there.
+   Everything here is prefixed .bb- and scoped to it: no global selectors, no
+   element selectors outside a .bb- ancestor.
+   iPad-first: the turn counter is the big one (56px targets), every other
+   control clears 34px, and nothing depends on hover. */
+
+/* ---- match bar ---------------------------------------------------------- */
+
+.bb-matchbar {
+  background: var(--panel);
+  border: 1px solid #2b221b;
+  border-top: 3px solid var(--rust);
+  padding: 10px 14px 14px;
+  margin-bottom: 16px;
+}
+.bb-matchbar.bb-done { opacity: .6; }
+
+.bb-global {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px;
+  padding-bottom: 10px; margin-bottom: 12px;
+  border-bottom: 1px solid #2b221b;
+}
+
+/* the running scoreline, readable from across the table */
+.bb-scoreline { display: inline-flex; align-items: baseline; gap: 10px; margin-left: auto; }
+.bb-sl-team {
+  font-size: 13px; color: var(--dust);
+  text-transform: uppercase; letter-spacing: .15em;
+  max-width: 22ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bb-sl-num {
+  font-family: 'Black Ops One', sans-serif; font-size: clamp(30px, 5vw, 46px);
+  color: var(--rust); text-shadow: 3px 3px 0 #000; line-height: 1;
+}
+.bb-sl-dash { color: var(--dust); font-size: 22px; }
+
+.bb-weather { display: inline-flex; align-items: center; gap: 8px; }
+.bb-wsel {
+  min-height: 38px; min-width: 170px; padding: 4px 8px;
+  background: var(--panel2); color: var(--bone); border: 1px solid #4a3d31;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 16px;
+}
+.bb-wsel:disabled { opacity: .5; }
+
+/* ---- generic stepper (label − value +) ---------------------------------- */
+
+.bb-step { display: inline-flex; align-items: center; gap: 8px; }
+.bb-step-lbl {
+  color: var(--dust); font-size: 12px;
+  text-transform: uppercase; letter-spacing: .15em;
+}
+.bb-sbtn {
+  cursor: pointer; min-width: 40px; min-height: 40px;
+  background: var(--panel2); color: var(--bone); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One', sans-serif; font-size: 20px; line-height: 1;
+}
+.bb-sbtn:active { background: var(--rust-dk); border-color: var(--rust); }
+.bb-sbtn:disabled { opacity: .3; cursor: default; }
+
+.bb-halfnum, .bb-scorenum, .bb-rrnum, .bb-famenum {
+  font-family: 'Black Ops One', sans-serif; color: var(--bone);
+  text-align: center; line-height: 1;
+}
+.bb-halfnum { font-size: 26px; min-width: 62px; color: var(--rust); }
+.bb-scorenum { font-size: 30px; min-width: 46px; color: var(--rust); text-shadow: 2px 2px 0 #000; }
+.bb-rrnum { font-size: 26px; min-width: 34px; }
+.bb-famenum { font-size: 20px; min-width: 28px; }
+.bb-rrmax { color: var(--dust); font-size: 15px; margin-left: -4px; }
+
+/* ---- per-team block ----------------------------------------------------- */
+
+.bb-teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+.bb-team { background: var(--panel2); border: 1px solid #2b221b; border-left: 3px solid var(--rust-dk); padding: 10px 12px; }
+.bb-team-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.bb-team-name {
+  font-family: 'Black Ops One', sans-serif; font-size: 17px; color: var(--rust);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.bb-team-coach { color: var(--dust); font-size: 14px; }
+
+/* the turn counter — the control people actually touch every 30 seconds */
+.bb-turnbox {
+  background: #0a0806; border: 1px solid #2b221b; padding: 8px 10px; margin-bottom: 10px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px;
+}
+.bb-turn { gap: 10px; }
+.bb-turn .bb-sbtn { min-width: 56px; min-height: 56px; font-size: 28px; border-color: var(--rust-dk); }
+.bb-turn .bb-step-lbl { font-size: 13px; }
+.bb-turnnum {
+  font-family: 'Black Ops One', sans-serif; font-size: clamp(38px, 6vw, 56px);
+  color: var(--rust); text-shadow: 3px 3px 0 #000; line-height: 1;
+  min-width: 62px; text-align: center;
+}
+.bb-turnmax { font-family: 'Black Ops One', sans-serif; font-size: 20px; color: var(--dust); margin-left: -6px; }
+
+.bb-tpips { display: flex; gap: 4px; }
+.bb-tpip {
+  cursor: pointer; width: 22px; height: 34px; padding: 0;
+  background: transparent; border: 2px solid #4a3d31;
+}
+.bb-tpip.on { background: var(--rust-dk); border-color: var(--rust-dk); }
+.bb-tpip.now { background: var(--rust); border-color: #ff9d5c; box-shadow: inset 0 0 0 2px #0c0a08; }
+.bb-tpip:disabled { cursor: default; }
+
+.bb-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin-bottom: 8px; }
+.bb-row-min { gap: 8px 14px; }
+
+.bb-used {
+  cursor: pointer; min-height: 36px; padding: 4px 12px;
+  background: transparent; color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 15px;
+  text-transform: uppercase; letter-spacing: .1em;
+}
+.bb-used.on { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+.bb-used:disabled { opacity: .4; cursor: default; }
+
+.bb-ind { display: flex; align-items: center; gap: 8px; }
+.bb-indinput {
+  flex: 1; min-width: 0; min-height: 34px; padding: 4px 8px;
+  background: var(--panel); color: var(--bone); border: 1px solid #4a3d31;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 15px;
+}
+
+/* ---- player card -------------------------------------------------------- */
+
+.bb-card.bb-ko { opacity: .7; }
+.bb-card.bb-is-mvp { border-top-color: #ffd23f; }
+
+.bb-top { display: flex; align-items: center; gap: 10px; }
+.bb-num {
+  font-family: 'Black Ops One', sans-serif; font-size: 22px; color: var(--bone);
+  background: #0a0806; border: 2px solid var(--rust-dk);
+  min-width: 42px; height: 42px; line-height: 38px; text-align: center; flex: none;
+}
+.bb-id { display: flex; flex-direction: column; min-width: 0; }
+.bb-name {
+  font-family: 'Black Ops One', sans-serif; font-size: 17px; color: var(--bone);
+  text-transform: uppercase; letter-spacing: .04em;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bb-card.destroyed .bb-name { text-decoration: line-through; }
+.bb-pos { color: var(--dust); font-size: 14px; text-transform: uppercase; letter-spacing: .12em; }
+.bb-spp {
+  margin-left: auto; flex: none;
+  font-family: 'Black Ops One', sans-serif; font-size: 14px; color: var(--dust);
+}
+.bb-spp.has { color: var(--rust); }
+
+.bb-stats { display: flex; gap: 6px; margin: 8px 0 6px; }
+.bb-stat {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  background: #0a0806; border: 1px solid #2b221b; padding: 3px 0 4px;
+}
+.bb-stat-k { color: var(--dust); font-size: 11px; text-transform: uppercase; letter-spacing: .18em; }
+.bb-stat-v { font-family: 'Black Ops One', sans-serif; font-size: 19px; color: var(--bone); line-height: 1.1; }
+
+.bb-skills { font-size: 14px; color: var(--bone); margin-bottom: 8px; line-height: 1.35; }
+.bb-skills.bb-none { color: var(--dust); font-style: italic; }
+
+/* state chips */
+.bb-states { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.bb-chip {
+  cursor: pointer; min-height: 36px; padding: 4px 10px;
+  background: transparent; color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 15px;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.bb-chip:active { border-color: var(--rust); }
+.bb-chip:disabled { opacity: .4; cursor: default; }
+.bb-chip.on { color: #fff; }
+.bb-chip-ready.on { background: #3d6b26; border-color: var(--ok); }
+.bb-chip-prone.on { background: #7a5c2e; border-color: #b8860b; }
+.bb-chip-stunned.on { background: #b8860b; border-color: #ffd23f; color: #0c0a08; }
+.bb-chip-ko.on { background: var(--rust-dk); border-color: var(--rust); }
+.bb-chip-casualty.on { background: var(--blood); border-color: #ff7b6b; }
+.bb-chip-sentOff.on { background: #4a1f6b; border-color: #a06bd0; }
+
+/* SPP event steppers — the point of the whole card */
+.bb-events { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-bottom: 10px; }
+.bb-ev {
+  background: #0a0806; border: 1px solid #2b221b;
+  display: flex; flex-direction: column; align-items: center; padding: 4px 2px 5px;
+}
+.bb-ev.has { border-color: var(--rust-dk); }
+.bb-ev-k {
+  color: var(--dust); font-size: 11px; letter-spacing: .14em;
+  text-transform: uppercase; margin-bottom: 2px;
+}
+.bb-ev.has .bb-ev-k { color: var(--rust); }
+.bb-ev-ctl { display: flex; align-items: center; gap: 2px; }
+.bb-evbtn {
+  cursor: pointer; min-width: 34px; min-height: 34px; padding: 0;
+  background: var(--panel2); color: var(--bone); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One', sans-serif; font-size: 17px; line-height: 1;
+}
+.bb-evbtn-up { border-color: var(--rust-dk); }
+.bb-evbtn:active { background: var(--rust-dk); border-color: var(--rust); }
+.bb-evbtn:disabled { opacity: .3; cursor: default; }
+.bb-ev-n {
+  font-family: 'Black Ops One', sans-serif; font-size: 20px; color: var(--bone);
+  min-width: 26px; text-align: center;
+}
+.bb-ev.has .bb-ev-n { color: var(--rust); }
+
+.bb-mvprow { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bb-mvp {
+  cursor: pointer; min-height: 38px; padding: 4px 16px;
+  background: transparent; color: var(--dust); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One', sans-serif; font-size: 15px; letter-spacing: .1em;
+}
+.bb-mvp.on { background: #b8860b; border-color: #ffd23f; color: #0c0a08; }
+.bb-mvp:disabled { opacity: .4; cursor: default; }
+.bb-mvphint { color: var(--dust); font-size: 13px; }
+
+/* ---- phone portrait ----------------------------------------------------- */
+
+@media (max-width: 620px) {
+  .bb-teams { grid-template-columns: 1fr; }
+  .bb-scoreline { margin-left: 0; width: 100%; }
+  .bb-events { grid-template-columns: repeat(3, 1fr); }
+  .bb-turnbox { justify-content: center; }
+  .bb-tpip { width: 18px; }
+}

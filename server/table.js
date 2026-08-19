@@ -25,24 +25,45 @@ const lists = require('./liststore');   // My Lists: solo play-reference lists
 const alphaStrike = require('../public/builders/alphastrike.js');
 const wh40k = require('./wh40k');       // module functions called directly, not over HTTP
 const classic = require('./classic');   // classic_sheets reader (same DB as builders)
+const bb = require('./bb');             // Blood Bowl catalog + roster serializer
+
+// ---------------------------------------------------------------------------
+// Tracker registry
+// ---------------------------------------------------------------------------
+//
+// Each entry is a self-contained per-game tracker module implementing the
+// shared interface (id / name / leagueGame / snapshotUnits / applyPatch /
+// autoDestroyed / resetTracking / doneSummary). Everything below dispatches
+// through TRACKERS[t.game] instead of branching per game, so a sixth game is
+// one require line here plus its client card in public/table/.
+//
+// Optional extras are probed with `typeof tr.x === 'function'`, for the three
+// places a game genuinely differs: applySidePatch (necromunda VP + bottle,
+// mcp VP), roundReset (trenchcrusade activations) and the Blood Bowl match
+// state (snapshotMeta / newMatch / applyMatchPatch / MATCH_FIELDS).
+const TRACKERS = {
+  necromunda: require('./tracker-necromunda'),
+  mcp: require('./tracker-mcp'),
+  bloodbowl: require('./tracker-bloodbowl'),
+  trenchcrusade: require('./tracker-trenchcrusade'),
+};
 
 // Game registry — the lobby renders from this, and leagueGame maps a table's
-// summary onto the league tracker's match report.
+// summary onto the league tracker's match report. Tracker games register
+// themselves from their own module metadata so the two can never drift.
 const GAMES = {
   'battletech-as': { name: 'BattleTech — Alpha Strike', leagueGame: 'battletech' },
   'battletech-classic': { name: 'BattleTech — Classic', leagueGame: 'battletech' },
   'wh40k': { name: 'Warhammer 40k', leagueGame: 'wh40k' },
 };
+for (const [id, tr] of Object.entries(TRACKERS)) {
+  GAMES[id] = { name: tr.name, leagueGame: tr.leagueGame };
+}
 
-// My Lists covers everything the tables do plus the paste-only games: their
-// units come from a text export of our own builders (or any list that follows
-// the same shape), parsed into simple stat cards — the paste carries the data.
-const LIST_GAMES = {
-  ...GAMES,
-  necromunda: { name: 'Necromunda' },
-  mcp: { name: 'Marvel Crisis Protocol' },
-  trenchcrusade: { name: 'Trench Crusade' },
-};
+// My Lists covers every game the tables do. A tracker game's list units are
+// snapshotted by the SAME tracker the tables use — the client dispatches cards
+// on game id alone, so a list and a table must produce the same unit shape.
+const LIST_GAMES = { ...GAMES };
 
 // Alpha Strike critical-hit maxima (per the master unit card):
 // Engine 2 (second = destroyed), Fire Control 4, MP 4, Weapons 4.
@@ -411,6 +432,11 @@ function snapshotSimpleUnit(p) {
   };
 }
 
+// A list saved before the trackers existed still holds simple cards. They have
+// no tracker-shaped state, so they keep the old handling (and the old card)
+// rather than blowing up — re-save the list to get the real tracker card.
+const isLegacySimple = (u) => Boolean(u && Array.isArray(u.statlines) && u.woundsTaken !== undefined);
+
 function applySimplePatch(u, field, value) {
   if (field === 'woundsTaken') {
     if (!(u.maxWounds >= 1)) return { error: 'dis unit has no wound track' };
@@ -634,7 +660,16 @@ function parseBtLine(raw) {
 // ---------------------------------------------------------------------------
 
 // Fields every game shares, then per-game rules.
+//
+// The tracker dispatch runs FIRST, before the shared notes/destroyed block:
+// every tracker handles both itself and keeps `destroyed` in step with its own
+// rules state (Necromunda's condition, MCP's card side, Blood Bowl's player
+// state, Trench Crusade's injury track). Letting the shared block win would
+// flip `destroyed` behind the tracker's back and desync the Wreck button from
+// the rules.
 function applyPatch(t, u, field, value) {
+  const tr = TRACKERS[t.game];
+  if (tr && !isLegacySimple(u)) return tr.applyPatch(u, field, value);
   if (field === 'notes') {
     if (typeof value !== 'string') return { error: 'notes must be text' };
     u.notes = value.slice(0, 200);
@@ -646,12 +681,14 @@ function applyPatch(t, u, field, value) {
   }
   if (t.game === 'battletech-classic') return applyClassicPatch(u, field, value, t.status);
   if (t.game === 'wh40k') return applyWh40kPatch(u, field, value);
-  if (SIMPLE_PARSERS[t.game]) return applySimplePatch(u, field, value);
+  if (SIMPLE_PARSERS[t.game] || isLegacySimple(u)) return applySimplePatch(u, field, value);
   return applyUnitPatch(u, field, value);
 }
 
 // Zero a unit's live tracking state back to the snapshot (list reset).
 function resetTracking(game, u) {
+  const tr = TRACKERS[game];
+  if (tr && !isLegacySimple(u)) { tr.resetTracking(u); return; }
   u.notes = '';
   u.destroyed = false;
   if (game === 'battletech-as') {
@@ -695,6 +732,8 @@ function summary(t) {
 // = own units downed. vp comes from the caller (objectives are scored on the
 // tabletop); for wh40k the side's live VP tracker is the default.
 function doneSummary(t, vpBySide) {
+  const tr = TRACKERS[t.game];
+  if (tr) return { ...tr.doneSummary(t.sides, vpBySide), table: t.name };
   const destroyed = (s) => s.units.filter((u) => u.destroyed).length;
   const totalDestroyed = t.sides.reduce((n, s) => n + destroyed(s), 0);
   return {
@@ -711,6 +750,21 @@ function doneSummary(t, vpBySide) {
       };
     }),
   };
+}
+
+// One side's line in the "Game over — …" log entry. Every game's doneSummary
+// carries its OWN league stat ids (battletech/wh40k vp+kills, necromunda
+// vp+oop, mcp vp+kos, trenchcrusade vp+cas, bloodbowl td+cas and no vp), so
+// this reads them per game instead of printing `undefined`.
+const TALLY_LINES = {
+  necromunda: (s) => `${s.name} ${s.vp}VP (${s.oop} out of action)`,
+  mcp: (s) => `${s.name} ${s.vp}VP (${s.kos} KOs)`,
+  trenchcrusade: (s) => `${s.name} ${s.vp}VP (${s.cas} casualties)`,
+  bloodbowl: (s) => `${s.name} ${s.td} TD (${s.cas} cas)`,
+};
+function tallyLine(sum, s) {
+  const fn = TALLY_LINES[sum.game];
+  return fn ? fn(s) : `${s.name} ${s.vp}VP (${s.kills} kills)`;
 }
 
 function mount(app, io, deps) {
@@ -800,6 +854,69 @@ function mount(app, io, deps) {
     return { units };
   }
 
+  // ---- tracker games: build one side from whatever the caller sent --------
+  //
+  // Necromunda / MCP / Trench Crusade sides are PASTED: { text } is the text
+  // export of our own builder, parsed with the same grammar My Lists uses and
+  // handed to the tracker to snapshot.
+  //
+  // Blood Bowl's natural input is a league team roster instead:
+  // { leagueId, teamId } -> db.leagues()[leagueId].teams[teamId] -> bb
+  // .serializeTeam() -> snapshotUnits({ roster }). { text, race? } still works
+  // for a team that never got drafted on the site.
+  //
+  // Returns { units, meta, parsed } | { status, error }. An empty body yields
+  // an empty side, which is how a table opens waiting for its joiner.
+  function buildTrackerUnits(game, body) {
+    const tr = TRACKERS[game];
+    if (!tr) return { status: 400, error: 'unknown game' };
+    const src = body || {};
+
+    if (game === 'bloodbowl') {
+      let input = null;
+      if (src.leagueId && src.teamId) {
+        const lg = db.leagues()[String(src.leagueId)];
+        if (!lg) return { status: 404, error: 'No league wiv dat id.' };
+        const team = (lg.teams || {})[String(src.teamId)];
+        if (!team) return { status: 404, error: 'No team wiv dat id in dat league.' };
+        if (!team.bb) return { status: 400, error: `"${team.name}" ain't a drafted Blood Bowl team.` };
+        try {
+          input = { roster: bb.serializeTeam(team, () => 0) };
+        } catch (err) {
+          console.error('[table] bb roster:', err.message);
+          return { status: 502, error: 'Could not read dat team roster.' };
+        }
+      } else if (typeof src.text === 'string' && src.text.trim()) {
+        input = { text: src.text, race: src.race };
+      }
+      if (!input) return { units: [], meta: null };
+      const units = tr.snapshotUnits(input);
+      if (!units.length) return { status: 400, error: 'No players on dat roster.' };
+      return { units, meta: tr.snapshotMeta(input) };
+    }
+
+    const text = typeof src.text === 'string' ? src.text : '';
+    if (!text.trim()) return { units: [], meta: null };
+    // SIMPLE_PARSERS still owns the grammar (and the honest `unparsed` report);
+    // the tracker owns the snapshot built from it.
+    const parsed = SIMPLE_PARSERS[game] ? SIMPLE_PARSERS[game](text) : null;
+    const units = tr.snapshotUnits({ text, parsed });
+    if (!units.length) {
+      return { status: 400, error: 'Could not find any units in dat paste — use da builder\'s Export text.' };
+    }
+    return { units, parsed, text, meta: null };
+  }
+
+  // Side-level extras a tracker game hangs off its sides. Kept here (not in
+  // the trackers) because they live on the TABLE's side object.
+  function setSideExtras(game, side, built) {
+    if (game === 'necromunda') { side.vp = 0; side.bottled = false; }
+    else if (game === 'mcp') {
+      side.vp = 0;
+      side.refs = TRACKERS.mcp.snapshotRefs({ text: built?.text, parsed: built?.parsed });
+    } else if (game === 'trenchcrusade') side.vp = 0;
+  }
+
   // Build a side's units from one of the CALLER's saved forces — same
   // snapshot path as pasted-list entries above.
   async function buildForceUnits(user, forceName, game) {
@@ -833,9 +950,11 @@ function mount(app, io, deps) {
   }
 
   // ---- create a table ----
-  // body: { game, name, sides: [{ name, forceName?, army? }] }
+  // body: { game, name, sides: [{ name, forceName?, army?, text?, leagueId?, teamId? }] }
   // forceName pulls the CREATOR's saved force (battletech games);
-  // army is a confirmed wh40k list: [{ id, models? }].
+  // army is a confirmed wh40k list: [{ id, models? }];
+  // text is a builder paste (necromunda / mcp / trenchcrusade);
+  // leagueId+teamId is a drafted league roster (bloodbowl).
   app.post('/api/table', memberReader, async (req, res) => {
     const user = needUser(req, res);
     if (!user) return;
@@ -847,11 +966,20 @@ function mount(app, io, deps) {
     if (rawSides.length < 2) return res.status(400).json({ error: 'A game needs at least two sides.' });
 
     const built = [];
+    const metas = [];              // bloodbowl: one snapshotMeta per side
     for (const s of rawSides) {
       const sideName = String(s?.name || '').trim().slice(0, 40) || `Side ${built.length + 1}`;
       let units = [];
       let owner = null;
-      if (game === 'wh40k') {
+      let extras = null;
+      if (TRACKERS[game]) {
+        const r = buildTrackerUnits(game, s);
+        if (r.error) return res.status(r.status).json({ error: r.error });
+        units = r.units;
+        extras = r;
+        metas.push(r.meta || null);
+        if (units.length) owner = user.name;
+      } else if (game === 'wh40k') {
         if (s?.forceName) return res.status(400).json({ error: '40k sides take a pasted army list, not a saved force.' });
         if (Array.isArray(s?.army) && s.army.length) {
           const r = await buildArmyUnits(s.army);
@@ -867,11 +995,16 @@ function mount(app, io, deps) {
       }
       const side = { name: sideName, owner, units };
       if (game === 'wh40k') { side.cp = 0; side.vp = 0; }
+      setSideExtras(game, side, extras);
       built.push(side);
     }
 
     const r = store.create({ game, name: label, createdBy: user.name, sides: built });
     if (r.error) return res.status(400).json({ error: r.error });
+    // Blood Bowl is the one game with MATCH state (half / turn / score /
+    // rerolls / weather). tablestore builds a fixed-key table, so it is
+    // attached here and persisted by the store.update below.
+    if (game === 'bloodbowl') r.table.match = TRACKERS.bloodbowl.newMatch(built.length, metas);
     store.addLog(r.table, `Table opened by ${user.name}`);
     store.update(r.table);
     res.json(r.table);
@@ -907,8 +1040,10 @@ function mount(app, io, deps) {
   });
 
   // ---- bring units to an empty side (a joiner claiming their side) ----
-  // body: { forceName } (battletech games, the CALLER's saved force) or
-  //       { army: [{ id, models? }] } (wh40k, a confirmed resolved list)
+  // body: { forceName } (battletech games, the CALLER's saved force),
+  //       { army: [{ id, models? }] } (wh40k, a confirmed resolved list),
+  //       { text } (necromunda / mcp / trenchcrusade builder paste) or
+  //       { leagueId, teamId } (bloodbowl league roster).
   app.post('/api/table/:id/side/:idx/units', memberReader, async (req, res) => {
     const user = needUser(req, res);
     if (!user) return;
@@ -920,13 +1055,27 @@ function mount(app, io, deps) {
     if (!side) return res.status(404).json({ error: 'no such side' });
     if (side.units.length) return res.status(400).json({ error: `${side.name} already has units on it.` });
 
-    const r = t.game === 'wh40k'
-      ? await buildArmyUnits(req.body?.army)
-      : await buildForceUnits(user, req.body?.forceName, t.game);
+    let r;
+    if (TRACKERS[t.game]) {
+      r = buildTrackerUnits(t.game, req.body);
+      if (!r.error && !r.units.length) {
+        r = { status: 400, error: t.game === 'bloodbowl' ? 'Pick a league team first.' : 'Paste yer list first.' };
+      }
+    } else if (t.game === 'wh40k') {
+      r = await buildArmyUnits(req.body?.army);
+    } else {
+      r = await buildForceUnits(user, req.body?.forceName, t.game);
+    }
     if (r.error) return res.status(r.status).json({ error: r.error });
 
     side.units = r.units;
     side.owner = user.name;
+    setSideExtras(t.game, side, r);
+    // A late-arriving Blood Bowl team brings its own reroll count with it;
+    // setting the base is what a team starts the match holding.
+    if (t.game === 'bloodbowl' && t.match && r.meta) {
+      TRACKERS.bloodbowl.applyMatchPatch(t.match, `rerollBase.${idx}`, r.meta.rerolls);
+    }
     store.addLog(t, `${user.name} brought a force to ${side.name}`);
     store.update(t);
     broadcast(t, { reload: true });
@@ -936,7 +1085,8 @@ function mount(app, io, deps) {
   // ---- live state patch ----
   // body: { uid, field, value }         — unit fields
   //       { field: 'round', value }     — table-level
-  //       { side, field: 'cp'|'vp', value } — side-level trackers (wh40k)
+  //       { side, field: 'cp'|'vp'|'bottled', value } — side-level trackers
+  //       { field: 'half'|'turn.0'|'score.1'|…, value } — bloodbowl match state
   app.post('/api/table/:id/state', memberReader, (req, res) => {
     const user = needUser(req, res);
     if (!user) return;
@@ -946,30 +1096,68 @@ function mount(app, io, deps) {
     const { uid, side: sideIdx, field, value } = req.body || {};
     if (typeof field !== 'string') return res.status(400).json({ error: 'patch needs a field' });
 
+    const tracker = TRACKERS[t.game];
+
     if (field === 'round') {
       const n = toInt(value);
       if (!(n >= 1 && n <= 999)) return res.status(400).json({ error: 'round is 1-999' });
       t.round = n;
       t.status = 'playing';
+      // Games with a per-round reset (Trench Crusade clears activations) touch
+      // every unit at once, and the client's state handler only patches the
+      // units it is handed — so ask it for a wholesale refresh instead.
+      const reload = tracker && typeof tracker.roundReset === 'function';
+      if (reload) tracker.roundReset(t);
       store.addLog(t, `Round ${n}`);
       store.update(t);
-      broadcast(t, {});
+      broadcast(t, reload ? { reload: true } : {});
       return res.json({ ok: true, round: t.round });
     }
 
-    // Side-level CP / VP trackers (wh40k). Battle round is the shared round.
-    if ((field === 'cp' || field === 'vp') && uid == null) {
-      if (t.game !== 'wh40k') return res.status(400).json({ error: 'no side trackers in dis game' });
-      const side = t.sides[toInt(sideIdx)];
-      if (!side) return res.status(404).json({ error: 'no such side' });
-      const n = toInt(value);
-      const max = field === 'cp' ? 99 : 200;
-      if (!(n >= 0 && n <= max)) return res.status(400).json({ error: `${field} is 0-${max}` });
-      side[field] = n;
-      store.addLog(t, `${side.name}: ${field.toUpperCase()} ${n}`);
+    // Blood Bowl match state: half / turn.<i> / score.<i> / rerolls.<i> /
+    // rerollBase.<i> / rerollUsed.<i> / fame.<i> / inducements.<i> / weather.
+    // No other game has a match object, so this is gated on the tracker
+    // exposing one rather than on the game id.
+    if (uid == null && t.match && tracker && tracker.MATCH_FIELDS
+      && Object.prototype.hasOwnProperty.call(tracker.MATCH_FIELDS, String(field).split('.')[0])) {
+      const mr = tracker.applyMatchPatch(t.match, field, value);
+      if (mr.error) return res.status(400).json({ error: mr.error });
+      t.status = 'playing';
+      store.addLog(t, mr.msg);
       store.update(t);
-      broadcast(t, { side: toInt(sideIdx), sideState: { cp: side.cp, vp: side.vp } });
-      return res.json({ ok: true, side: toInt(sideIdx), [field]: n });
+      broadcast(t, { match: t.match });
+      return res.json({ ok: true, match: t.match });
+    }
+
+    // Side-level trackers. CP is wh40k-only; VP (and Necromunda's bottle
+    // switch) route through the tracker's own applySidePatch where it has one,
+    // and fall back to a plain 0-200 counter for the games that just keep a
+    // hand-scored VP on the side.
+    if ((field === 'cp' || field === 'vp' || field === 'bottled') && uid == null) {
+      const idx = toInt(sideIdx);
+      const side = t.sides[idx];
+      if (!side) return res.status(404).json({ error: 'no such side' });
+      if (field === 'cp') {
+        if (t.game !== 'wh40k') return res.status(400).json({ error: 'no CP in dis game' });
+        const n = toInt(value);
+        if (!(n >= 0 && n <= 99)) return res.status(400).json({ error: 'cp is 0-99' });
+        side.cp = n;
+        store.addLog(t, `${side.name}: CP ${n}`);
+      } else if (tracker && typeof tracker.applySidePatch === 'function') {
+        const sr = tracker.applySidePatch(side, field, value);
+        if (sr.error) return res.status(400).json({ error: sr.error });
+        store.addLog(t, sr.msg);
+      } else if (field === 'vp' && (t.game === 'wh40k' || tracker)) {
+        const n = toInt(value);
+        if (!(n >= 0 && n <= 200)) return res.status(400).json({ error: 'vp is 0-200' });
+        side.vp = n;
+        store.addLog(t, `${side.name}: VP ${n}`);
+      } else {
+        return res.status(400).json({ error: 'no side trackers in dis game' });
+      }
+      store.update(t);
+      broadcast(t, { side: idx, sideState: { cp: side.cp, vp: side.vp, bottled: side.bottled } });
+      return res.json({ ok: true, side: idx, [field]: side[field] });
     }
 
     const unit = t.sides.flatMap((s) => s.units).find((u) => u.uid === uid);
@@ -997,7 +1185,7 @@ function mount(app, io, deps) {
     const sum = doneSummary(t, vpBySide);
     t.status = 'done';
     t.result = sum;
-    store.addLog(t, `Game over — ${sum.sides.map((s) => `${s.name} ${s.vp}VP (${s.kills} kills)`).join(' vs ')}`);
+    store.addLog(t, `Game over — ${sum.sides.map((s) => tallyLine(sum, s)).join(' vs ')}`);
     store.update(t);
     broadcast(t, { done: sum });
     res.json(sum);
@@ -1136,6 +1324,9 @@ function mount(app, io, deps) {
         if (!wh40k.available()) return res.status(503).json({ error: 'Da 40k database ain\'t hooked up.' });
         return res.json(await wh40k.resolveList(text));
       }
+      // Paste preview, NOT the saved shape: the resolve screen only shows what
+      // parsed and what didn't, so it keeps the light simple-card projection.
+      // The tracker snapshot happens when the list is actually created.
       if (SIMPLE_PARSERS[game]) {
         const parsed = SIMPLE_PARSERS[game](text);
         return res.json({
@@ -1143,6 +1334,22 @@ function mount(app, io, deps) {
           sections: parsed.sections,
           units: parsed.units.map(snapshotSimpleUnit),
           unparsed: parsed.unparsed,
+        });
+      }
+      // Blood Bowl has no builder export of its own — the paste is a plain
+      // roster, so the tracker's own reader previews it.
+      if (TRACKERS[game]) {
+        const units = TRACKERS[game].snapshotUnits({ text });
+        return res.json({
+          header: [],
+          sections: [],
+          units: units.map((u) => ({
+            name: u.name,
+            subtitle: u.position || '',
+            cost: u.number != null ? `#${u.number}` : null,
+            statlines: [],
+          })),
+          unparsed: [],
         });
       }
       const r = await resolveBtList(text, game);
@@ -1192,20 +1399,24 @@ function mount(app, io, deps) {
           console.error('[lists] army rules:', err.message);
           army = { factionId: r.factionId ?? null, factionName: null, error: 'army rules lookup failed' };
         }
-      } else if (SIMPLE_PARSERS[game]) {
+      } else if (TRACKERS[game]) {
+        // My Lists parity: the client dispatches cards on game id alone, so a
+        // list MUST snapshot through the same tracker a table does. The paste
+        // parser is kept only for the header / reference sections / honest
+        // unparsed report that ride along in `army`.
         if (typeof text !== 'string' || !text.trim()) {
           return res.status(400).json({ error: 'Paste yer builder\'s text export.' });
         }
-        const parsed = SIMPLE_PARSERS[game](text);
-        if (!parsed.units.length) {
+        const parsed = SIMPLE_PARSERS[game] ? SIMPLE_PARSERS[game](text) : null;
+        units = TRACKERS[game].snapshotUnits({ text, parsed }).slice(0, MAX_LIST_UNITS);
+        if (!units.length) {
           return res.status(400).json({ error: 'Could not find any units in dat paste — use da builder\'s Export text.' });
         }
-        units = parsed.units.slice(0, MAX_LIST_UNITS).map(snapshotSimpleUnit);
-        army = {
+        army = parsed ? {
           header: parsed.header.slice(0, 12),
           sections: parsed.sections,
           unparsed: parsed.unparsed.slice(0, 30),
-        };
+        } : null;
       } else if (forceName) {
         const r = await buildForceUnits(user, forceName, game);
         if (r.error) return res.status(r.status).json({ error: r.error });

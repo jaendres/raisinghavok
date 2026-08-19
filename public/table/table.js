@@ -18,8 +18,15 @@
 //   battletech-as      — Alpha Strike cards (this file renders them)
 //   battletech-classic — Total Warfare record sheets (classic.js renders)
 //   wh40k              — Warhammer 40k datasheets (wh40k.js renders)
-//   necromunda / mcp / trenchcrusade — lists only: simple stat cards parsed
-//   from our own builders' text exports (this file renders them)
+//   necromunda         — gang fighter cards (necromunda.js renders)
+//   mcp                — Crisis Protocol character cards (mcp.js renders)
+//   bloodbowl          — player cards + the match bar (bloodbowl.js renders)
+//   trenchcrusade      — warband model cards (trenchcrusade.js renders)
+//
+// The four tracker games dispatch through the CARDS map below rather than a
+// branch each; adding a sixth game is one entry there plus its <script> tag in
+// index.html. simpleCardHTML() survives only as the graceful fallback for
+// lists saved before the trackers existed.
 
 // Discord SSO hands the session token back in the URL fragment.
 (() => {
@@ -47,6 +54,36 @@ let collapsedAll = false;    // remember collapse-all across redraws
 
 // which game a card belongs to (table or list, whichever is open)
 const curGame = () => (T ? T.game : LST ? LST.game : null);
+
+// ---- per-game card modules -------------------------------------------------
+//
+// One entry per tracker game. `mod` is looked up lazily so a blocked script
+// degrades to the simple fallback card instead of throwing, and `fits` checks
+// the unit actually carries that tracker's snapshot shape — a list saved
+// before the trackers existed still holds simple cards and must not be fed to
+// a card that expects tracker state.
+const CARDS = {
+  necromunda: {
+    mod: () => window.NecromundaCard,
+    fits: (u) => u && u.condition !== undefined && u.statline && !Array.isArray(u.statline),
+  },
+  mcp: {
+    mod: () => window.McpCard,
+    fits: (u) => u && u.side !== undefined && u.stamina && typeof u.stamina === 'object',
+  },
+  bloodbowl: {
+    mod: () => window.BloodBowlCard,
+    fits: (u) => u && u.events && typeof u.events === 'object' && u.state !== undefined,
+  },
+  trenchcrusade: {
+    mod: () => window.TrenchCrusadeCard,
+    fits: (u) => u && u.bloodMarkers !== undefined && u.state !== undefined,
+  },
+};
+
+// The card module for the open table/list, or null (unknown game, or the
+// script did not load).
+const cardMod = (game) => (CARDS[game] ? CARDS[game].mod() || null : null);
 
 const CRIT_ROWS = [
   ['engine', 'Engine', 2],
@@ -212,17 +249,32 @@ async function viewLobby() {
   const $game = $app.querySelector('#n-game');
 
   // Per-game side inputs: battletech sides attach one of MY saved forces,
-  // wh40k sides take a pasted army list (resolved before the table opens).
+  // wh40k sides take a pasted army list (resolved before the table opens),
+  // the paste games take their builder's text export, and Blood Bowl picks a
+  // drafted league team (with a pasted roster as the fallback). Every one of
+  // them may be left empty — the joiner fills it at the table.
   const sideRow = (name, preselect) => {
+    const game = $game.value;
+    const nameInput = `<input class="s-name" maxlength="40" placeholder="Side ${$sides.children.length + 1}" value="${esc(name)}">`;
+    const rm = '<span class="rm" title="remove side">✕</span>';
     const div = document.createElement('div');
-    div.className = 'side-row' + ($game.value === 'wh40k' ? ' side-row-40k' : '');
-    div.innerHTML = $game.value === 'wh40k'
-      ? `<input class="s-name" maxlength="40" placeholder="Side ${$sides.children.length + 1}" value="${esc(name)}">
-         <span class="rm" title="remove side">✕</span>
-         <textarea class="s-army" rows="3" placeholder="paste an army list here (GW app / BattleScribe / New Recruit) — or leave empty an' add it at da table"></textarea>`
-      : `<input class="s-name" maxlength="40" placeholder="Side ${$sides.children.length + 1}" value="${esc(name)}">
+    div.className = 'side-row' + (game === 'wh40k' || CARDS[game] ? ' side-row-40k' : '');
+    if (game === 'wh40k') {
+      div.innerHTML = `${nameInput}${rm}
+         <textarea class="s-army" rows="3" placeholder="paste an army list here (GW app / BattleScribe / New Recruit) — or leave empty an' add it at da table"></textarea>`;
+    } else if (game === 'bloodbowl') {
+      div.innerHTML = `${nameInput}${rm}
+         <select class="s-bbteam" style="grid-column:1/-1"><option value="">— loading league teams —</option></select>
+         <textarea class="s-text" rows="2" placeholder="…or paste a roster: one player per line (&quot;7 Grak, Blitzer&quot;)"></textarea>`;
+      fillBbTeamSelects([div.querySelector('.s-bbteam')]);
+    } else if (CARDS[game]) {
+      div.innerHTML = `${nameInput}${rm}
+         <textarea class="s-text" rows="3" placeholder="${esc(PASTE_HINTS[game] || 'paste yer list here')}"></textarea>`;
+    } else {
+      div.innerHTML = `${nameInput}
          <select class="s-force" title="attach one o' MY saved forces">${forceOpts(preselect)}</select>
-         <span class="rm" title="remove side">✕</span>`;
+         ${rm}`;
+    }
     div.querySelector('.rm').onclick = () => { if ($sides.children.length > 2) div.remove(); };
     return div;
   };
@@ -246,11 +298,17 @@ async function viewLobby() {
     const game = $game.value;
     const name = $app.querySelector('#n-name').value;
     const rows = [...$sides.querySelectorAll('.side-row')];
-    const sides = rows.map((r, i) => ({
-      name: r.querySelector('.s-name').value.trim() || `Side ${i + 1}`,
-      forceName: r.querySelector('.s-force')?.value || undefined,
-      armyText: r.querySelector('.s-army')?.value.trim() || undefined,
-    }));
+    const sides = rows.map((r, i) => {
+      const bbPick = (r.querySelector('.s-bbteam')?.value || '').split(':');
+      return {
+        name: r.querySelector('.s-name').value.trim() || `Side ${i + 1}`,
+        forceName: r.querySelector('.s-force')?.value || undefined,
+        armyText: r.querySelector('.s-army')?.value.trim() || undefined,
+        text: r.querySelector('.s-text')?.value.trim() || undefined,
+        leagueId: bbPick[0] || undefined,
+        teamId: bbPick[1] || undefined,
+      };
+    });
     try {
       if (game === 'wh40k' && sides.some((s) => s.armyText)) {
         // Resolve every pasted list first, then confirm on the resolve screen.
@@ -275,7 +333,13 @@ async function viewLobby() {
       }
       const t = await api('/table', {
         method: 'POST',
-        body: JSON.stringify({ game, name, sides: sides.map((s) => ({ name: s.name, forceName: s.forceName })) }),
+        body: JSON.stringify({
+          game,
+          name,
+          sides: sides.map((s) => (CARDS[game]
+            ? { name: s.name, text: s.text, leagueId: s.leagueId, teamId: s.teamId }
+            : { name: s.name, forceName: s.forceName })),
+        }),
       });
       location.hash = '#/t/' + t.id;
     } catch (e) { $err.textContent = e.message; }
@@ -337,7 +401,10 @@ function renderResolveScreen(sides, onConfirm) {
 // My Lists — add-list flow + the reading view
 // ============================================================================
 
-const isSimpleGame = (game) => game === 'necromunda' || game === 'mcp' || game === 'trenchcrusade';
+// Games whose list source is a plain text paste: /lists/resolve answers with a
+// parse preview (what parsed, what didn't) rather than a unit-picker. This is
+// about where the list COMES FROM, not about which card renders it.
+const isPasteGame = (game) => Boolean(CARDS[game]);
 
 const PASTE_HINTS = {
   'battletech-as': 'paste a list — one unit per line, any builder\'s export ("Atlas AS7-D (4)", "2x Locust LCT-1V")',
@@ -346,6 +413,7 @@ const PASTE_HINTS = {
   necromunda: 'paste da text export from our Necromunda gang builder (Export → Copy text)',
   mcp: 'paste da text export from our Crisis Protocol roster builder (Text → Copy)',
   trenchcrusade: 'paste da text export from our Trench Crusade warband builder (Export → Copy text)',
+  bloodbowl: 'paste a roster — one player per line ("7 Grak, Blitzer") — or pick a league team on da table screen',
 };
 
 // ---- add-list flow ----
@@ -411,7 +479,7 @@ async function viewNewList() {
       try {
         const resolve = await api('/lists/resolve', { method: 'POST', body: JSON.stringify({ game, text }) });
         if (game === 'wh40k') render40kListResolve(game, listName(), resolve);
-        else if (isSimpleGame(game)) renderSimpleListPreview(game, listName(), text, resolve);
+        else if (isPasteGame(game)) renderSimpleListPreview(game, listName(), text, resolve);
         else renderBtListResolve(game, listName(), resolve);
       } catch (e) { $err.textContent = e.message; }
     };
@@ -570,6 +638,11 @@ function listKeyStat(u) {
     const m = u.statline?.[0];
     return m ? `T${m.t} • Sv${m.sv} • ${u.modelCount}×${u.woundsPer}W` : `${u.modelCount} models`;
   }
+  // The tracker games keep their headline stat in different places.
+  if (game === 'necromunda') return [u.type, u.cost].filter(Boolean).join(' • ');
+  if (game === 'mcp') return u.threat ? `${u.threat} threat` : '';
+  if (game === 'bloodbowl') return [u.number != null ? `#${u.number}` : '', u.position].filter(Boolean).join(' • ');
+  if (game === 'trenchcrusade') return [u.catalogName, u.cost].filter(Boolean).join(' • ');
   return u.cost || u.subtitle || '';
 }
 
@@ -636,7 +709,7 @@ function armyPanelHTML(l) {
 
 function renderListView() {
   const l = LST;
-  const gameName = ({ 'battletech-as': 'BattleTech — Alpha Strike', 'battletech-classic': 'BattleTech — Classic', wh40k: 'Warhammer 40k', necromunda: 'Necromunda', mcp: 'Marvel Crisis Protocol', trenchcrusade: 'Trench Crusade' })[l.game] || l.game;
+  const gameName = ({ 'battletech-as': 'BattleTech — Alpha Strike', 'battletech-classic': 'BattleTech — Classic', wh40k: 'Warhammer 40k', necromunda: 'Necromunda', mcp: 'Marvel Crisis Protocol', bloodbowl: 'Blood Bowl', trenchcrusade: 'Trench Crusade' })[l.game] || l.game;
   $app.innerHTML = `
     <div class="crumb"><a href="#/">Game Night</a> / ${esc(l.name)}</div>
     <div class="play-head list-head">
@@ -716,9 +789,94 @@ function unitByUid(uid) {
   return null;
 }
 
+// MCP's optimistic mirror of server/tracker-mcp.js. That card module exposes
+// no applyLocal, so the handful of fields it emits are mirrored here —
+// including the daze flip, which is the whole point of the card.
+function mcpLocal(u, field, value) {
+  const setSide = (s) => {
+    u.side = s;
+    u.damage = s === 'ko' ? ((u.stamina && u.stamina.injured) || 0) : 0;
+    u.destroyed = s === 'ko';
+  };
+  if (field === 'damage') {
+    const max = (u.side === 'injured' ? u.stamina.injured : u.stamina.healthy) || 0;
+    if (value < max) { u.damage = value; return true; }
+    setSide(u.side === 'healthy' ? 'injured' : 'ko');
+    return true;
+  }
+  if (field === 'side') {
+    const s = typeof value === 'number' ? ['healthy', 'injured', 'ko'][value] : String(value);
+    if (['healthy', 'injured', 'ko'].includes(s)) setSide(s);
+    return true;
+  }
+  if (field === 'power') { u.power = value; return true; }
+  if (field.startsWith('effect.')) {
+    const k = field.slice(7);
+    if (!u.effects || typeof u.effects !== 'object') u.effects = {};
+    if (value) u.effects[k] = true; else delete u.effects[k];
+    return true;
+  }
+  if (field === 'holdingObjective') { u.holdingObjective = Boolean(value); return true; }
+  if (field === 'destroyed') {
+    if (value) setSide('ko');
+    else if (u.side === 'ko') setSide('injured');
+    else u.destroyed = false;
+    return true;
+  }
+  return false;
+}
+
+// Blood Bowl's optimistic mirror of server/tracker-bloodbowl.js. `casualty`
+// and `sentOff` are the two states that take a player off the pitch for good,
+// which is what `destroyed` means for the shared dimming / Wreck button.
+const BB_OFF_PITCH = ['casualty', 'sentOff'];
+function bbLocal(u, field, value) {
+  if (field === 'state') {
+    u.state = String(value);
+    u.destroyed = BB_OFF_PITCH.includes(u.state);
+    return true;
+  }
+  if (field.startsWith('event.')) {
+    if (!u.events || typeof u.events !== 'object') u.events = {};
+    u.events[field.slice(6)] = value;
+    return true;
+  }
+  if (field === 'mvp') { u.mvp = Boolean(value); return true; }
+  if (field === 'destroyed') {
+    u.destroyed = Boolean(value);
+    if (u.destroyed && !BB_OFF_PITCH.includes(u.state)) u.state = 'casualty';
+    if (!u.destroyed && BB_OFF_PITCH.includes(u.state)) u.state = 'ready';
+    return true;
+  }
+  return false;
+}
+
 // Mirror of the server's per-field rules so optimistic taps land on legal
 // values; the server remains the referee.
+//
+// Tracker games delegate: Necromunda and Trench Crusade ship their own
+// applyLocal (they own the rules that keep `destroyed` honest), MCP and Blood
+// Bowl are mirrored above, and notes/destroyed/legacy wounds fall through.
 function applyLocal(u, field, value) {
+  const g = curGame();
+  if (CARDS[g]) {
+    const mod = cardMod(g);
+    if (mod && typeof mod.applyLocal === 'function' && mod.applyLocal(u, field, value) !== false) return;
+    if (g === 'mcp' && mcpLocal(u, field, value)) return;
+    if (g === 'bloodbowl' && bbLocal(u, field, value)) return;
+    if (field === 'notes') { u.notes = value; return; }
+    if (field === 'destroyed') { u.destroyed = Boolean(value); return; }
+    if (field === 'woundsTaken') {                 // legacy simple-card list
+      u.woundsTaken = value;
+      u.destroyed = u.maxWounds != null && value >= u.maxWounds;
+    }
+    return;
+  }
+  applyLocalBt(u, field, value);
+}
+
+// BattleTech (Alpha Strike + Classic) and 40k fields.
+function applyLocalBt(u, field, value) {
   if (field.startsWith('armorHit.')) u.armorHit[field.slice(9)] = value;
   else if (field.startsWith('structHit.')) u.structHit[field.slice(10)] = value;
   else if (field.startsWith('crit.')) {
@@ -759,6 +917,18 @@ function applyLocal(u, field, value) {
 }
 
 function readField(u, field) {
+  const g = curGame();
+  if (CARDS[g]) {
+    const mod = cardMod(g);
+    if (mod && typeof mod.readField === 'function') {
+      const v = mod.readField(u, field);
+      if (v !== undefined) return v;
+    }
+    // The fields MCP's and Blood Bowl's cards emit that are not plain keys.
+    if (field.startsWith('effect.')) return Boolean((u.effects || {})[field.slice(7)]);
+    if (field.startsWith('event.')) return (u.events || {})[field.slice(6)] || 0;
+    return u[field];
+  }
   if (field.startsWith('crits.')) return u.crits[field.slice(6)];
   if (field.startsWith('armorHit.')) return u.armorHit[field.slice(9)] || 0;
   if (field.startsWith('structHit.')) return u.structHit[field.slice(10)] || 0;
@@ -829,12 +999,13 @@ async function patch(uid, field, value, { undoable = true } = {}) {
   }
 }
 
-// Side-level trackers (wh40k CP/VP). Optimistic, no undo stack — the +/-
-// buttons are their own undo.
+// Side-level trackers (wh40k CP/VP, the tracker games' VP, Necromunda's
+// bottle switch). Optimistic, no undo stack — the +/- buttons are their own
+// undo, and the bottle chip toggles back.
 async function patchSide(sideIdx, field, value) {
   const s = T.sides[sideIdx];
   if (!s) return;
-  const prev = s[field] || 0;
+  const prev = s[field];
   s[field] = value;
   redrawSideTrackers(sideIdx);
   try {
@@ -842,6 +1013,42 @@ async function patchSide(sideIdx, field, value) {
   } catch (e) {
     s[field] = prev;
     redrawSideTrackers(sideIdx);
+    playErr(e.message);
+  }
+}
+
+// ---- Blood Bowl match state (half / turn / score / rerolls / weather) ------
+//
+// The only table-level state any game keeps beyond the round counter. Patched
+// as "<field>" or "<field>.<sideIdx>" (see server/tracker-bloodbowl.js
+// MATCH_FIELDS); the route answers with the whole match object, and the socket
+// echo repaints every other phone.
+function matchField(field, side) {
+  return side === null || side === undefined || side === '' ? field : `${field}.${side}`;
+}
+
+function redrawMatchBar() {
+  const el = document.querySelector('.bb-matchbar');
+  if (!el || !window.BloodBowlCard) return;
+  const html = BloodBowlCard.matchBarHtml(T.match, T.sides, T.status);
+  if (html) el.outerHTML = html;
+}
+
+async function patchMatch(field, side, value, { redraw = true } = {}) {
+  if (!T || !T.match) return;
+  const key = matchField(field, side);
+  const before = JSON.stringify(T.match);
+  // optimistic: half/turn resets are the server's business, so this only
+  // writes the tapped cell and lets the response reconcile the rest.
+  if (Array.isArray(T.match[field])) T.match[field][+side] = value;
+  else T.match[field] = value;
+  if (redraw) redrawMatchBar();
+  try {
+    const r = await api(`/table/${T.id}/state`, { method: 'POST', body: JSON.stringify({ field: key, value }) });
+    if (r && r.match) { T.match = r.match; redrawMatchBar(); }
+  } catch (e) {
+    T.match = JSON.parse(before);
+    redrawMatchBar();
     playErr(e.message);
   }
 }
@@ -942,7 +1149,13 @@ function cardHTML(u) {
   // editable — it's your own list, not a locked live game.
   if (game === 'battletech-classic' && window.ClassicCard) return ClassicCard.html(u, T ? T.status : 'setup', canUndo);
   if (game === 'wh40k' && window.W40kCard) return W40kCard.html(u, canUndo);
-  if (game === 'necromunda' || game === 'mcp' || game === 'trenchcrusade') return simpleCardHTML(u);
+  if (CARDS[game]) {
+    const mod = cardMod(game);
+    // Legacy simple-shaped units (and a card script that failed to load) fall
+    // back rather than rendering a broken card.
+    if (mod && CARDS[game].fits(u)) return mod.html(u, T ? T.status : 'setup', canUndo);
+    return simpleCardHTML(u);
+  }
   return asCardHTML(u);
 }
 
@@ -971,12 +1184,15 @@ function redrawSideTotals() {
   });
 }
 
+// Repaint the whole tracker strip: the CP/VP numbers, and Necromunda's bottle
+// chip, which changes shape (holding / test / bottled) rather than just text.
 function redrawSideTrackers(i) {
-  const s = T.sides[i];
+  const el = document.getElementById(`side-track-${i}`);
+  if (el) { el.innerHTML = sideTrackersHTML(T.sides[i], i); return; }
   const cp = document.getElementById(`cp-num-${i}`);
   const vp = document.getElementById(`vp-num-${i}`);
-  if (cp) cp.textContent = s.cp || 0;
-  if (vp) vp.textContent = s.vp || 0;
+  if (cp) cp.textContent = T.sides[i].cp || 0;
+  if (vp) vp.textContent = T.sides[i].vp || 0;
 }
 
 function sideSub(s) {
@@ -987,6 +1203,12 @@ function sideSub(s) {
   }
   if (T.game === 'wh40k') {
     return `${s.owner ? s.owner + ' • ' : ''}${alive}/${s.units.length} units standing`;
+  }
+  if (CARDS[T.game]) {
+    // The tracker games carry no points total on the snapshot — what the table
+    // wants to see is how many models are still up.
+    const what = T.game === 'bloodbowl' ? 'on da pitch' : 'standing';
+    return `${s.owner ? s.owner + ' • ' : ''}${alive}/${s.units.length} ${what}`;
   }
   const pv = s.units.reduce((n, u) => n + (u.pv || 0), 0);
   return `${s.owner ? s.owner + ' • ' : ''}${pv} PV • ${alive}/${s.units.length} standing`;
@@ -1030,8 +1252,11 @@ function connectSocket(id) {
     if (p.sideState != null && T.sides[p.side]) {
       T.sides[p.side].cp = p.sideState.cp;
       T.sides[p.side].vp = p.sideState.vp;
+      T.sides[p.side].bottled = p.sideState.bottled;
       redrawSideTrackers(p.side);
     }
+    // Blood Bowl match state (half / turn / score / rerolls / weather).
+    if (p.match) { T.match = p.match; redrawMatchBar(); }
     redrawHead();
     if (p.done) { T.status = 'done'; T.result = p.done; renderPlay(); }
   });
@@ -1058,6 +1283,25 @@ function emptySideHTML(s, i) {
         <div style="margin-top:8px"><button class="btn" data-claim40k="${i}">Check da List</button></div>
       </div>`;
   }
+  if (T.game === 'bloodbowl') {
+    return `
+      <div class="card claim-card">
+        <p class="muted">No team on dis side — bring one o' yer league teams, or paste a roster.</p>
+        <div class="join-row" style="margin-top:8px">
+          <select class="claim-bb" data-side="${i}" style="min-width:240px"><option value="">— loading league teams —</option></select>
+          <button class="btn" data-claimbb="${i}">Take da Field</button>
+        </div>
+        <textarea class="claim-army" data-side="${i}" rows="3" placeholder="…or paste a roster: one player per line (&quot;7 Grak, Blitzer&quot;)"></textarea>
+      </div>`;
+  }
+  if (CARDS[T.game]) {
+    return `
+      <div class="card claim-card">
+        <p class="muted">No units on dis side — paste yer list from da <a href="/builders/">builder</a>'s text export.</p>
+        <textarea class="claim-army" data-side="${i}" rows="4" placeholder="${esc(PASTE_HINTS[T.game] || 'paste yer list here')}"></textarea>
+        <div style="margin-top:8px"><button class="btn" data-claimpaste="${i}">Deploy</button></div>
+      </div>`;
+  }
   return `
     <div class="card claim-card">
       <p class="muted">No units on dis side — bring a force from da <a href="/builders/">builder</a>.</p>
@@ -1068,21 +1312,31 @@ function emptySideHTML(s, i) {
     </div>`;
 }
 
+// Games with a hand-scored side tracker. CP stays wh40k-only; VP is shared by
+// wh40k and the three tracker games that score objectives on the tabletop
+// (Blood Bowl scores touchdowns on the match bar instead).
+const SIDE_VP_GAMES = ['wh40k', 'necromunda', 'mcp', 'trenchcrusade'];
+
 function sideTrackersHTML(s, i) {
-  if (T.game !== 'wh40k' || T.status === 'done') return '';
-  return `
+  if (T.status === 'done' || !SIDE_VP_GAMES.includes(T.game)) return '';
+  const cp = T.game === 'wh40k' ? `
     <span class="side-track">
       <span class="lbl">CP</span>
       <button class="rbtn sm" data-tside="${i}" data-tfield="cp" data-d="-1">−</button>
       <b id="cp-num-${i}">${s.cp || 0}</b>
       <button class="rbtn sm" data-tside="${i}" data-tfield="cp" data-d="1">+</button>
-    </span>
+    </span>` : '';
+  // Necromunda's gang bottle indicator: how close the gang is to testing, and
+  // whether it has bottled out. The card module owns the markup.
+  const bottle = T.game === 'necromunda' && window.NecromundaCard
+    ? NecromundaCard.bottleHTML(s, i) : '';
+  return `${cp}
     <span class="side-track">
       <span class="lbl">VP</span>
       <button class="rbtn sm" data-tside="${i}" data-tfield="vp" data-d="-1">−</button>
       <b id="vp-num-${i}">${s.vp || 0}</b>
       <button class="rbtn sm" data-tside="${i}" data-tfield="vp" data-d="1">+</button>
-    </span>`;
+    </span>${bottle}`;
 }
 
 function renderPlay() {
@@ -1100,6 +1354,9 @@ function renderPlay() {
       </span>`}
       <span class="join-code"><span class="lbl">Join code</span><b>${T.id}</b></span>
     </div>
+
+    ${T.game === 'bloodbowl' && window.BloodBowlCard ? BloodBowlCard.matchBarHtml(T.match, T.sides, T.status) : ''}
+
     <div class="error" id="p-err"></div>
 
     ${done && T.result ? doneHTML(T.result) : ''}
@@ -1108,7 +1365,7 @@ function renderPlay() {
       <div class="side-title">
         <h2>${esc(s.name)}</h2>
         <span class="muted" id="side-sub-${i}">${sideSub(s)}</span>
-        ${sideTrackersHTML(s, i)}
+        <span class="side-tracks" id="side-track-${i}">${sideTrackersHTML(s, i)}</span>
       </div>
       <div class="unit-grid${T.game === 'battletech-classic' ? ' classic-grid' : ''}">
         ${s.units.map(cardHTML).join('') || emptySideHTML(s, i)}
@@ -1117,13 +1374,15 @@ function renderPlay() {
     ${done ? '' : `
     <h2>Finish</h2>
     <div class="card" id="finish-card">
-      <p class="muted">Score yer objectives at da table, punch in da VP, an' file it to da league.</p>
+      <p class="muted">${T.game === 'bloodbowl'
+        ? 'Da score, da TDs and da casualties are already on da cards — just file it.'
+        : 'Score yer objectives at da table, punch in da VP, and file it to da league.'}</p>
       <div class="finish-grid" style="margin-top:10px">
         ${T.sides.map((s) => `
           <div>
             <h3 style="color:var(--bone);font-size:15px;margin-bottom:6px">${esc(s.name)}</h3>
-            <div class="muted" style="margin-bottom:6px">${s.units.filter((u) => u.destroyed).length} lost so far</div>
-            <label>Victory points <input type="number" class="vp-input" data-vp="${esc(s.name)}" min="0" max="200" value="${T.game === 'wh40k' ? (s.vp || 0) : 0}"></label>
+            <div class="muted" style="margin-bottom:6px">${s.units.filter((u) => u.destroyed).length} ${T.game === 'bloodbowl' ? 'off da pitch' : 'lost'} so far</div>
+            ${T.game === 'bloodbowl' ? '' : `<label>Victory points <input type="number" class="vp-input" data-vp="${esc(s.name)}" min="0" max="200" value="${s.vp || 0}"></label>`}
           </div>`).join('')}
       </div>
       <div style="margin-top:14px"><button class="btn big" id="p-finish">Finish Table</button></div>
@@ -1164,10 +1423,52 @@ function renderPlay() {
         });
       }).catch(() => { /* db down */ });
     }
+
+    // Populate the claim-a-side league-team dropdowns (bloodbowl only).
+    const bbClaims = [...document.querySelectorAll('select.claim-bb')];
+    if (bbClaims.length) fillBbTeamSelects(bbClaims);
   }
 }
 
+// Every drafted Blood Bowl team across the club's Blood Bowl leagues, as
+// "<leagueId>:<teamId>" options. A team that was never drafted through the
+// list builder has no roster to snapshot, so it is left out.
+async function fillBbTeamSelects(selects) {
+  let opts = '<option value="">— no league teams found —</option>';
+  try {
+    const leagues = await api('/league');
+    const bbLeagues = (leagues || []).filter((l) => l.game === 'bloodbowl');
+    const rows = [];
+    for (const l of bbLeagues) {
+      const full = await api('/league/' + l.id);
+      for (const t of Object.values(full.teams || {})) {
+        if (t.bb) rows.push({ v: `${l.id}:${t.id}`, label: `${t.name} — ${t.race || '?'} (${l.name})` });
+      }
+    }
+    if (rows.length) {
+      opts = '<option value="">— pick a league team —</option>'
+        + rows.map((r) => `<option value="${esc(r.v)}">${esc(r.label)}</option>`).join('');
+    }
+  } catch { /* leagues unavailable — the paste box still works */ }
+  selects.forEach((sel) => { sel.innerHTML = opts; });
+}
+
+// Each game's doneSummary carries its OWN league stat ids, so the tally reads
+// them per game rather than printing `undefined`:
+//   battletech / wh40k  vp + kills + lost      necromunda  vp + oop + lost
+//   mcp                 vp + kos + lost        trenchcrusade  vp + cas
+//   bloodbowl           td + cas + comp + int  (and no vp at all)
 function doneHTML(sum) {
+  const headline = (s) => (sum.game === 'bloodbowl' ? `${s.td} TD` : `${s.vp} VP`);
+  const detail = (s) => {
+    if (sum.game === 'bloodbowl') {
+      return `${s.cas} cas • ${s.comp} comp • ${s.int} int${s.mvp ? ` • MVP ${esc(s.mvp)}` : ''}`;
+    }
+    if (sum.game === 'necromunda') return `${s.oop} out of action • ${s.lost} lost`;
+    if (sum.game === 'mcp') return `${s.kos} KOs • ${s.lost} lost`;
+    if (sum.game === 'trenchcrusade') return `${s.cas} casualties`;
+    return `${s.kills} kills • ${s.lost} lost`;
+  };
   return `
   <div class="card">
     <h2 style="margin-top:0">Final Tally</h2>
@@ -1175,8 +1476,8 @@ function doneHTML(sum) {
       ${sum.sides.map((s) => `
         <div style="text-align:center">
           <h3 style="color:var(--bone);font-size:16px">${esc(s.name)}</h3>
-          <div class="done-num">${s.vp} VP</div>
-          <div class="muted">${s.kills} kills • ${s.lost} lost</div>
+          <div class="done-num">${headline(s)}</div>
+          <div class="muted">${detail(s)}</div>
         </div>`).join('')}
     </div>
     <p style="margin-top:14px"><a class="btn" href="/league/">File it in da League Tracker →</a>
@@ -1202,6 +1503,22 @@ async function viewPlay(id) {
 // tracking toggle ON (reference mode leaves the stats read-only).
 const canTrack = () => (T && T.status !== 'done') || (LST && listTracking);
 
+// Ceiling for a delegated +/- stepper, mirroring the server's caps
+// (tracker-mcp MAX_POWER, tracker-bloodbowl MAX_EVENT). The server is still
+// the referee — this only stops the button firing a patch it knows is illegal.
+function stepMax(field) {
+  if (field === 'power') return 99;
+  if (field.startsWith('event.')) return (window.BloodBowlCard && BloodBowlCard.MAX_EVENT) || 20;
+  return 99;
+}
+
+// The units sharing a side with this one (a list is one "side").
+function sideUnitsOf(uid) {
+  if (LST) return LST.units;
+  if (!T) return [];
+  return (T.sides.find((s) => s.units.some((u) => u.uid === uid)) || { units: [] }).units;
+}
+
 $app.addEventListener('click', (ev) => {
   // list view: collapse/expand one unit card to its one-line header
   const head = ev.target.closest('[data-collapse]');
@@ -1219,11 +1536,44 @@ $app.addEventListener('click', (ev) => {
     patch(uid, field, k === cur ? k - 1 : k);
     return;
   }
-  // boolean toggles: crit slots, weapon-out buttons
+  // enum setters: a chip that SETS a field to a fixed value rather than
+  // stepping it. The cards spell it three ways — necromunda/trenchcrusade
+  // [data-set][data-value], mcp [data-set][data-v], bloodbowl
+  // [data-field][data-val] — so all three are read here.
+  const setter = ev.target.closest('[data-uid][data-set], [data-uid][data-field][data-val]');
+  if (setter && canTrack()) {
+    const d = setter.dataset;
+    const field = d.set || d.field;
+    const value = d.value !== undefined ? d.value : (d.v !== undefined ? d.v : d.val);
+    if (field && value !== undefined) { patch(d.uid, field, value); return; }
+  }
+  // numeric steppers: mcp power [data-step][data-d], bloodbowl SPP events
+  // [data-field][data-d]. Clamped client-side so a tap at the end of the
+  // track is a no-op instead of a rejected patch.
+  const step = ev.target.closest('[data-uid][data-step][data-d], [data-uid][data-field][data-d]');
+  if (step && canTrack()) {
+    const d = step.dataset;
+    const field = d.step || d.field;
+    const u = unitByUid(d.uid);
+    if (!u) return;
+    const cur = +readField(u, field) || 0;
+    const next = Math.max(0, Math.min(cur + (+d.d), stepMax(field)));
+    if (next !== cur) patch(d.uid, field, next);
+    return;
+  }
+  // boolean toggles: crit slots, weapon-out buttons, status chips, MVP
   const tgl = ev.target.closest('[data-uid][data-toggle]');
   if (tgl && canTrack()) {
     const u = unitByUid(tgl.dataset.uid);
-    if (u) patch(u.uid, tgl.dataset.toggle, !readField(u, tgl.dataset.toggle));
+    if (!u) return;
+    const on = !readField(u, tgl.dataset.toggle);
+    // One MVP per side: taking the crown clears whoever wore it.
+    if (tgl.dataset.toggle === 'mvp' && on && curGame() === 'bloodbowl') {
+      for (const other of sideUnitsOf(u.uid)) {
+        if (other.uid !== u.uid && other.mvp) patch(other.uid, 'mvp', false, { undoable: false });
+      }
+    }
+    patch(u.uid, tgl.dataset.toggle, on);
     return;
   }
   const undoBtn = ev.target.closest('[data-undo]');
@@ -1234,7 +1584,7 @@ $app.addEventListener('click', (ev) => {
     if (u) patch(u.uid, 'destroyed', !u.destroyed);
     return;
   }
-  // side CP/VP steppers (wh40k)
+  // side CP/VP steppers (wh40k + the tracker games' VP)
   const tr = ev.target.closest('[data-tside][data-tfield]');
   if (tr && T && T.status !== 'done') {
     const i = +tr.dataset.tside;
@@ -1242,6 +1592,40 @@ $app.addEventListener('click', (ev) => {
     if (!s) return;
     const next = Math.max(0, (s[tr.dataset.tfield] || 0) + (+tr.dataset.d));
     patchSide(i, tr.dataset.tfield, next);
+    return;
+  }
+  // Necromunda gang bottle switch (the chip in the side header)
+  const bottle = ev.target.closest('[data-bottle]');
+  if (bottle && T && T.status !== 'done') {
+    const i = +bottle.dataset.bottle;
+    if (T.sides[i]) patchSide(i, 'bottled', !T.sides[i].bottled);
+    return;
+  }
+  // ---- Blood Bowl match bar ----
+  // step a match field ([data-mfield][data-d], optional [data-mside])
+  const mstep = ev.target.closest('[data-mfield][data-d]');
+  if (mstep && T && T.match && T.status !== 'done') {
+    const d = mstep.dataset;
+    const field = d.mfield;
+    const side = d.mside === undefined ? null : +d.mside;
+    const cur = side === null ? (T.match[field] || 0) : ((T.match[field] || [])[side] || 0);
+    patchMatch(field, side, cur + (+d.d));
+    return;
+  }
+  // set a match field absolutely ([data-mfield][data-mval]) — the turn counters
+  const mval = ev.target.closest('[data-mfield][data-mval]');
+  if (mval && T && T.match && T.status !== 'done') {
+    const d = mval.dataset;
+    patchMatch(d.mfield, d.mside === undefined ? null : +d.mside, +d.mval);
+    return;
+  }
+  // flip a boolean match field ([data-mtoggle]) — "reroll used dis turn"
+  const mtgl = ev.target.closest('[data-mtoggle]');
+  if (mtgl && T && T.match && T.status !== 'done') {
+    const d = mtgl.dataset;
+    const side = d.mside === undefined ? null : +d.mside;
+    const cur = side === null ? T.match[d.mtoggle] : (T.match[d.mtoggle] || [])[side];
+    patchMatch(d.mtoggle, side, !cur);
     return;
   }
   // claim an empty side
@@ -1271,6 +1655,34 @@ $app.addEventListener('click', (ev) => {
         });
       })
       .catch((e) => playErr(e.message));
+    return;
+  }
+  // claim a paste-game side (necromunda / mcp / trenchcrusade): the server
+  // parses and snapshots the same way it does at create time.
+  const claimPaste = ev.target.closest('[data-claimpaste]');
+  if (claimPaste && T && T.status !== 'done') {
+    const i = +claimPaste.dataset.claimpaste;
+    const ta = document.querySelector(`textarea.claim-army[data-side="${i}"]`);
+    const text = ta ? ta.value.trim() : '';
+    if (!text) { playErr('Paste yer list first.'); return; }
+    api(`/table/${T.id}/side/${i}/units`, { method: 'POST', body: JSON.stringify({ text }) })
+      .then((t) => { T = t; renderPlay(); })
+      .catch((e) => playErr(e.message));
+    return;
+  }
+  // claim a Blood Bowl side: a drafted league team, or a pasted roster.
+  const claimBb = ev.target.closest('[data-claimbb]');
+  if (claimBb && T && T.status !== 'done') {
+    const i = +claimBb.dataset.claimbb;
+    const sel = document.querySelector(`select.claim-bb[data-side="${i}"]`);
+    const ta = document.querySelector(`textarea.claim-army[data-side="${i}"]`);
+    const pick = sel && sel.value ? sel.value.split(':') : null;
+    const text = ta ? ta.value.trim() : '';
+    if (!pick && !text) { playErr('Pick a league team or paste a roster.'); return; }
+    const body = pick ? { leagueId: pick[0], teamId: pick[1] } : { text };
+    api(`/table/${T.id}/side/${i}/units`, { method: 'POST', body: JSON.stringify(body) })
+      .then((t) => { T = t; renderPlay(); })
+      .catch((e) => playErr(e.message));
   }
 });
 $app.addEventListener('change', (ev) => {
@@ -1280,6 +1692,18 @@ $app.addEventListener('change', (ev) => {
   const crew = ev.target.closest('select.crew-sel[data-uid][data-field]');
   if (crew && ((T && T.status === 'setup') || (LST && listTracking))) {
     patch(crew.dataset.uid, crew.dataset.field, +crew.value, { undoable: false });
+    return;
+  }
+  // Blood Bowl match bar: the weather picker and the inducements box. The
+  // inducements input keeps its own text, so it is patched without a repaint.
+  const wsel = ev.target.closest('select.bb-wsel[data-mfield]');
+  if (wsel && T && T.match && T.status !== 'done') {
+    patchMatch(wsel.dataset.mfield, wsel.dataset.mside === undefined ? null : +wsel.dataset.mside, wsel.value);
+    return;
+  }
+  const ind = ev.target.closest('input.bb-indinput[data-mfield]');
+  if (ind && T && T.match && T.status !== 'done') {
+    patchMatch(ind.dataset.mfield, ind.dataset.mside === undefined ? null : +ind.dataset.mside, ind.value, { redraw: false });
   }
 });
 
