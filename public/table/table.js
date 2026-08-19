@@ -442,7 +442,7 @@ async function viewNewList() {
     <div class="card">
       <div class="form-grid">
         <label>Game <select id="nl-game">${games.map((g) => `<option value="${g.id}">${esc(g.name)}</option>`).join('')}</select></label>
-        <label>List name <input id="nl-name" maxlength="60" placeholder="Tuesday Custodes"></label>
+        <label>List name <input id="nl-name" maxlength="60" placeholder="named from yer force or list — edit if yer like"></label>
       </div>
       <div id="nl-src"></div>
       <div class="error" id="nl-err"></div>
@@ -452,7 +452,13 @@ async function viewNewList() {
   const $game = $app.querySelector('#nl-game');
   const $src = $app.querySelector('#nl-src');
   const $err = $app.querySelector('#nl-err');
-  const listName = () => $app.querySelector('#nl-name').value.trim();
+  const $name = $app.querySelector('#nl-name');
+  // The name is a convenience, never a gate: picking a force or resolving a
+  // paste already says what the list is, so fill it in and let them edit it.
+  const suggestName = (suggestion) => {
+    if (!$name.value.trim() && suggestion) $name.value = String(suggestion).slice(0, 60);
+  };
+  const listName = () => $name.value.trim() || ($game.selectedOptions[0]?.textContent || 'My list').trim().slice(0, 60);
 
   const renderSource = () => {
     const game = $game.value;
@@ -470,11 +476,12 @@ async function viewNewList() {
         </div>
         <h3 class="nl-h3">…or paste a list from any builder</h3>
         ${paste}`;
+      $src.querySelector('#nl-force').onchange = (ev) => suggestName(ev.target.value);
       $src.querySelector('#nl-fromforce').onclick = async () => {
         $err.textContent = '';
         const forceName = $src.querySelector('#nl-force').value;
         if (!forceName) { $err.textContent = 'Pick a saved force first.'; return; }
-        if (!listName()) { $err.textContent = 'Give da list a name first.'; return; }
+        suggestName(forceName);
         try {
           const l = await api('/lists', { method: 'POST', body: JSON.stringify({ game, name: listName(), forceName }) });
           location.hash = '#/l/' + l.id;
@@ -487,9 +494,10 @@ async function viewNewList() {
       $err.textContent = '';
       const text = $src.querySelector('#nl-paste').value.trim();
       if (!text) { $err.textContent = 'Paste a list first.'; return; }
-      if (!listName()) { $err.textContent = 'Give da list a name first.'; return; }
       try {
         const resolve = await api('/lists/resolve', { method: 'POST', body: JSON.stringify({ game, text }) });
+        suggestName(resolve.detachment?.name || resolve.faction?.name
+          || resolve.units?.[0]?.matches?.[0]?.name || resolve.units?.[0]?.name);
         if (game === 'wh40k') render40kListResolve(game, listName(), resolve);
         else if (isPasteGame(game)) renderSimpleListPreview(game, listName(), text, resolve);
         else renderBtListResolve(game, listName(), resolve);
