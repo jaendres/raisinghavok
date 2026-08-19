@@ -127,7 +127,9 @@ const GAME_STATS = {
       { id: 'crisisSelection', name: 'Crisis selection', type: 'select',
         options: ['Random', 'Player choice'], default: 'Random' },
     ],
-    races: ['Avengers', 'X-Men', 'Brotherhood of Mutants', 'Guardians of the Galaxy', 'Asgard', 'Cabal', 'Criminal Syndicate', 'Defenders', 'Inhumans', 'Web Warriors', 'S.H.I.E.L.D.', 'Hydra', 'A-Force', 'Black Order', 'Convocation', 'Dark Dimension', 'Midnight Sons', 'Wakanda', 'Winter Guard', 'X-Force', 'Sentinels', 'Unaffiliated'],
+    // Names match the MCP catalog's affiliations exactly (server/data/
+    // mcp-catalog.json) so a league team's faction lines up with the builder.
+    races: ['A-Force', 'Asgard', 'Avengers', 'Black Order', 'Brotherhood of Mutants', 'Cabal', 'Convocation', 'Criminal Syndicate', 'Dark Dimension', 'Defenders', 'Guardians of the Galaxy', 'Hellfire Club', 'Hydra', 'Inhumans', 'Legion of the Lost', 'Midnight Sons', 'New Mutants', 'S.H.I.E.L.D.', 'Sentinels', 'Servants of the Apocalypse', 'Spider-Foes', 'Uncanny X-Men', 'Wakanda', 'Weapon X', 'Web Warriors', 'Winter Guard', 'X-Force', 'Unaffiliated'],
   },
 };
 
