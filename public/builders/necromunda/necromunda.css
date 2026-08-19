@@ -1,0 +1,88 @@
+/* Necromunda gang builder.
+   builders.css (imported first) already pulls in the club look from
+   league.css and provides the three-pane .bt-layout scaffolding; this file
+   adds the gang-builder-specific pieces: fighter cards, statline strips,
+   credit meter, and fat tap targets for the club iPads. */
+
+/* ---- gang chooser ---- */
+
+.gang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.gang-card h3 { font-size: 20px; color: var(--bone); }
+.gang-card .meta { min-height: 34px; }
+
+/* ---- recruit table ---- */
+
+.nm-table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.nm-table th { position: sticky; top: 0; background: var(--panel); z-index: 1; padding: 6px 6px; font-size: 11.5px; }
+.nm-table td { padding: 8px 6px; vertical-align: top; }
+.nm-table .c-add { width: 44px; padding-right: 0; }
+.nm-table .c-cost { width: 52px; }
+.nm-table .c-name { width: auto; white-space: normal; word-break: break-word; }
+.c-name .fcat { display: block; color: var(--dust); font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em; }
+.c-name .fstat { display: block; color: #8a7f6f; font-size: 12.5px; margin-top: 2px; }
+.cr { color: var(--rust); font-family: 'Black Ops One'; font-size: 14px; white-space: nowrap; }
+
+/* iPad-friendly: every interactive control at least ~40px in the hit direction */
+.addbtn { min-width: 40px; min-height: 36px; font-size: 16px; }
+.rmbtn { min-width: 36px; min-height: 32px; }
+
+/* ---- armoury reference ---- */
+
+.armoury h3 { font-size: 13.5px; color: var(--rust); margin: 12px 0 4px; letter-spacing: .1em; }
+.arm-row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 2px; border-bottom: 1px dashed #2b221b; cursor: pointer; font-size: 15px; }
+.arm-row:hover { background: #ff6a1a12; }
+.arm-row .muted { font-size: 13px; }
+.profile-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 4px 0 8px; }
+.profile-table th { font-size: 10px; padding: 3px 5px; }
+.profile-table td { padding: 3px 5px; border-bottom: 1px dashed #241d17; white-space: nowrap; }
+.profile-table td:last-child { white-space: normal; }
+.profile-wrap { overflow-x: auto; }
+
+/* ---- roster pane ---- */
+
+.credit-meter { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; text-align: center; }
+.credit-meter .box { background: var(--panel2); border: 1px solid #2b221b; padding: 8px 4px; }
+.credit-meter .lbl { display: block; color: var(--dust); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+.credit-meter b { font-family: 'Black Ops One'; font-size: 20px; color: var(--rust); }
+.credit-meter .over b { color: #ff7b6b; }
+
+.fighter-card { background: var(--panel2); border: 1px solid #2b221b; border-left: 3px solid var(--rust-dk); padding: 10px 12px; margin-bottom: 10px; }
+.fighter-card .fc-head { display: flex; align-items: center; gap: 8px; }
+.fighter-card .fc-head input { flex: 1; min-width: 0; padding: 6px 8px; font-size: 15px; }
+.fighter-card .fc-type { color: var(--dust); font-size: 13px; text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+.fighter-card .fc-cost { font-family: 'Black Ops One'; color: var(--rust); white-space: nowrap; }
+
+.statline { width: 100%; border-collapse: collapse; margin: 8px 0 4px; }
+.statline th { font-size: 9.5px; padding: 2px 1px; text-align: center; color: var(--dust); border-bottom: 1px solid #2b221b; }
+.statline td { font-size: 14px; padding: 3px 1px; text-align: center; border-bottom: none; font-variant-numeric: tabular-nums; }
+
+.gear-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 3px 0; font-size: 14.5px; }
+.gear-row .g-cost { color: var(--dust); white-space: nowrap; }
+.gear-add { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-top: 6px; }
+.gear-add select { min-height: 40px; }
+.gear-add .btn.small { min-height: 40px; padding: 4px 14px; }
+
+.fc-foot { display: flex; justify-content: flex-end; margin-top: 6px; }
+
+/* ---- warnings ---- */
+
+.warnbox { background: #3a1a10; border: 1px solid var(--blood); color: #ffb59b; padding: 8px 12px; margin-bottom: 12px; font-size: 14.5px; }
+.warnbox ul { margin-left: 18px; }
+
+/* ---- export sheet ---- */
+
+.export-pre {
+  background: #fff; color: #111; font-family: 'Courier New', monospace; font-size: 13px;
+  padding: 20px 24px; white-space: pre-wrap; word-break: break-word; line-height: 1.35;
+  max-height: 60vh; overflow: auto;
+}
+
+@media print {
+  nav, footer, .no-print { display: none !important; }
+  body { background: #fff; }
+  main { width: 100%; margin: 0; }
+  .modal-back { position: static; padding: 0; background: #fff; display: block; }
+  .modal { box-shadow: none; border: none; width: 100%; padding: 0; }
+  .modal-x, .modal-actions { display: none !important; }
+  .export-pre { max-height: none; overflow: visible; padding: 0; }
+}

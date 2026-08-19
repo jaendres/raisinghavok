@@ -1,0 +1,4492 @@
+{
+ "meta": {
+  "game": "Necromunda",
+  "edition": "2018 ruleset, House of X era gang lists",
+  "generated": "2026-08-19",
+  "source": "hand-assembled from the sources below (no single clean machine source exists)",
+  "sources": [
+   {
+    "role": "fighters (types, costs, statlines) + trading-post prices + skill lists",
+    "repo": "github.com/gyrinx-app/gyrinx",
+    "license": "Apache-2.0",
+    "commit": "ba96ba467f2902d58255df1919a8a4705357993d",
+    "files": "content/necromunda-2018/data/{fighter/*,equipment.yaml,skill.yaml}"
+   },
+   {
+    "role": "weapon/wargear profiles + Goliath/Escher/Orlock/Van Saar/Cawdor equipment lists and prices",
+    "repo": "github.com/BSData/necromunda-gang-war",
+    "commit": "181398caddde855d2128a960e43f4cbe2217352a",
+    "edition": "Necromunda: Gang War (2017–2020 data)"
+   },
+   {
+    "role": "Delaque + Enforcer equipment access, fixes, composition rules",
+    "repo": "hand-compiled",
+    "note": "see CAVEATS"
+   }
+  ],
+  "rejected": {
+   "repo": "github.com/BSData/necromunda",
+   "why": "Necromunda 1st edition (1995); README marks it deprecated/unsupported — wrong game for a current-rules builder."
+  },
+  "rules": {
+   "startingCredits": 1000,
+   "leader": "A gang must include exactly one Leader.",
+   "gangFighterMajority": "Fighters with the Gang Fighter rule (Gangers and Juves) must make up at least half the gang.",
+   "specialists": "At gang founding only one Ganger may be upgraded to a Specialist (campaign play).",
+   "notes": "Light-touch validation only: the builder warns, it does not referee. Check the House books for anything contentious."
+  },
+  "caveats": [
+   "Fighter names, costs and statlines come from the gyrinx-app content library (House of X era) and were spot-checked against community sources.",
+   "Weapon profiles and the five house equipment lists come from BSData necromunda-gang-war (last updated 2020): per-gang prices there are Gang War era and may differ from the House books by small amounts; weapons the House books added later are missing from those lists.",
+   "Delaque and Enforcer equipment access is hand-compiled; prices for those items are Trading Post prices (or hand-entered where marked) rather than house-list prices.",
+   "Items marked with an empty profile list (e.g. Concussion Carbine) have no profile in the source data — look them up in the book.",
+   "Ld/Cl/Wil/Int and WS/BS/I are target numbers (render with a +). Crew statlines of 0 mean the characteristic does not apply (vehicle crew)."
+  ],
+  "report": {
+   "skipped": [
+    "orlock: \"Polearm/Blunderbuss\" — no price in any source",
+    "vansaar: \"Armoured Bodyglove\" — no price in any source",
+    "cawdor: \"Polearm/Blunderbuss\" — no price in any source"
+   ],
+   "fixes": [
+    "escher: Queen — Escher Gang Queen is the gang Leader; source file categorises her as Champion",
+    "cawdor: deduped repeated \"Word-Keeper\"",
+    "enforcers: deduped repeated \"Subjugator Patrolman Specialist\""
+   ],
+   "counts": {
+    "goliath": {
+     "fighters": 7,
+     "equipment": 39
+    },
+    "escher": {
+     "fighters": 7,
+     "equipment": 37
+    },
+    "orlock": {
+     "fighters": 8,
+     "equipment": 31
+    },
+    "vansaar": {
+     "fighters": 7,
+     "equipment": 35
+    },
+    "delaque": {
+     "fighters": 11,
+     "equipment": 31
+    },
+    "cawdor": {
+     "fighters": 10,
+     "equipment": 39
+    },
+    "enforcers": {
+     "fighters": 9,
+     "equipment": 20
+    }
+   }
+  }
+ },
+ "skills": {
+  "Adept Abilities - Psychic": [
+   "Familiar",
+   "Hypnosis",
+   "Unbreakable Will",
+   "Zealot"
+  ],
+  "Agility": [
+   "Catfall",
+   "Clamber",
+   "Dodge",
+   "Mighty Leap",
+   "Spring up",
+   "Sprint"
+  ],
+  "Bravado": [
+   "Big Brother",
+   "Bring it On!",
+   "Guilder Contacts",
+   "King Hit",
+   "Shotgun Savant",
+   "Steady Hands"
+  ],
+  "Brawn": [
+   "Bulging Biceps",
+   "Bull Charge",
+   "Crushing Blow",
+   "Headbutt",
+   "Hurl",
+   "Iron Jaw"
+  ],
+  "Chaos Cultist - Psychic": [
+   "Assail",
+   "Dark Shield",
+   "Levitation",
+   "Maddening Visions",
+   "Non-sanctioned Psyker",
+   "Scouring",
+   "Warp Strength"
+  ],
+  "Combat": [
+   "Combat Master",
+   "Counter-attack",
+   "Disarm",
+   "Parry",
+   "Rain of Blows",
+   "Step Aside"
+  ],
+  "Cult - Psychic": [
+   "Assail",
+   "Force Blast",
+   "Hypnosis",
+   "Mind Control",
+   "Unbreakable Will",
+   "Zealot"
+  ],
+  "Cunning": [
+   "Backstab",
+   "Escape Artist",
+   "Evade",
+   "Infiltrate",
+   "Lie Low",
+   "Overwatch"
+  ],
+  "Darkness - Wryd Powers": [
+   "A Perfect Void",
+   "Cacophony of Silence",
+   "Cloak of Whispers",
+   "Eternal Slumber",
+   "Penumbral Mirror",
+   "Sight Blight"
+  ],
+  "Delusion - Wryd Powers": [
+   "Deceitful Thoughts",
+   "Ghost and Shadow",
+   "Opprobrious",
+   "Seen Unseen",
+   "Spatial Psychosis",
+   "Suicidal Embrace"
+  ],
+  "Driving": [
+   "Expert Driver",
+   "Heavy Foot",
+   "Jink",
+   "Running Repairs",
+   "Slalom",
+   "T-bone"
+  ],
+  "Ferocity": [
+   "Berserker",
+   "Fearsome",
+   "Impetuous",
+   "Nerves of Steel",
+   "True Grit",
+   "Unstoppable"
+  ],
+  "Finesse": [
+   "Acrobatic",
+   "Combat Focus",
+   "Combat Virtuoso",
+   "Hit and Run",
+   "Lightning Reflexes",
+   "Somersault"
+  ],
+  "Impressive Leadership - Legendary Name": [
+   "Bigman",
+   "Impressive Scars",
+   "Iron Stare",
+   "Lucky",
+   "Rock Steady",
+   "Too Pretty for Primus"
+  ],
+  "Improbable Beatdowns - Legendary Name": [
+   "Bullet Lord",
+   "Chancer",
+   "Headshot",
+   "One Punch",
+   "One Shot",
+   "Two-guns"
+  ],
+  "Leadership": [
+   "Commanding Presence",
+   "Inspirational",
+   "Iron Will",
+   "Mentor",
+   "Overseer",
+   "Regroup"
+  ],
+  "Madness - Delaque Power": [
+   "Craven Howl",
+   "Cyclopean Gaze",
+   "Existential Barrage",
+   "Psychotic Lure",
+   "Terrible Truths",
+   "Unrememberable Utterance"
+  ],
+  "Muscle": [
+   "Fists of Steel",
+   "Immovable Stance",
+   "Iron Man",
+   "Naaargah!",
+   "Unleash the Beast",
+   "Walk it Off"
+  ],
+  "Obfuscation": [
+   "Doppelganger",
+   "Faceless",
+   "Fake Out",
+   "Psi-touched",
+   "Rumour-monger",
+   "Take Down"
+  ],
+  "Ogryn Wyrd Powers": [
+   "Body of Flame",
+   "Crush",
+   "Iron Arm",
+   "Overcharge",
+   "Terrify",
+   "Weapon Jinx"
+  ],
+  "Palanite Drill": [
+   "Got Your Six",
+   "Helmawr's Justice",
+   "Non-verbal Communication",
+   "Restraint Protocols",
+   "Team Work",
+   "Threat Response"
+  ],
+  "Piety": [
+   "Blazing Faith",
+   "Devotional Frenzy",
+   "Lord of Rats",
+   "Restless Faith",
+   "Scavenger's Eye",
+   "Unshakable Conviction"
+  ],
+  "Savagery": [
+   "Avatar of Blood",
+   "Bloodlust",
+   "Crimson Haze",
+   "Frenzy",
+   "Killing Blow",
+   "Slaughterborn"
+  ],
+  "Savant": [
+   "Ballistics Expert",
+   "Connected",
+   "Fixer",
+   "Medicae",
+   "Munitioneer",
+   "Savvy Trader"
+  ],
+  "Shooting": [
+   "Fast Shot",
+   "Gunfighter",
+   "Hip Shooting",
+   "Marksman",
+   "Precision Shot",
+   "Trick Shot"
+  ],
+  "Tech": [
+   "Cold and Calculating",
+   "Gadgeteer",
+   "Mental Mastery",
+   "Photonic Engineer",
+   "Rad-phaged",
+   "Weaponsmith"
+  ],
+  "Unbelievable Escapes - Orlock Legendary Name": [
+   "Badzone Legend",
+   "Blade Breaker",
+   "Bullet Dodger",
+   "Iron Hard",
+   "Promethium-proof Killer",
+   "Slippery Scummer"
+  ],
+  "Wastelands": [
+   "Beast Handler",
+   "Born to the Wastes",
+   "Bring It Down",
+   "Ever Vigilant",
+   "Eyes of the Wasteland",
+   "Stormwalker"
+  ],
+  "Wisdom of the Ancients": [
+   "Chemical Bonds Never Break",
+   "Dependable Like Kin",
+   "Nobody Pushes Kin Around",
+   "Stubborn to the Last",
+   "There's Always Another Secret",
+   "Where There's Scrap, There's Creds!"
+  ],
+  "Witch Powers - Powers": [
+   "Dark Shield",
+   "Levitation",
+   "Maddening Visions",
+   "Scouring",
+   "Warp Strength"
+  ]
+ },
+ "weapons": {
+  "\"Hystrar\" pattern energy shield": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Energy Shield, Knockback, Melee"
+    }
+   ]
+  },
+  "\"Krumper\" Rivet Cannon": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "name": "Rapid Fire",
+     "rngS": "3\"",
+     "rngL": "9\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "4",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "3+",
+     "traits": "Rapid Fire (1), Unwieldy"
+    },
+    {
+     "name": "Super-heated rivet",
+     "rngS": "3\"",
+     "rngL": "9\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "6",
+     "ap": "-2",
+     "d": "2",
+     "ammo": "3+",
+     "traits": "Blaze, Unwieldy"
+    }
+   ]
+  },
+  "\"Nightshade\" Chem-thrower": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "5+",
+     "traits": "Gas, Template"
+    }
+   ]
+  },
+  "\"Renderizer\" Serrated Axe": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+2",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "-",
+     "traits": "Melee, Pulverize, Unwieldy"
+    }
+   ]
+  },
+  "Autogun": {
+   "category": "Basic Weapons",
+   "profiles": [
+    {
+     "rngS": "8\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Rapid Fire (1)"
+    }
+   ]
+  },
+  "Autopistol": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "4\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Pistol, Rapid Fire (1)"
+    }
+   ]
+  },
+  "Axe": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Disarm, Melee"
+    }
+   ]
+  },
+  "Blasting charge": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx2",
+     "accS": "-",
+     "accL": "-",
+     "str": "5",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "5+",
+     "traits": "Blast (5\"), Grenade, Knockback"
+    }
+   ]
+  },
+  "Blunderbuss": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "name": "Emperor's Wrath",
+     "rngS": "8\"",
+     "rngL": "12\"",
+     "accS": "-",
+     "accL": "-1",
+     "str": "4",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "4+",
+     "traits": "Knockback, Pulverize"
+    },
+    {
+     "name": "Grape shot",
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "2",
+     "ap": "-",
+     "d": "1",
+     "ammo": "6+",
+     "traits": "Plentiful, Scattershot"
+    },
+    {
+     "name": "Purgation shot",
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "6+",
+     "traits": "Blaze, Plentiful"
+    }
+   ],
+   "profileOf": "Bluderbuss"
+  },
+  "Bolt pistol": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "6\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "6+",
+     "traits": "Pistol"
+    }
+   ]
+  },
+  "Boltgun": {
+   "category": "Basic Weapons",
+   "profiles": [
+    {
+     "rngS": "12\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "6+",
+     "traits": "Rapid Fire (1)"
+    }
+   ]
+  },
+  "Brute cleaver": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "+1",
+     "str": "S",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Disarm"
+    }
+   ]
+  },
+  "Chainglaive": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "E",
+     "rngL": "2\"",
+     "accS": "-1",
+     "accL": "-",
+     "str": "S+2",
+     "ap": "-2",
+     "d": "2",
+     "ammo": "-",
+     "traits": "Melee, Unwieldy, Versatile"
+    }
+   ]
+  },
+  "Chainsword": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "+1",
+     "str": "S",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Parry Rending"
+    }
+   ]
+  },
+  "Choke gas grenade": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "5+",
+     "traits": "Blast (3\"), Gas, Grenade"
+    }
+   ]
+  },
+  "Club, maul or hammer": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S",
+     "ap": "-",
+     "d": "2",
+     "ammo": "-",
+     "traits": "Melee"
+    }
+   ]
+  },
+  "Combat Shotgun": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "name": "Salvo fire",
+     "rngS": "4\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-",
+     "d": "2",
+     "ammo": "4+",
+     "traits": "Knockback, Rapid Fire (1)"
+    },
+    {
+     "name": "Shredder blast",
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "2",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Scattershot, Template"
+    },
+    {
+     "name": "Firestorm shells",
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "5",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "6+",
+     "traits": "Blaze, Limited, Template"
+    }
+   ]
+  },
+  "Demolition charge": {
+   "category": "Grenades",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx2",
+     "accS": "-",
+     "accL": "",
+     "str": "8",
+     "ap": "-3",
+     "d": "3",
+     "ammo": "*",
+     "traits": "Blast (5\"), Grenade, Single Shot"
+    }
+   ]
+  },
+  "Enforcer Boltgun": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "12\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "6+",
+     "traits": "Rapid Fire (1)"
+    }
+   ],
+   "profileOf": "Boltgun"
+  },
+  "Fighting knife": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Backstab, Melee"
+    }
+   ]
+  },
+  "Flail": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "+1",
+     "str": "S+1",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Entangle, Melee"
+    }
+   ]
+  },
+  "Flamer": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "4",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "5+",
+     "traits": "Blaze, Template"
+    }
+   ]
+  },
+  "Frag grenade": {
+   "category": "Grenades",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Blast (3\"), Knockback, Grenade"
+    }
+   ]
+  },
+  "Grav-gun": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "9\"",
+     "rngL": "18\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "*",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "5+",
+     "traits": "Blast (3\"), Concussion, Graviton Pulse"
+    }
+   ]
+  },
+  "Grenade Launcher": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "name": "Frag grenade",
+     "rngS": "6\"",
+     "rngL": "24\"",
+     "accS": "-1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "6+",
+     "traits": "Blast (3\"), Knockback"
+    },
+    {
+     "name": "Krak grenade",
+     "rngS": "6\"",
+     "rngL": "24\"",
+     "accS": "-1",
+     "accL": "-",
+     "str": "6",
+     "ap": "-2",
+     "d": "2",
+     "ammo": "6+",
+     "traits": ""
+    },
+    {
+     "name": "Smoke grenade",
+     "rngS": "6\"",
+     "rngL": "24\"",
+     "accS": "-1",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "4+",
+     "traits": "Smoke"
+    },
+    {
+     "name": "Choke gas grenade",
+     "rngS": "6\"",
+     "rngL": "24\"",
+     "accS": "-1",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "5+",
+     "traits": "Blast (3\"), Gas, Limited"
+    },
+    {
+     "name": "Scare gas grenade",
+     "rngS": "6\"",
+     "rngL": "24\"",
+     "accS": "-1",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "6+",
+     "traits": "Blast (3\"), Fear, Gas, Limited"
+    }
+   ]
+  },
+  "Hand flamer": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "5+",
+     "traits": "Blaze, Template"
+    }
+   ]
+  },
+  "Heavy Bolter": {
+   "category": "Heavy Weapons",
+   "profiles": [
+    {
+     "rngS": "18\"",
+     "rngL": "36\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "5",
+     "ap": "-2",
+     "d": "2",
+     "ammo": "6+",
+     "traits": "Rapid Fire (2), Unwieldy"
+    }
+   ]
+  },
+  "Heavy flamer": {
+   "category": "Heavy Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "5",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "5+",
+     "traits": "Blaze, Template"
+    }
+   ]
+  },
+  "Heavy stubber": {
+   "category": "Heavy Weapons",
+   "profiles": [
+    {
+     "rngS": "20\"",
+     "rngL": "40\"",
+     "accS": "-",
+     "accL": "-1",
+     "str": "4",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Rapid Fire (2), Unwieldy"
+    }
+   ]
+  },
+  "Incendiary charge": {
+   "category": "Grenades",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "5+",
+     "traits": "Blast (5\"), Blaze, Grenade"
+    }
+   ]
+  },
+  "Krak grenade": {
+   "category": "Grenades",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-1",
+     "str": "6",
+     "ap": "-2",
+     "d": "2",
+     "ammo": "4+",
+     "traits": "Demolitions, Grenade"
+    }
+   ]
+  },
+  "Las Carbine": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "10\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Plentiful, Rapid Fire (1)"
+    }
+   ]
+  },
+  "Las Sub-carbine": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "4\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Pistol, Plentiful, RapidFire (1)"
+    }
+   ]
+  },
+  "Lasgun": {
+   "category": "Basic Weapons",
+   "profiles": [
+    {
+     "rngS": "18\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "2+",
+     "traits": "Plentiful"
+    }
+   ]
+  },
+  "Laspistol": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "8\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "2+",
+     "traits": "Pistol, Plentiful"
+    }
+   ]
+  },
+  "Long Las": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "18\"",
+     "rngL": "36\"",
+     "accS": "-",
+     "accL": "+1",
+     "str": "4",
+     "ap": "-",
+     "d": "1",
+     "ammo": "2+",
+     "traits": "Plentiful"
+    }
+   ]
+  },
+  "Long Rifle": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "24\"",
+     "rngL": "48\"",
+     "accS": "-",
+     "accL": "+1",
+     "str": "4",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Knockback"
+    }
+   ]
+  },
+  "Meltagun": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "6\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "8",
+     "ap": "-4",
+     "d": "3",
+     "ammo": "4+",
+     "traits": "Melta, Scarce"
+    }
+   ]
+  },
+  "Multi-melta": {
+   "category": "Heavy Weapons",
+   "profiles": [
+    {
+     "rngS": "12\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "8",
+     "ap": "-4",
+     "d": "3",
+     "ammo": "4+",
+     "traits": "Blast (3\"), Melta, Scarce, Unwieldy"
+    }
+   ]
+  },
+  "Needle pistol": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "4\"",
+     "rngL": "9\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "4",
+     "ap": "-1",
+     "d": "-",
+     "ammo": "6+",
+     "traits": "Pistol, Scarce, Toxin"
+    }
+   ]
+  },
+  "Needle rifle": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "9\"",
+     "rngL": "18\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "4",
+     "ap": "-2",
+     "d": "-",
+     "ammo": "6+",
+     "traits": "Scarce, Toxin"
+    }
+   ]
+  },
+  "Photon flash flare": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "5+",
+     "traits": "Blast (5\"), Flash, Grenade"
+    }
+   ]
+  },
+  "Plasma cannon": {
+   "category": "Heavy Weapons",
+   "profiles": [
+    {
+     "name": "Low power",
+     "rngS": "18\"",
+     "rngL": "36\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "6",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "5+",
+     "traits": "Rapid Fire (1), Scarce, Unwieldy"
+    },
+    {
+     "name": "Maximal power",
+     "rngS": "18\"",
+     "rngL": "36\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "8",
+     "ap": "-2",
+     "d": "3",
+     "ammo": "5+",
+     "traits": "Blast (3\"), Scarce, Unstable, Unwieldy"
+    }
+   ]
+  },
+  "Plasma gun": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "name": "Low power",
+     "rngS": "12\"",
+     "rngL": "24\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "5",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "5+",
+     "traits": "Rapid Fire (1), Scarce"
+    },
+    {
+     "name": "Maximal power",
+     "rngS": "12\"",
+     "rngL": "24\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "7",
+     "ap": "-2",
+     "d": "3",
+     "ammo": "5+",
+     "traits": "Scarce, Unstable"
+    }
+   ]
+  },
+  "Plasma pistol": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "name": "Low power",
+     "rngS": "6\"",
+     "rngL": "12\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "5",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "5+",
+     "traits": "Pistol, Scarce"
+    },
+    {
+     "name": "Maximal power",
+     "rngS": "6\"",
+     "rngL": "12\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "7",
+     "ap": "-2",
+     "d": "3",
+     "ammo": "5+",
+     "traits": "Pistol, Scarce, Unstable"
+    }
+   ]
+  },
+  "Polearm": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "E",
+     "rngL": "2\"",
+     "accS": "-",
+     "accL": "-",
+     "str": "+1",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Unwieldy, Versatile"
+    }
+   ]
+  },
+  "Power axe": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+2",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Disarm, Melee, Power"
+    }
+   ]
+  },
+  "Power hammer": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-1",
+     "d": "2",
+     "ammo": "-",
+     "traits": "Melee, Power"
+    }
+   ]
+  },
+  "Power knife": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Backstab, Melee, Power"
+    }
+   ]
+  },
+  "Power sword": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Parry, Power"
+    }
+   ]
+  },
+  "Rad Cannon": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "16\"",
+     "rngL": "32\"",
+     "accS": "-",
+     "accL": "-1",
+     "str": "2",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Blast (3\"), Rad-phage, Unwieldy"
+    }
+   ]
+  },
+  "Rad grenade": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "3",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Blast (3\"), Grenade, Rad-phage"
+    }
+   ]
+  },
+  "Rad gun": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "",
+     "str": "2",
+     "ap": "-2",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Rad-phage, Template"
+    }
+   ]
+  },
+  "Sawn-off shotgun": {
+   "category": "Basic Weapons",
+   "profiles": [
+    {
+     "rngS": "4\"",
+     "rngL": "8\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "6+",
+     "traits": "Plentiful, Scattershot"
+    }
+   ]
+  },
+  "Scare gas grenade": {
+   "category": "Grenades",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "6+",
+     "traits": "Blast (3\") Fear, Gas, Grenade"
+    }
+   ]
+  },
+  "Servo-claw": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+2",
+     "ap": "-",
+     "d": "2",
+     "ammo": "-",
+     "traits": "Melee"
+    }
+   ]
+  },
+  "Shock Baton": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "",
+     "str": "S",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Parry, Shock"
+    }
+   ]
+  },
+  "Shock Stave": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "E",
+     "rngL": "2\"",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Shock, Versatile"
+    }
+   ]
+  },
+  "Shock whip": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "E",
+     "rngL": "3\"",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Shock, Versatile"
+    }
+   ]
+  },
+  "Shotgun": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "name": "Solid Slug",
+     "rngS": "8\"",
+     "rngL": "16\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-",
+     "d": "2",
+     "ammo": "4+",
+     "traits": "Knockback"
+    },
+    {
+     "name": "Scatter shell",
+     "rngS": "4\"",
+     "rngL": "8\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "2",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Scattershot"
+    },
+    {
+     "name": "Inferno shells",
+     "rngS": "4\"",
+     "rngL": "16\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "5+",
+     "traits": "Blaze, Limited"
+    },
+    {
+     "name": "Executioner shells",
+     "rngS": "4\"",
+     "rngL": "16\"",
+     "accS": "-1",
+     "accL": "+1",
+     "str": "4",
+     "ap": "-2",
+     "d": "2",
+     "ammo": "6+",
+     "traits": "Knockback, Limited"
+    },
+    {
+     "name": "Acid rounds",
+     "rngS": "4\"",
+     "rngL": "16\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "3",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Blaze, Scattershot"
+    }
+   ]
+  },
+  "Smoke grenade": {
+   "category": "Grenades",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "Sx3",
+     "accS": "-",
+     "accL": "-",
+     "str": "-",
+     "ap": "-",
+     "d": "-",
+     "ammo": "4+",
+     "traits": "Grenade, Smoke"
+    }
+   ]
+  },
+  "Spud-jacker": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S+1",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Knockback, Melee"
+    }
+   ]
+  },
+  "Stiletto knife": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "+1",
+     "str": "S",
+     "ap": "-",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Toxin"
+    }
+   ]
+  },
+  "Stiletto sword": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-",
+     "str": "S",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Parry, Toxin"
+    }
+   ]
+  },
+  "Stub cannon": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "rngS": "9\"",
+     "rngL": "18\"",
+     "accS": "-",
+     "accL": "-",
+     "str": "5",
+     "ap": "-",
+     "d": "1",
+     "ammo": "3+",
+     "traits": "Knockback"
+    }
+   ]
+  },
+  "Stub gun": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "6\"",
+     "rngL": "12\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "3",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Pistol, Plentiful"
+    },
+    {
+     "name": "Dumdum rounds",
+     "rngS": "5\"",
+     "rngL": "10\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Limited"
+    }
+   ]
+  },
+  "Suppression Laser": {
+   "category": "Weapons",
+   "profiles": [
+    {
+     "name": "Broad burst",
+     "rngS": "4\"",
+     "rngL": "8\"",
+     "accS": "+2",
+     "accL": "-",
+     "str": "2",
+     "ap": "-",
+     "d": "1",
+     "ammo": "4+",
+     "traits": "Plentiful, Scattershot"
+    },
+    {
+     "name": "Short burst",
+     "rngS": "8\"",
+     "rngL": "16\"",
+     "accS": "+1",
+     "accL": "-",
+     "str": "4",
+     "ap": "-",
+     "d": "2",
+     "ammo": "4+",
+     "traits": "Knockback, Plentiful"
+    }
+   ]
+  },
+  "Sword": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "+1",
+     "str": "S",
+     "ap": "-1",
+     "d": "1",
+     "ammo": "-",
+     "traits": "Melee, Parry"
+    }
+   ]
+  },
+  "Two-handed axe": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-1",
+     "str": "S+2",
+     "ap": "-",
+     "d": "2",
+     "ammo": "-",
+     "traits": "Melee, Unwieldy"
+    }
+   ]
+  },
+  "Two-handed hammer": {
+   "category": "Close Combat",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "E",
+     "accS": "-",
+     "accL": "-1",
+     "str": "S+1",
+     "ap": "-",
+     "d": "3",
+     "ammo": "-",
+     "traits": "Knockback Melee, Unwieldy"
+    }
+   ]
+  },
+  "Web gun": {
+   "category": "Special Weapons",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "5",
+     "ap": "-",
+     "d": "-",
+     "ammo": "5+",
+     "traits": "Template, Web"
+    }
+   ]
+  },
+  "Web Pistol": {
+   "category": "Pistols",
+   "profiles": [
+    {
+     "rngS": "-",
+     "rngL": "T",
+     "accS": "-",
+     "accL": "-",
+     "str": "4",
+     "ap": "-",
+     "d": "-",
+     "ammo": "6+",
+     "traits": "Template, Web"
+    }
+   ]
+  }
+ },
+ "wargear": {
+  "Plasma/Stub Combi-pistol": {
+   "category": "Gear"
+  },
+  "Bolter/flamer combi-weapon": {
+   "category": "Gear"
+  },
+  "Bolter/melta combi-weapon": {
+   "category": "Gear"
+  },
+  "Respirator": {
+   "category": "Equipment"
+  },
+  "Stimm-slug stash": {
+   "category": "Equipment"
+  },
+  "Photo-goggles": {
+   "category": "Equipment"
+  },
+  "Bio-booster": {
+   "category": "Equipment"
+  },
+  "Drop rig": {
+   "category": "Equipment"
+  },
+  "Flak Armor": {
+   "category": "Armor"
+  },
+  "Mesh Armor": {
+   "category": "Armor"
+  },
+  "Bolter/needler combi-weapon": {
+   "category": "Gear"
+  },
+  "Chem-Synth": {
+   "category": "Equipment"
+  },
+  "Filter plugs": {
+   "category": "Equipment"
+  },
+  "Las-projector": {
+   "category": "Equipment"
+  },
+  "Strip kit": {
+   "category": "Equipment"
+  },
+  "Reclaimed autogun": {
+   "category": "Basic Weapons"
+  },
+  "Polearm/autogun": {
+   "category": "Gear"
+  },
+  "Reclaimed autopistol": {
+   "category": "Pistols"
+  },
+  "Autogun/flamer - Combi-weapon": {
+   "category": "Gear"
+  },
+  "Heavy Crossbow": {
+   "category": "Gear"
+  },
+  "Flak Armour": {
+   "category": "Armor"
+  },
+  "Mesh Armour": {
+   "category": "Armor"
+  },
+  "Grav-chute": {
+   "category": "Equipment"
+  },
+  "Lasgun/plasma combi-weapon": {
+   "category": "Gear"
+  },
+  "Lasgun/melta combi-weapon": {
+   "category": "Gear"
+  },
+  "Armoured Bodyglove": {
+   "category": "Gear",
+   "note": "House of Artifice price, hand-entered; counts as armour"
+  },
+  "Armoured undersuit": {
+   "category": "Equipment"
+  },
+  "Infra-sight": {
+   "category": "Equipment"
+  },
+  "Grapnel launcher": {
+   "category": "Equipment"
+  },
+  "Cult Icon (Cawdor)": {
+   "category": "Gear"
+  },
+  "Skinblade": {
+   "category": "Equipment"
+  },
+  "Mono-sight": {
+   "category": "Equipment"
+  },
+  "Emperor's Wrath rounds": {
+   "category": "Gear"
+  },
+  "Bomb Delivery Rats": {
+   "category": "Gear"
+  },
+  "Concussion Carbine": {
+   "category": "Gear",
+   "note": "Book of Judgement — profile not in source data"
+  },
+  "Vigilance Assault Shield": {
+   "category": "Gear",
+   "note": "Subjugator pattern; treated as wargear"
+  },
+  "Layered Flak Armor": {
+   "category": "Armor"
+  },
+  "Hardened Layered Flak": {
+   "category": "Armor"
+  },
+  "Magnacles": {
+   "category": "Equipment"
+  }
+ },
+ "gangs": {
+  "goliath": {
+   "name": "Goliath",
+   "book": "House of Chains (2019)",
+   "houseSkill": "Muscle",
+   "equipmentListSource": "bsdata-gang-war (+hand additions)",
+   "fighters": [
+    {
+     "name": "Forge Tyrant",
+     "category": "Leader",
+     "cost": 135,
+     "stats": {
+      "m": 4,
+      "ws": 3,
+      "bs": 3,
+      "s": 4,
+      "t": 4,
+      "w": 2,
+      "i": 3,
+      "a": 3,
+      "ld": 5,
+      "cl": 4,
+      "wil": 8,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Stimmer",
+     "category": "Champion",
+     "cost": 125,
+     "stats": {
+      "m": 4,
+      "ws": 2,
+      "bs": 4,
+      "s": 4,
+      "t": 4,
+      "w": 2,
+      "i": 3,
+      "a": 3,
+      "ld": 8,
+      "cl": 4,
+      "wil": 7,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Forge Boss",
+     "category": "Champion",
+     "cost": 100,
+     "stats": {
+      "m": 4,
+      "ws": 3,
+      "bs": 4,
+      "s": 4,
+      "t": 4,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 6,
+      "cl": 5,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Forge-Born",
+     "category": "Prospect",
+     "cost": 35,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 5,
+      "s": 3,
+      "t": 4,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 9,
+      "cl": 7,
+      "wil": 9,
+      "int": 9
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Bruiser",
+     "category": "Ganger",
+     "cost": 55,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 4,
+      "s": 4,
+      "t": 4,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 8,
+      "cl": 5,
+      "wil": 9,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Bruiser (Specialist)",
+     "category": "Ganger",
+     "cost": 55,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 4,
+      "s": 4,
+      "t": 4,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 8,
+      "cl": 5,
+      "wil": 9,
+      "int": 8
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Bully",
+     "category": "Juve",
+     "cost": 35,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 5,
+      "s": 4,
+      "t": 4,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 9,
+      "cl": 7,
+      "wil": 9,
+      "int": 9
+     },
+     "defaultEquipment": []
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Flak Armor",
+     "cost": 10,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mesh Armor",
+     "cost": 15,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Boltgun",
+     "cost": 55,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Axe",
+     "cost": 5,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Chainsword",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Fighting knife",
+     "cost": 15,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Power axe",
+     "cost": 35,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Power hammer",
+     "cost": 45,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Two-handed axe",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Two-handed hammer",
+     "cost": 35,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bio-booster",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Drop rig",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stimm-slug stash",
+     "cost": 30,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bolter/flamer combi-weapon",
+     "cost": 195,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bolter/melta combi-weapon",
+     "cost": 190,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma/Stub Combi-pistol",
+     "cost": 65,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Smoke grenade",
+     "cost": 15,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy Bolter",
+     "cost": 160,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy flamer",
+     "cost": 195,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy stubber",
+     "cost": 130,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bolt pistol",
+     "cost": 50,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Hand flamer",
+     "cost": 75,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stub gun",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flamer",
+     "cost": 140,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Meltagun",
+     "cost": 135,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "\"Krumper\" Rivet Cannon",
+     "cost": 70,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "\"Renderizer\" Serrated Axe",
+     "cost": 40,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Blasting charge",
+     "cost": 35,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Brute cleaver",
+     "cost": 20,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Club, maul or hammer",
+     "cost": 25,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Combat Shotgun",
+     "cost": 70,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Grenade Launcher",
+     "cost": 65,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shotgun",
+     "cost": 30,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Spud-jacker",
+     "cost": 15,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stub cannon",
+     "cost": 20,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  },
+  "escher": {
+   "name": "Escher",
+   "book": "House of Blades (2019)",
+   "houseSkill": "Finesse",
+   "equipmentListSource": "bsdata-gang-war (+hand additions)",
+   "fighters": [
+    {
+     "name": "Queen",
+     "category": "Leader",
+     "cost": 125,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 2,
+      "a": 3,
+      "ld": 5,
+      "cl": 5,
+      "wil": 6,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Deathmaiden",
+     "category": "Champion",
+     "cost": 115,
+     "stats": {
+      "m": 6,
+      "ws": 2,
+      "bs": 3,
+      "s": 3,
+      "t": 4,
+      "w": 2,
+      "i": 2,
+      "a": 3,
+      "ld": 8,
+      "cl": 4,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Matriarch",
+     "category": "Champion",
+     "cost": 100,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 2,
+      "a": 2,
+      "ld": 6,
+      "cl": 6,
+      "wil": 6,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Wyld Runner",
+     "category": "Prospect",
+     "cost": 45,
+     "stats": {
+      "m": 6,
+      "ws": 4,
+      "bs": 4,
+      "s": 2,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 9,
+      "cl": 7,
+      "wil": 9,
+      "int": 9
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Sister",
+     "category": "Ganger",
+     "cost": 50,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Sister (Specialist)",
+     "category": "Ganger",
+     "cost": 50,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Little Sister",
+     "category": "Juve",
+     "cost": 20,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 8,
+      "cl": 8,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Flak Armor",
+     "cost": 10,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mesh Armor",
+     "cost": 15,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autogun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Lasgun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Chainsword",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Fighting knife",
+     "cost": 15,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Power knife",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Power sword",
+     "cost": 50,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stiletto knife",
+     "cost": 20,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stiletto sword",
+     "cost": 35,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Chem-Synth",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Drop rig",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Filter plugs",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Las-projector",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bolter/needler combi-weapon",
+     "cost": 90,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Scare gas grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Smoke grenade",
+     "cost": 15,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy stubber",
+     "cost": 130,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autopistol",
+     "cost": 10,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Hand flamer",
+     "cost": 75,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Laspistol",
+     "cost": 10,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Needle pistol",
+     "cost": 30,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma pistol",
+     "cost": 50,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stub gun",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flamer",
+     "cost": 140,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Meltagun",
+     "cost": 135,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Needle rifle",
+     "cost": 40,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma gun",
+     "cost": 100,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "\"Nightshade\" Chem-thrower",
+     "cost": 135,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Choke gas grenade",
+     "cost": 50,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photon flash flare",
+     "cost": 15,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shock whip",
+     "cost": 25,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shotgun",
+     "cost": 30,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  },
+  "orlock": {
+   "name": "Orlock",
+   "book": "House of Iron (2020)",
+   "houseSkill": "Bravado",
+   "equipmentListSource": "bsdata-gang-war (+hand additions)",
+   "fighters": [
+    {
+     "name": "Road Captain",
+     "category": "Leader",
+     "cost": 105,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 3,
+      "i": 4,
+      "a": 2,
+      "ld": 4,
+      "cl": 5,
+      "wil": 5,
+      "int": 5
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Arms Master",
+     "category": "Champion",
+     "cost": 95,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 5,
+      "cl": 6,
+      "wil": 6,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Road Sergeant",
+     "category": "Champion",
+     "cost": 80,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 5,
+      "cl": 6,
+      "wil": 6,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Wrecker",
+     "category": "Prospect",
+     "cost": 55,
+     "stats": {
+      "m": 6,
+      "ws": 5,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 9,
+      "cl": 8,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Gunner",
+     "category": "Ganger",
+     "cost": 45,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 6,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Gunner Specialist",
+     "category": "Ganger",
+     "cost": 45,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 6,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Greenhorn",
+     "category": "Juve",
+     "cost": 35,
+     "stats": {
+      "m": 6,
+      "ws": 5,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 7,
+      "cl": 8,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Iron Rider",
+     "category": "Crew",
+     "cost": 35,
+     "stats": {
+      "m": 0,
+      "ws": 0,
+      "bs": 4,
+      "s": 0,
+      "t": 0,
+      "w": 0,
+      "i": 0,
+      "a": 0,
+      "ld": 6,
+      "cl": 6,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "note": "Vehicle crew (Ash Wastes) — vehicle rules not modeled here."
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Flak Armor",
+     "cost": 10,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mesh Armor",
+     "cost": 15,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Reclaimed autogun",
+     "cost": 10,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Sawn-off shotgun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Axe",
+     "cost": 5,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Chainglaive",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Fighting knife",
+     "cost": 15,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flail",
+     "cost": 20,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Two-handed axe",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Two-handed hammer",
+     "cost": 35,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bio-booster",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Drop rig",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Filter plugs",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Strip kit",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autogun/flamer - Combi-weapon",
+     "cost": 15,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy Crossbow",
+     "cost": 125,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Polearm/autogun",
+     "cost": 20,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Demolition charge",
+     "cost": 50,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy flamer",
+     "cost": 195,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy stubber",
+     "cost": 130,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Hand flamer",
+     "cost": 75,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Reclaimed autopistol",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stub gun",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flamer",
+     "cost": 140,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Long Rifle",
+     "cost": 30,
+     "category": "Special Weapons",
+     "priceSource": "trading-post"
+    },
+    {
+     "name": "Blasting charge",
+     "cost": 35,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Club, maul or hammer",
+     "cost": 25,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  },
+  "vansaar": {
+   "name": "Van Saar",
+   "book": "House of Artifice (2020)",
+   "houseSkill": "Tech",
+   "equipmentListSource": "bsdata-gang-war (+hand additions)",
+   "fighters": [
+    {
+     "name": "Prime",
+     "category": "Leader",
+     "cost": 130,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 2,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 5,
+      "a": 2,
+      "ld": 4,
+      "cl": 5,
+      "wil": 5,
+      "int": 4
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Archeotek",
+     "category": "Champion",
+     "cost": 125,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 2,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 5,
+      "a": 2,
+      "ld": 4,
+      "cl": 6,
+      "wil": 6,
+      "int": 5
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Augmek",
+     "category": "Champion",
+     "cost": 110,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 2,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 1,
+      "ld": 5,
+      "cl": 6,
+      "wil": 6,
+      "int": 5
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Neotek",
+     "category": "Prospect",
+     "cost": 70,
+     "stats": {
+      "m": 5,
+      "ws": 5,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 9,
+      "cl": 8,
+      "wil": 9,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Tek",
+     "category": "Ganger",
+     "cost": 65,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 5,
+      "a": 1,
+      "ld": 6,
+      "cl": 7,
+      "wil": 7,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Tek Specialist",
+     "category": "Ganger",
+     "cost": 65,
+     "stats": {
+      "m": 4,
+      "ws": 4,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 5,
+      "a": 1,
+      "ld": 6,
+      "cl": 7,
+      "wil": 7,
+      "int": 6
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Subtek",
+     "category": "Juve",
+     "cost": 35,
+     "stats": {
+      "m": 5,
+      "ws": 5,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 9,
+      "cl": 8,
+      "wil": 9,
+      "int": 7
+     },
+     "defaultEquipment": []
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Flak Armour",
+     "cost": 10,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mesh Armour",
+     "cost": 15,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Lasgun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Power knife",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Servo-claw",
+     "cost": 35,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shock Baton",
+     "cost": 30,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shock Stave",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bio-booster",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Drop rig",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Filter plugs",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Grav-chute",
+     "cost": 50,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Armoured Bodyglove",
+     "cost": 15,
+     "category": "Gear",
+     "priceSource": "hand",
+     "note": "House of Artifice price, hand-entered; counts as armour"
+    },
+    {
+     "name": "Lasgun/melta combi-weapon",
+     "cost": 120,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Lasgun/plasma combi-weapon",
+     "cost": 75,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Smoke grenade",
+     "cost": 15,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Multi-melta",
+     "cost": 180,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma cannon",
+     "cost": 130,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Hand flamer",
+     "cost": 75,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Laspistol",
+     "cost": 10,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma pistol",
+     "cost": 50,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flamer",
+     "cost": 140,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Grav-gun",
+     "cost": 120,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Meltagun",
+     "cost": 135,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma gun",
+     "cost": 100,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "\"Hystrar\" pattern energy shield",
+     "cost": 50,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Las Carbine",
+     "cost": 20,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Las Sub-carbine",
+     "cost": 15,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Rad Cannon",
+     "cost": 130,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Rad grenade",
+     "cost": 25,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Rad gun",
+     "cost": 100,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Suppression Laser",
+     "cost": 40,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  },
+  "delaque": {
+   "name": "Delaque",
+   "book": "House of Shadow (2021)",
+   "houseSkill": "Obfuscation",
+   "equipmentListSource": "hand-compiled",
+   "fighters": [
+    {
+     "name": "Master of Shadow Psyker",
+     "category": "Leader",
+     "cost": 130,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 3,
+      "a": 2,
+      "ld": 6,
+      "cl": 6,
+      "wil": 5,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Master of Shadow",
+     "category": "Leader",
+     "cost": 100,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 3,
+      "a": 2,
+      "ld": 6,
+      "cl": 6,
+      "wil": 5,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Nacht-Ghul Psyker",
+     "category": "Champion",
+     "cost": 140,
+     "stats": {
+      "m": 6,
+      "ws": 2,
+      "bs": 3,
+      "s": 4,
+      "t": 3,
+      "w": 2,
+      "i": 2,
+      "a": 2,
+      "ld": 7,
+      "cl": 6,
+      "wil": 6,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Phantom Psyker",
+     "category": "Champion",
+     "cost": 115,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 7,
+      "cl": 6,
+      "wil": 6,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Nacht-Ghul",
+     "category": "Champion",
+     "cost": 110,
+     "stats": {
+      "m": 6,
+      "ws": 2,
+      "bs": 3,
+      "s": 4,
+      "t": 3,
+      "w": 2,
+      "i": 2,
+      "a": 2,
+      "ld": 7,
+      "cl": 6,
+      "wil": 6,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Phantom",
+     "category": "Champion",
+     "cost": 85,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 7,
+      "cl": 6,
+      "wil": 6,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Psy-Gheist",
+     "category": "Prospect",
+     "cost": 60,
+     "stats": {
+      "m": 6,
+      "ws": 4,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 9,
+      "cl": 7,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Ghost",
+     "category": "Ganger",
+     "cost": 40,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 6,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Ghost Specialist",
+     "category": "Ganger",
+     "cost": 40,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 6,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Shadow",
+     "category": "Juve",
+     "cost": 25,
+     "stats": {
+      "m": 6,
+      "ws": 5,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 9,
+      "cl": 7,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Wraith",
+     "category": "Crew",
+     "cost": 35,
+     "stats": {
+      "m": 0,
+      "ws": 0,
+      "bs": 4,
+      "s": 0,
+      "t": 0,
+      "w": 0,
+      "i": 0,
+      "a": 0,
+      "ld": 7,
+      "cl": 6,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "note": "Vehicle crew (Ash Wastes) — vehicle rules not modeled here."
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Flak Armor",
+     "cost": 10,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mesh Armor",
+     "cost": 15,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autogun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Lasgun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Fighting knife",
+     "cost": 15,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Power knife",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shock Stave",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stiletto knife",
+     "cost": 20,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Sword",
+     "cost": 20,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Armoured undersuit",
+     "cost": 25,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Filter plugs",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Grapnel launcher",
+     "cost": 25,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Infra-sight",
+     "cost": 40,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Smoke grenade",
+     "cost": 15,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autopistol",
+     "cost": 10,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Laspistol",
+     "cost": 10,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Plasma pistol",
+     "cost": 50,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stub gun",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Web Pistol",
+     "cost": 90,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flamer",
+     "cost": 140,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Long Las",
+     "cost": 20,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Long Rifle",
+     "cost": 30,
+     "category": "Special Weapons",
+     "priceSource": "trading-post"
+    },
+    {
+     "name": "Meltagun",
+     "cost": 135,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Web gun",
+     "cost": 125,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Choke gas grenade",
+     "cost": 50,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Grenade Launcher",
+     "cost": 65,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shotgun",
+     "cost": 30,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  },
+  "cawdor": {
+   "name": "Cawdor",
+   "book": "House of Faith (2021)",
+   "houseSkill": "Piety",
+   "equipmentListSource": "bsdata-gang-war (+hand additions)",
+   "fighters": [
+    {
+     "name": "Word-Keeper",
+     "category": "Leader",
+     "cost": 100,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 4,
+      "cl": 6,
+      "wil": 5,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Priest",
+     "category": "Leader",
+     "cost": 100,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 5,
+      "cl": 6,
+      "wil": 4,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Deacon",
+     "category": "Champion",
+     "cost": 90,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 6,
+      "cl": 6,
+      "wil": 5,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Firebrand",
+     "category": "Champion",
+     "cost": 90,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 3,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 5,
+      "cl": 6,
+      "wil": 7,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Redemptionist Brethren",
+     "category": "Ganger",
+     "cost": 50,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 8,
+      "cl": 6,
+      "wil": 6,
+      "int": 9
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Redemptionist Brethren Specialist",
+     "category": "Ganger",
+     "cost": 50,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 8,
+      "cl": 6,
+      "wil": 6,
+      "int": 9
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Brethren",
+     "category": "Ganger",
+     "cost": 45,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Brethren Specialist",
+     "category": "Ganger",
+     "cost": 45,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Zealot",
+     "category": "Juve",
+     "cost": 40,
+     "stats": {
+      "m": 6,
+      "ws": 4,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 8,
+      "cl": 7,
+      "wil": 8,
+      "int": 9
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Bonepicker",
+     "category": "Juve",
+     "cost": 20,
+     "stats": {
+      "m": 6,
+      "ws": 5,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 3,
+      "a": 1,
+      "ld": 8,
+      "cl": 8,
+      "wil": 8,
+      "int": 9
+     },
+     "defaultEquipment": []
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Flak Armour",
+     "cost": 10,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mesh Armour",
+     "cost": 15,
+     "category": "Armor",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Reclaimed autogun",
+     "cost": 10,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Sawn-off shotgun",
+     "cost": 15,
+     "category": "Basic Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Axe",
+     "cost": 5,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Chainglaive",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Fighting knife",
+     "cost": 15,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flail",
+     "cost": 20,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Two-handed axe",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Two-handed hammer",
+     "cost": 35,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Drop rig",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Filter plugs",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Mono-sight",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Skinblade",
+     "cost": 10,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Strip kit",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autogun/flamer - Combi-weapon",
+     "cost": 15,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Bomb Delivery Rats",
+     "cost": 30,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Cult Icon (Cawdor)",
+     "cost": 40,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Emperor's Wrath rounds",
+     "cost": 35,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy Crossbow",
+     "cost": 125,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Polearm/autogun",
+     "cost": 20,
+     "category": "Gear",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Incendiary charge",
+     "cost": 10,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Smoke grenade",
+     "cost": 15,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy flamer",
+     "cost": 195,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy stubber",
+     "cost": 130,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Hand flamer",
+     "cost": 75,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Reclaimed autopistol",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Flamer",
+     "cost": 140,
+     "category": "Special Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Long Rifle",
+     "cost": 30,
+     "category": "Special Weapons",
+     "priceSource": "trading-post"
+    },
+    {
+     "name": "Blasting charge",
+     "cost": 35,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Blunderbuss",
+     "cost": 30,
+     "category": "Weapons",
+     "priceSource": "hand",
+     "note": "House of Faith price, hand-entered"
+    },
+    {
+     "name": "Choke gas grenade",
+     "cost": 50,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Club, maul or hammer",
+     "cost": 25,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Polearm",
+     "cost": 15,
+     "category": "Weapons",
+     "priceSource": "hand",
+     "note": "House of Faith price, hand-entered"
+    },
+    {
+     "name": "Stub gun",
+     "cost": 5,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  },
+  "enforcers": {
+   "name": "Palanite Enforcers",
+   "book": "Book of Judgement (2019)",
+   "houseSkill": "Palanite Drill",
+   "equipmentListSource": "hand-compiled",
+   "fighters": [
+    {
+     "name": "Subjugator Captain",
+     "category": "Leader",
+     "cost": 150,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 4,
+      "cl": 6,
+      "wil": 5,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Palanite Captain",
+     "category": "Leader",
+     "cost": 140,
+     "stats": {
+      "m": 5,
+      "ws": 3,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 2,
+      "ld": 4,
+      "cl": 6,
+      "wil": 5,
+      "int": 6
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Subjugator Sergeant",
+     "category": "Champion",
+     "cost": 110,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 1,
+      "ld": 5,
+      "cl": 6,
+      "wil": 6,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Palanite Sergeant",
+     "category": "Champion",
+     "cost": 100,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 2,
+      "i": 4,
+      "a": 1,
+      "ld": 5,
+      "cl": 6,
+      "wil": 6,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Subjugator Patrolman",
+     "category": "Ganger",
+     "cost": 80,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Subjugator Patrolman Specialist",
+     "category": "Ganger",
+     "cost": 80,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Palanite Patrolman",
+     "category": "Ganger",
+     "cost": 70,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": []
+    },
+    {
+     "name": "Palanite Patrolman Specialist",
+     "category": "Ganger",
+     "cost": 70,
+     "stats": {
+      "m": 5,
+      "ws": 4,
+      "bs": 4,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 7,
+      "cl": 7,
+      "wil": 7,
+      "int": 7
+     },
+     "defaultEquipment": [],
+     "specialist": true
+    },
+    {
+     "name": "Palanite Rookie",
+     "category": "Juve",
+     "cost": 0,
+     "stats": {
+      "m": 5,
+      "ws": 5,
+      "bs": 5,
+      "s": 3,
+      "t": 3,
+      "w": 1,
+      "i": 4,
+      "a": 1,
+      "ld": 8,
+      "cl": 8,
+      "wil": 8,
+      "int": 8
+     },
+     "defaultEquipment": []
+    }
+   ],
+   "equipment": [
+    {
+     "name": "Hardened Layered Flak",
+     "cost": 35,
+     "category": "Armor",
+     "priceSource": "trading-post"
+    },
+    {
+     "name": "Layered Flak Armor",
+     "cost": 20,
+     "category": "Armor",
+     "priceSource": "trading-post"
+    },
+    {
+     "name": "Shock Baton",
+     "cost": 30,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shock Stave",
+     "cost": 25,
+     "category": "Close Combat",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Magnacles",
+     "cost": 20,
+     "category": "Equipment",
+     "priceSource": "trading-post"
+    },
+    {
+     "name": "Photo-goggles",
+     "cost": 35,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Respirator",
+     "cost": 15,
+     "category": "Equipment",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Concussion Carbine",
+     "cost": 30,
+     "category": "Gear",
+     "priceSource": "hand",
+     "note": "Book of Judgement — profile not in source data"
+    },
+    {
+     "name": "Vigilance Assault Shield",
+     "cost": 40,
+     "category": "Gear",
+     "priceSource": "hand",
+     "note": "Subjugator pattern; treated as wargear"
+    },
+    {
+     "name": "Frag grenade",
+     "cost": 30,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Krak grenade",
+     "cost": 45,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Smoke grenade",
+     "cost": 15,
+     "category": "Grenades",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Heavy stubber",
+     "cost": 130,
+     "category": "Heavy Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Autopistol",
+     "cost": 10,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Stub gun",
+     "cost": 5,
+     "category": "Pistols",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Combat Shotgun",
+     "cost": 70,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Enforcer Boltgun",
+     "cost": 50,
+     "category": "Weapons",
+     "priceSource": "hand",
+     "note": "improved ammo roll vs standard boltgun; profile shown is the standard boltgun"
+    },
+    {
+     "name": "Grenade Launcher",
+     "cost": 65,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Photon flash flare",
+     "cost": 15,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    },
+    {
+     "name": "Shotgun",
+     "cost": 30,
+     "category": "Weapons",
+     "priceSource": "gang-war"
+    }
+   ]
+  }
+ }
+}

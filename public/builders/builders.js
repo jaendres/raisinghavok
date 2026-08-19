@@ -673,6 +673,12 @@ function viewHome() {
         <div class="meta">Full unit roster wiv faction an' era availability, skill-adjusted PV,
           an' saved forces. Built from our own archive of da Master Unit List.</div>
       </div>
+      <div class="card builder-card" onclick="location.href='/builders/necromunda/'">
+        <div class="game">Necromunda</div>
+        <h3>Gang Builder</h3>
+        <div class="meta">All seven core gangs — pick yer house, spend yer thousand credits,
+          arm da fighters an' print da roster. Saved gangs live on yer device.</div>
+      </div>
       <div class="card builder-card" onclick="location.href='/builders/mcp/'">
         <div class="game">Marvel Crisis Protocol</div>
         <h3>Roster Builder</h3>

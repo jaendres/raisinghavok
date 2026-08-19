@@ -765,6 +765,9 @@ wh40k.mount(app, { memberReader });
 // ---- Marvel Crisis Protocol catalog (BSData community files) ----
 require('./mcp').mount(app, { memberReader });
 
+// ---- Necromunda catalog (community-compiled, per-item provenance) ----
+require('./necromunda').mount(app, { memberReader });
+
 // ---- Classic BattleTech record sheets (classic_sheets, same Postgres) ----
 const classicSheets = require('./classic');
 classicSheets.mount(app, { memberReader });
