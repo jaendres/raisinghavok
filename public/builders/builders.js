@@ -373,7 +373,7 @@ function showGameNightHandoff(name) {
     bar.insertAdjacentElement('afterend', el);
   }
   el.innerHTML = `&#9876; <b>${name.replace(/[&<>"']/g, (c) => ('&#' + c.charCodeAt(0) + ';'))}</b> is ready to play &mdash;
-    <a href="/table/" style="color:var(--rust)">track damage at Game Night &rarr;</a>`;
+    <a href="/lists/" style="color:var(--rust)">read it at da table &rarr;</a>`;
 }
 
 async function refreshSavedForces() {

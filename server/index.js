@@ -17,6 +17,15 @@ const io = new Server(server);
 
 app.set('trust proxy', 1); // Azure front end — req.ip = real client IP for rate limiting
 app.use(express.json({ limit: '32kb' }));
+// The list reader used to live at /table/, back when it was built around
+// running a game against someone. Anyone's bookmark or open iPad tab still
+// works: /table/... lands on the same place under its real name, hash and
+// all (the hash never reaches the server, so the client re-applies it).
+app.get(/^\/table(\/.*)?$/, (req, res) => {
+  const rest = req.params[0] && req.params[0] !== '/' ? req.params[0] : '/';
+  res.redirect(301, '/lists' + rest);
+});
+
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // ---- REST API ----
@@ -38,7 +47,7 @@ app.get('/api/config', (req, res) => {
 // and hands the session token to the client in the URL fragment (fragments
 // never reach servers or logs).
 const ssoStates = new Map(); // state -> { exp, ret }, CSRF protection + return target
-const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/table/', '/'];
+const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/lists/', '/table/', '/'];
 
 app.get('/api/auth/discord', (req, res) => {
   if (!process.env.DISCORD_CLIENT_ID) return res.status(404).send('Discord SSO not configured');

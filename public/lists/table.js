@@ -1,4 +1,5 @@
-// Game Night — My Lists (solo play reference) + live at-the-table play tracker.
+// My Lists — yer own lists, read at the table: stats, abilities, army rules.
+// (The head-to-head tracker lives in here too, behind SHOW_TABLES.)
 // Hash-routed like the league SPA, same account (mol_token), plain vanilla JS.
 //
 // iPad-first: every control is a real tap target, nothing needs hover, and
@@ -46,6 +47,13 @@ let discordSso = false;
 let T = null;            // the current table object
 let socket = null;
 const undoStacks = new Map();  // uid -> [{ field, prev }]
+
+// The head-to-head tracker (shared tables, join codes, live sync) is built
+// and tested but switched off: reading yer own list is what this section is
+// for, and two features fought for the same page. Flip this to true to put
+// Start a Table / Join a Table / My Tables back in the lobby -- every route,
+// socket handler and card renderer behind them is still here and still works.
+const SHOW_TABLES = false;
 
 // list reading-view state
 let LST = null;              // the current list object (never set while T is)
@@ -141,7 +149,7 @@ async function api(path, opts = {}) {
 function loginWall() {
   const href = discordSso ? '/api/auth/discord?return=/table/' : '/play/';
   $app.innerHTML = `
-    <h1>Game Night</h1>
+    <h1>My Lists</h1>
     <div class="sub">Members only</div>
     <div class="card" style="text-align:center;padding:40px">
       <p class="muted" style="margin-bottom:20px">Live table trackin' is for club members.<br>
@@ -155,7 +163,9 @@ function loginWall() {
 const isBattletech = (game) => game === 'battletech-as' || game === 'battletech-classic';
 
 async function viewLobby() {
-  const [mine, games] = await Promise.all([api('/table'), api('/table-games')]);
+  const [mine, games] = SHOW_TABLES
+    ? await Promise.all([api('/table'), api('/table-games')])
+    : [{ tables: [] }, []];
   // My Lists is the lobby's first citizen — the solo reference library.
   let myLists = [];
   try { myLists = (await api('/lists')).lists || []; } catch { /* fresh account / hiccup */ }
@@ -194,15 +204,16 @@ async function viewLobby() {
   // My Lists leads (the solo reference library IS the point of the iPad),
   // then the shared live tracker below it.
   $app.innerHTML = `
-    <h1>Game Night</h1>
-    <div class="sub">Yer lists at da table — an' da live tracker beside 'em</div>
+    <h1>My Lists</h1>
+    <div class="sub">Yer units' stats, abilities an' army rules — at da table</div>
 
     <div class="lists-head">
-      <h2>My Lists</h2>
+      <h2>Yer Lists</h2>
       <a class="btn" href="#/lists/new">+ New List</a>
     </div>
     ${listLibrary}
 
+    ${SHOW_TABLES ? `
     <div class="lobby-top" style="margin-top:26px">
       <div class="card start-card">
         <h2 style="margin-top:0">Start a Table</h2>
@@ -235,7 +246,7 @@ async function viewLobby() {
           <div class="meta">${esc(t.gameName)} • ${t.sides.map((s) => esc(s.name)).join(' vs ')} ${statusTag(t)}</div>
           <div class="meta">code <span class="code">${t.id}</span> • by ${esc(t.createdBy)}</div>
         </div>`).join('') || '<p class="muted">No tables yet — start one above, or join wiv a code.</p>'}
-    </div>`;
+    </div>` : ''}`;
 
   $app.querySelectorAll('[data-open]').forEach((el) => {
     el.onclick = () => { location.hash = '#/t/' + el.dataset.open; };
@@ -243,6 +254,10 @@ async function viewLobby() {
   $app.querySelectorAll('[data-openlist]').forEach((el) => {
     el.onclick = () => { location.hash = '#/l/' + el.dataset.openlist; };
   });
+
+  // Everything below wires the head-to-head tracker's lobby controls,
+  // which are not rendered while SHOW_TABLES is off.
+  if (!SHOW_TABLES) return;
 
   const goJoin = () => {
     const code = $app.querySelector('#j-code').value.trim().toLowerCase();
@@ -363,7 +378,7 @@ async function viewLobby() {
 // onConfirm(armies) gets one [{ id, models? }] array per side (null resolve -> []).
 function renderResolveScreen(sides, onConfirm) {
   $app.innerHTML = `
-    <div class="crumb"><a href="#/">Game Night</a> / resolve army lists</div>
+    <div class="crumb"><a href="#/">My Lists</a> / resolve army lists</div>
     <h1>Check da Lists</h1>
     <div class="sub">Pick da right datasheet where it's ambiguous — dropped lines don't hit da table</div>
     ${sides.map((s, si) => !s.resolve ? '' : `
@@ -436,7 +451,7 @@ async function viewNewList() {
   forces.sort((a, b) => (b.updated || 0) - (a.updated || 0));
 
   $app.innerHTML = `
-    <div class="crumb"><a href="#/">Game Night</a> / new list</div>
+    <div class="crumb"><a href="#/">My Lists</a> / new list</div>
     <h1>New List</h1>
     <div class="sub">Save a list once — read yer stats, abilities an' army rules at any table</div>
     <div class="card">
@@ -731,7 +746,7 @@ function renderListView() {
   const l = LST;
   const gameName = ({ 'battletech-as': 'BattleTech — Alpha Strike', 'battletech-classic': 'BattleTech — Classic', wh40k: 'Warhammer 40k', necromunda: 'Necromunda', mcp: 'Marvel Crisis Protocol', bloodbowl: 'Blood Bowl', trenchcrusade: 'Trench Crusade' })[l.game] || l.game;
   $app.innerHTML = `
-    <div class="crumb"><a href="#/">Game Night</a> / ${esc(l.name)}</div>
+    <div class="crumb"><a href="#/">My Lists</a> / ${esc(l.name)}</div>
     <div class="play-head list-head">
       <h1>${esc(l.name)}</h1>
       <span class="tag">${esc(gameName)}</span>
@@ -791,7 +806,7 @@ async function viewList(id) {
   try {
     LST = await api('/lists/' + id);
   } catch (e) {
-    $app.innerHTML = `<h1>Game Night</h1><div class="card"><p class="error">${esc(e.message)}</p><a class="btn ghost" href="#/">Back to da lobby</a></div>`;
+    $app.innerHTML = `<h1>My Lists</h1><div class="card"><p class="error">${esc(e.message)}</p><a class="btn ghost" href="#/">Back to yer lists</a></div>`;
     return;
   }
   undoStacks.clear();
@@ -1246,7 +1261,7 @@ function redrawLog() {
 
 async function reloadTable() {
   try {
-    T = await api('/table/' + T.id);
+    T = await api('/lists/' + T.id);
     renderPlay();
   } catch { /* keep the old view */ }
 }
@@ -1364,7 +1379,7 @@ function sideTrackersHTML(s, i) {
 function renderPlay() {
   const done = T.status === 'done';
   $app.innerHTML = `
-    <div class="crumb"><a href="#/">Game Night</a> / ${esc(T.name)}</div>
+    <div class="crumb"><a href="#/">My Lists</a> / ${esc(T.name)}</div>
     <div class="play-head">
       <h1>${esc(T.name)}</h1>
       ${done ? '<span class="tag">finished</span>' : `
@@ -1509,9 +1524,9 @@ function doneHTML(sum) {
 
 async function viewPlay(id) {
   try {
-    T = await api('/table/' + id);
+    T = await api('/lists/' + id);
   } catch (e) {
-    $app.innerHTML = `<h1>Game Night</h1><div class="card"><p class="error">${esc(e.message)}</p><a class="btn ghost" href="#/">Back to da lobby</a></div>`;
+    $app.innerHTML = `<h1>My Lists</h1><div class="card"><p class="error">${esc(e.message)}</p><a class="btn ghost" href="#/">Back to yer lists</a></div>`;
     return;
   }
   undoStacks.clear();
