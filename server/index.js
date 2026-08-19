@@ -771,6 +771,9 @@ require('./necromunda').mount(app, { memberReader });
 // ---- Trench Crusade catalog (official free rules, v1.0.2) ----
 require('./trenchcrusade').mount(app, { memberReader });
 
+// ---- Admin data-refresh jobs (keeps our 40k copy current, no redeploy) ----
+require('./admin').mount(app, { authed, isAdmin });
+
 // ---- Classic BattleTech record sheets (classic_sheets, same Postgres) ----
 const classicSheets = require('./classic');
 classicSheets.mount(app, { memberReader });
