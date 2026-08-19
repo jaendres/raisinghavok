@@ -49,7 +49,19 @@ const undoStacks = new Map();  // uid -> [{ field, prev }]
 
 // list reading-view state
 let LST = null;              // the current list object (never set while T is)
-let listTracking = false;    // tap-pips shown/hidden (reference mode default)
+// Tap-pips shown or hidden. BattleTech record sheets exist to be marked up,
+// so those default to tracking on; 40k and the skirmish games are read far
+// more often than they are tracked, so they open clean. Either way the
+// reader's own choice is remembered per game from then on.
+const TRACK_FIRST = { 'battletech-classic': true, 'battletech-as': true };
+const trackPrefKey = (game) => 'gamenight-track-' + game;
+function defaultTracking(game) {
+  const saved = localStorage.getItem(trackPrefKey(game));
+  if (saved === '1') return true;
+  if (saved === '0') return false;
+  return Boolean(TRACK_FIRST[game]);
+}
+let listTracking = false;    // set from defaultTracking(game) when a list opens
 let collapsedAll = false;    // remember collapse-all across redraws
 
 // which game a card belongs to (table or list, whichever is open)
@@ -740,6 +752,7 @@ function renderListView() {
   };
   $app.querySelector('#l-track').onclick = () => {
     listTracking = !listTracking;
+    try { localStorage.setItem(trackPrefKey(LST.game), listTracking ? '1' : '0'); } catch { /* private mode */ }
     const grid = $app.querySelector('#list-grid');
     if (grid) grid.classList.toggle('ref-mode', !listTracking);
     $app.querySelector('#l-track').textContent = listTracking ? 'Tracking: ON' : 'Tracking: OFF';
@@ -774,6 +787,7 @@ async function viewList(id) {
     return;
   }
   undoStacks.clear();
+  listTracking = defaultTracking(LST.game);
   renderListView();
 }
 
