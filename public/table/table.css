@@ -1,0 +1,135 @@
+/* Game Night — live table tracker.
+   Inherits the club look from the league stylesheet, then adds the record-sheet
+   layout. Built iPad-first: every tap target is at least 34px, nothing needs
+   hover, and the play grid is tuned for 1024x768 landscape and phone portrait. */
+@import url('/league/league.css');
+
+main { width: min(1280px, 97vw); }
+
+/* ---- lobby ---- */
+
+.tbl-card { cursor: pointer; transition: transform .1s, border-color .1s; }
+.tbl-card:hover { transform: translateY(-3px); border-top-color: var(--rust); }
+.tbl-card h3 { font-size: 20px; color: var(--bone); }
+.tbl-card .meta { color: var(--dust); font-size: 14px; margin-top: 6px; }
+.tbl-card .code { font-family: 'Black Ops One'; color: var(--rust); letter-spacing: .2em; }
+
+.side-row { display: grid; grid-template-columns: 1fr 1fr 44px; gap: 8px; margin-bottom: 8px; }
+.side-row .rm { cursor: pointer; color: #ff7b6b; text-align: center; line-height: 40px; font-size: 20px; min-height: 40px; }
+
+.join-row { display: flex; gap: 8px; align-items: center; }
+.join-row input { font-family: 'Black Ops One'; letter-spacing: .25em; text-transform: lowercase; width: 150px; font-size: 20px; text-align: center; }
+
+/* ---- play screen header ---- */
+
+.play-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px;
+  background: var(--panel); border: 1px solid #2b221b; border-top: 3px solid var(--rust-dk);
+  padding: 12px 16px; margin-bottom: 16px;
+  position: sticky; top: 0; z-index: 5;
+}
+.play-head h1 { font-size: clamp(20px, 3vw, 28px); margin: 0; }
+.round-ctl { display: inline-flex; align-items: center; gap: 8px; }
+.round-ctl .rbtn {
+  width: 44px; height: 44px; font-size: 24px; line-height: 1; cursor: pointer;
+  background: var(--panel2); color: var(--bone); border: 2px solid #4a3d31;
+  box-shadow: 3px 3px 0 #000; font-family: 'Black Ops One';
+}
+.round-ctl .rbtn:active { background: var(--rust-dk); }
+.round-ctl b { font-family: 'Black Ops One'; font-size: 26px; min-width: 44px; text-align: center; }
+.round-ctl .lbl { color: var(--dust); font-size: 12px; text-transform: uppercase; letter-spacing: .15em; }
+
+.join-code { margin-left: auto; text-align: right; }
+.join-code .lbl { color: var(--dust); font-size: 12px; text-transform: uppercase; letter-spacing: .15em; }
+.join-code b {
+  display: block; font-family: 'Black Ops One'; font-size: clamp(24px, 4vw, 34px);
+  color: var(--rust); letter-spacing: .3em; text-shadow: 3px 3px 0 #000; line-height: 1.1;
+}
+
+/* ---- sides & unit cards ---- */
+
+.side-title { display: flex; align-items: baseline; gap: 12px; margin: 20px 0 10px; }
+.side-title h2 { margin: 0; }
+.side-title .muted { font-size: 14px; }
+
+.unit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+@media (max-width: 700px) { .unit-grid { grid-template-columns: 1fr; } }
+
+.unit-card {
+  background: var(--panel); border: 1px solid #2b221b; border-top: 3px solid var(--rust-dk);
+  padding: 12px 14px; position: relative;
+}
+.unit-card.destroyed { opacity: .45; }
+.unit-card.destroyed .u-name { text-decoration: line-through; }
+.wreck-badge {
+  position: absolute; top: 8px; right: 10px; z-index: 2;
+  font-family: 'Black Ops One'; font-size: 13px; color: #ff7b6b;
+  background: #3a1210; border: 2px solid var(--blood); padding: 2px 10px;
+  transform: rotate(-6deg); box-shadow: 3px 3px 0 #000; letter-spacing: .1em;
+}
+
+.u-top { display: flex; align-items: baseline; gap: 10px; }
+.u-name { font-family: 'Black Ops One'; font-size: 16px; color: var(--bone); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.u-pv { font-family: 'Black Ops One'; font-size: 14px; color: var(--rust); white-space: nowrap; }
+.u-line { color: var(--dust); font-size: 14px; margin: 3px 0 8px; }
+.u-line b { color: var(--bone); font-weight: 600; }
+
+/* record-sheet bubble rows: circular pips (they ARE the bubbles), everything
+   else stays square per the house style. Minimum 34px touch targets. */
+.pip-row { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 4px 0; }
+.pip-row .plabel {
+  width: 58px; flex: none; font-family: 'Black Ops One'; font-size: 10.5px;
+  color: var(--dust); letter-spacing: .08em; text-transform: uppercase;
+}
+.pip {
+  width: 34px; height: 34px; flex: none; cursor: pointer; padding: 0;
+  border-radius: 50%; background: var(--ink); position: relative;
+}
+.pip.armor { border: 2px solid var(--rust-dk); }
+.pip.armor.hit { background: var(--rust); border-color: var(--rust); box-shadow: inset 0 0 0 3px #0c0a08; }
+.pip.struct { border: 2px solid var(--blood); }
+.pip.struct.hit { background: var(--blood); border-color: #ff7b6b; box-shadow: inset 0 0 0 3px #0c0a08; }
+.pip.mini { width: 26px; height: 26px; }
+@media (max-width: 1100px) { .pip.mini { width: 34px; height: 34px; } }
+
+/* heat track + crit boxes: square, per house style */
+.sq {
+  width: 34px; height: 34px; flex: none; cursor: pointer; padding: 0;
+  background: var(--ink); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 12px; color: var(--dust);
+}
+.sq.heat { border-color: #7a5c2e; }
+.sq.heat.hit { background: #b8860b; color: #0c0a08; border-color: #ffd23f; }
+.sq.crit { border-color: #4a3d31; }
+.sq.crit.hit { background: var(--blood); border-color: #ff7b6b; color: #fff; }
+.sq.crit.hit::after { content: '✕'; font-size: 16px; }
+
+.crit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; margin-top: 8px; }
+@media (max-width: 480px) { .crit-grid { grid-template-columns: 1fr; } }
+
+.u-foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.u-foot input.notes {
+  flex: 1; min-width: 0; font-size: 14px; padding: 6px 8px; min-height: 34px;
+}
+.ubtn {
+  min-width: 44px; height: 38px; cursor: pointer; flex: none;
+  background: var(--panel2); color: var(--bone); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .05em; padding: 0 8px;
+  box-shadow: 2px 2px 0 #000;
+}
+.ubtn:active { background: var(--rust-dk); }
+.ubtn:disabled { opacity: .35; cursor: default; }
+.ubtn.danger { color: #ff7b6b; border-color: var(--blood); }
+
+/* ---- log + finish ---- */
+
+.play-log { max-height: 180px; overflow-y: auto; font-size: 14px; }
+.play-log .t { color: var(--dust); margin-right: 8px; font-variant-numeric: tabular-nums; }
+
+.finish-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.vp-input { font-family: 'Black Ops One'; font-size: 24px; text-align: center; width: 100%; min-height: 48px; }
+.done-num { font-family: 'Black Ops One'; font-size: 30px; color: var(--rust); text-shadow: 3px 3px 0 #000; }
+
+/* bigger buttons everywhere on touch layouts */
+.btn { min-height: 38px; }
+.btn.big { font-size: 17px; padding: 12px 26px; }

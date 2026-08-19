@@ -38,7 +38,7 @@ app.get('/api/config', (req, res) => {
 // and hands the session token to the client in the URL fragment (fragments
 // never reach servers or logs).
 const ssoStates = new Map(); // state -> { exp, ret }, CSRF protection + return target
-const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/'];
+const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/table/', '/'];
 
 app.get('/api/auth/discord', (req, res) => {
   if (!process.env.DISCORD_CLIENT_ID) return res.status(404).send('Discord SSO not configured');
@@ -755,6 +755,18 @@ app.delete('/api/builders/forces/:name', (req, res) => {
   if (!user) return res.status(401).json({ error: 'not logged in' });
   res.json(db.deleteForce(user.name, req.params.name));
 });
+
+// ---- Warhammer 40k database (Wahapedia 11th ed) ----
+// Same shape as the BattleTech builders module: reads the shared Postgres,
+// every route members-only. Routes live in the module; only the gate is ours.
+const wh40k = require('./wh40k');
+wh40k.mount(app, { memberReader });
+
+// ---- Game Night: live at-the-table play tracking ----
+// Tables persist in DATA_DIR/tables.json; live sync runs on its own
+// socket.io namespace (/table) so it stays clear of the Mad Ork Lands queue.
+const gameNight = require('./table');
+gameNight.mount(app, io, { authed, memberReader, builders, db });
 
 // ---- Multiplayer lobby ----
 // One global queue: countdown starts when the first player joins, match
