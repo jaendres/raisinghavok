@@ -673,6 +673,13 @@ function viewHome() {
         <div class="meta">Full unit roster wiv faction an' era availability, skill-adjusted PV,
           an' saved forces. Built from our own archive of da Master Unit List.</div>
       </div>
+      <div class="card builder-card" onclick="location.href='/builders/mcp/'">
+        <div class="game">Marvel Crisis Protocol</div>
+        <h3>Roster Builder</h3>
+        <div class="meta">Ten characters, five tactics, six crises — den pick tonight's squad
+          to da threat level. Card data from da BSData community files (Dec 2024 — check yer
+          threat values against current AMG cards).</div>
+      </div>
       <div class="card builder-card" onclick="location.href='/league/'">
         <div class="game">Blood Bowl</div>
         <h3>Team Draft &amp; Roster</h3>

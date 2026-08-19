@@ -1,0 +1,7284 @@
+{
+ "meta": {
+  "source": "https://github.com/BSData/marvel-crisis-protocol",
+  "commitHash": "7c677d48048ca9b3bb56b1133a124026a2e779ae",
+  "dataDate": "2024-12-26",
+  "generated": "2026-08-19",
+  "warning": "threat values as of 2024-12-26; verify against current AMG cards"
+ },
+ "affiliations": [
+  "A-Force",
+  "Asgard",
+  "Avengers",
+  "Black Order",
+  "Brotherhood of Mutants",
+  "Cabal",
+  "Convocation",
+  "Criminal Syndicate",
+  "Dark Dimension",
+  "Defenders",
+  "Guardians of the Galaxy",
+  "Hellfire Club",
+  "Hydra",
+  "Inhumans",
+  "Legion of the Lost",
+  "Midnight Sons",
+  "New Mutants",
+  "S.H.I.E.L.D.",
+  "Sentinels",
+  "Servants of the Apocalypse",
+  "Servants of the Apocalypse - Death",
+  "Servants of the Apocalypse - Famine",
+  "Servants of the Apocalypse - Pestilence",
+  "Servants of the Apocalypse - War",
+  "Spider-Foes",
+  "Uncanny X-Men",
+  "Wakanda",
+  "Weapon X",
+  "Web Warriors",
+  "Winter Guard",
+  "X-Force"
+ ],
+ "characters": [
+  {
+   "id": "dbec-15e6-fcb5-6eca",
+   "name": "ABOMINATION",
+   "alterEgo": "Emil Blonsky",
+   "threat": 5,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9756-24cf-86fc-4501",
+   "name": "AGENT VENOM",
+   "alterEgo": "Flash Thompson",
+   "threat": 4,
+   "affiliations": [
+    "Guardians of the Galaxy",
+    "S.H.I.E.L.D.",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "aa0b-95f1-62fc-2838",
+   "name": "AMAZING SPIDER-MAN",
+   "alterEgo": "Peter Parker",
+   "threat": 5,
+   "affiliations": [
+    "Defenders",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "FRIENDLY NEIGHBORHOOD SPIDER-TEAM (AFFILIATION: WEB WARRIORS)"
+   ]
+  },
+  {
+   "id": "8ea6-f322-1497-c62c",
+   "name": "ANCIENT ONE",
+   "alterEgo": "Ancient One",
+   "threat": 4,
+   "affiliations": [
+    "Convocation",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 3,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0d57-3f6c-ff59-fa91",
+   "name": "ANGEL",
+   "alterEgo": "Warren Worthington III",
+   "threat": 3,
+   "affiliations": [
+    "Uncanny X-Men"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "ac83-59a4-7096-b4f7",
+   "name": "ANGELA",
+   "alterEgo": "Aldrif Odinsdottir",
+   "threat": 5,
+   "affiliations": [
+    "A-Force",
+    "Asgard",
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 7
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5a4b-418c-352c-6fa2",
+   "name": "ANT-MAN",
+   "alterEgo": "Scott Lang",
+   "threat": 3,
+   "affiliations": [
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "af2d-0f36-95f4-35dd",
+   "name": "APOCALYPSE",
+   "alterEgo": "En Sabah Nur",
+   "threat": 6,
+   "affiliations": [
+    "Servants of the Apocalypse"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 8
+   },
+   "movement": "M",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "APOCALYPSE'S HORSEMEN (AFFILIATION: SERVANTS OF THE APOCALYPSE)"
+   ]
+  },
+  {
+   "id": "1477-afb5-b954-31e2",
+   "name": "ARCHANGEL",
+   "alterEgo": "Warren Worthington III",
+   "threat": 4,
+   "affiliations": [
+    "X-Force",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Pestilence"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "c465-2cca-c4c9-2c6e",
+   "name": "ARNIM ZOLA",
+   "alterEgo": "Arnim Zola",
+   "threat": 3,
+   "affiliations": [
+    "Hydra",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 2,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5ff2-8a8e-f738-e182",
+   "name": "BARON HELMUT ZEMO",
+   "alterEgo": "Helmut Zemo",
+   "threat": 4,
+   "affiliations": [
+    "Hydra",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "ARMY OF EVIL (AFFILIATION: HYDRA)"
+   ]
+  },
+  {
+   "id": "9e14-b2dd-0b1f-5a78",
+   "name": "BARON MORDO",
+   "alterEgo": "Karl Amadeus Mordo",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Convocation"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "42b9-24cc-b7bd-cd38",
+   "name": "BARON STRUCKER",
+   "alterEgo": "Wolfgang von Strucker",
+   "threat": 3,
+   "affiliations": [
+    "Hydra",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "HYDRA HIGH COUNCIL (AFFILIATION: HYDRA)"
+   ]
+  },
+  {
+   "id": "6c63-776e-a7a4-64e0",
+   "name": "BARON ZEMO",
+   "alterEgo": "Helmut Zemo",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b6cc-1a57-b76c-a395",
+   "name": "BEAST",
+   "alterEgo": "Henry McCoy",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Inhumans",
+    "Uncanny X-Men",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Pestilence",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "8a08-6143-b83f-4f6f",
+   "name": "BETA RAY BILL",
+   "alterEgo": "Bill",
+   "threat": 4,
+   "affiliations": [
+    "Asgard",
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "a67b-8e8d-6096-a0e3",
+   "name": "BISHOP",
+   "alterEgo": "Lucas Bishop",
+   "threat": 4,
+   "affiliations": [
+    "Uncanny X-Men",
+    "X-Force"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "f4e6-3af1-3da2-2f89",
+   "name": "BLACK BOLT",
+   "alterEgo": "Blackagar Boltagon",
+   "threat": 5,
+   "affiliations": [
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 9
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "KING OF THE INHUMANS (AFFILIATION: INHUMANS)"
+   ]
+  },
+  {
+   "id": "1f9d-036d-e736-b76b",
+   "name": "BLACK CAT",
+   "alterEgo": "Felicia Hardy",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Criminal Syndicate",
+    "Midnight Sons",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "a8b6-ae22-a94d-f169",
+   "name": "BLACK DWARF",
+   "alterEgo": "Black Dwarf",
+   "threat": 4,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 8
+   },
+   "movement": "S",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1d04-2cc5-49b7-574d",
+   "name": "BLACK PANTHER",
+   "alterEgo": "T'Challa",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "KING OF WAKANDA (AFFILIATION: WAKANDA)"
+   ]
+  },
+  {
+   "id": "963d-a8b0-c2e9-0e5d",
+   "name": "BLACK PANTHER, CHOSEN OF BAST",
+   "alterEgo": "T'Challa",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Defenders",
+    "Midnight Sons",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "13ce-a33d-62a3-ed2f",
+   "name": "BLACK SWAN",
+   "alterEgo": "Black Swan",
+   "threat": 4,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "dc24-b673-bd87-becc",
+   "name": "BLACK WIDOW",
+   "alterEgo": "Natasha Romanoff",
+   "threat": 2,
+   "affiliations": [
+    "A-Force",
+    "Avengers",
+    "S.H.I.E.L.D.",
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 4
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 2,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2e6a-1750-3cb2-d6d8",
+   "name": "BLACK WIDOW, AGENT OF S.H.I.E.L.D.",
+   "alterEgo": "Natasha Romanoff",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Avengers",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "8d7a-55ca-327f-22fc",
+   "name": "BLADE",
+   "alterEgo": "Eric Brooks",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "Defenders",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "BUMP IN THE NIGHT (AFFILIATION: MIDNIGHT SONS)"
+   ]
+  },
+  {
+   "id": "32c1-0f9e-9021-8c9b",
+   "name": "BOB, AGENT OF HYDRA",
+   "alterEgo": "Robert Dobalina",
+   "threat": 2,
+   "affiliations": [
+    "Cabal",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 3,
+    "injured": 3
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "868d-5bff-db1d-d252",
+   "name": "BULLSEYE",
+   "alterEgo": "Benjamin Poindexter",
+   "threat": 2,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 4
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7d91-094f-05cb-8775",
+   "name": "CABLE",
+   "alterEgo": "Nathan Summers",
+   "threat": 5,
+   "affiliations": [
+    "Avengers",
+    "Uncanny X-Men",
+    "X-Force",
+    "New Mutants",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Pestilence",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "WETWORKS (AFFILIATION: X-FORCE)"
+   ]
+  },
+  {
+   "id": "9156-ad6f-faba-8b06",
+   "name": "CAPTAIN AMERICA",
+   "alterEgo": "Sam Wilson",
+   "threat": 3,
+   "affiliations": [
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "ALL NEW, ALL DIFFERENT (AFFILIATION: AVENGERS)"
+   ]
+  },
+  {
+   "id": "076d-92cf-3f6f-34cc",
+   "name": "CAPTAIN AMERICA",
+   "alterEgo": "Steve Rogers",
+   "threat": 4,
+   "affiliations": [
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "A DAY UNLIKE ANY OTHER (AFFILIATION: AVENGERS)"
+   ]
+  },
+  {
+   "id": "1669-f170-4b53-5e4c",
+   "name": "CAPTAIN AMERICA, FIRST AVENGER",
+   "alterEgo": "Steve Rogers",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "EARTH'S MIGHTIEST HEROES (AFFILIATION: AVENGERS)"
+   ]
+  },
+  {
+   "id": "006c-18c4-9121-0cb0",
+   "name": "CAPTAIN MARVEL",
+   "alterEgo": "Carol Danvers",
+   "threat": 4,
+   "affiliations": [
+    "A-Force",
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "37b6-88f2-5e67-d719",
+   "name": "CAPTAIN MARVEL, COSMIC AVENGER",
+   "alterEgo": "Carol Danvers",
+   "threat": 5,
+   "affiliations": [
+    "A-Force",
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "ec32-0fb9-f11e-3ed5",
+   "name": "CARNAGE",
+   "alterEgo": "Cletus Kasady",
+   "threat": 4,
+   "affiliations": [
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 5,
+    "energy": 1,
+    "mystic": 1
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d4d3-4f22-6f55-5e4c",
+   "name": "CASSANDRA NOVA",
+   "alterEgo": "Cassandra Nova Xavier",
+   "threat": 5,
+   "affiliations": [
+    "Cabal",
+    "Sentinels",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - Famine"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2a7c-33d6-e1a9-b44b",
+   "name": "CLEA",
+   "alterEgo": "Clea",
+   "threat": 3,
+   "affiliations": [
+    "Convocation",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "cb5b-26ba-f52b-cebc",
+   "name": "COLOSSUS",
+   "alterEgo": "Piotr Rasputin",
+   "threat": 4,
+   "affiliations": [
+    "X-Force",
+    "Brotherhood of Mutants",
+    "Uncanny X-Men",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Pestilence",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "f044-cdf5-9a36-6158",
+   "name": "CORVUS GLAIVE",
+   "alterEgo": "Corvus Glaive",
+   "threat": 4,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0738-b2c4-6e33-ed03",
+   "name": "COSMIC GHOST RIDER",
+   "alterEgo": "Frank Castle",
+   "threat": 6,
+   "affiliations": [
+    "Black Order",
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 9,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "99cc-b451-31f0-603c",
+   "name": "CRIMSON DYNAMO",
+   "alterEgo": "Dimitri Bukharin",
+   "threat": 4,
+   "affiliations": [
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "UNBREAKABLE RED LINE (AFFILIATION: WINTER GUARD)"
+   ]
+  },
+  {
+   "id": "ebe5-9d79-dbf0-f94e",
+   "name": "CROSSBONES",
+   "alterEgo": "Brock Rumlow",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6ffc-3740-2188-ce2b",
+   "name": "CROSSBONES, MERCILESS MERC",
+   "alterEgo": "Brock Rumlow",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2d7e-9519-6fad-71fc",
+   "name": "CRYSTAL",
+   "alterEgo": "Crystalia Amaquelin",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "49ef-a814-5d29-8dcb",
+   "name": "CYCLOPS",
+   "alterEgo": "Scott Summers",
+   "threat": 4,
+   "affiliations": [
+    "Uncanny X-Men"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "X-MEN BLUE (AFFILIATION: UNCANNY X-MEN)"
+   ]
+  },
+  {
+   "id": "5d11-e324-ff10-9299",
+   "name": "DAREDEVIL",
+   "alterEgo": "Matt Murdock",
+   "threat": 4,
+   "affiliations": [
+    "Defenders",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "MARVEL KNIGHTS (AFFILIATION: DEFENDERS)"
+   ]
+  },
+  {
+   "id": "816f-24cc-1c55-87e3",
+   "name": "DARKSTAR",
+   "alterEgo": "Laynia Petrovna",
+   "threat": 3,
+   "affiliations": [
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "16c5-bd31-f805-b1f5",
+   "name": "DEADPOOL",
+   "alterEgo": "Wade Wilson",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "X-Force",
+    "Weapon X",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Famine",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "f81d-cebf-a888-74ff",
+   "name": "DOC OCK, SINISTER SCIENTIST",
+   "alterEgo": "Otto Octavius",
+   "threat": 4,
+   "affiliations": [
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "SINISTER SIX (AFFILIATION: SPIDER-FOES)"
+   ]
+  },
+  {
+   "id": "728b-b52c-eac1-8e48",
+   "name": "DOCTOR OCTOPUS",
+   "alterEgo": "Otto Octavius",
+   "threat": 3,
+   "affiliations": [
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "3f5d-9ff6-16b8-207a",
+   "name": "DOCTOR STRANGE",
+   "alterEgo": "Stephen Vincent Strange",
+   "threat": 5,
+   "affiliations": [
+    "Convocation",
+    "Defenders",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "MYSTIC EMPOWERMENT (AFFILIATION: DEFENDERS)"
+   ]
+  },
+  {
+   "id": "7bf4-d05f-b639-cf8c",
+   "name": "DOCTOR STRANGE, SORCERER SUPREME",
+   "alterEgo": "Stephen Vincent Strange",
+   "threat": 5,
+   "affiliations": [
+    "Convocation",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "aa25-b9e0-7a01-2f5a",
+   "name": "DOCTOR VOODOO",
+   "alterEgo": "Jericho Drumm",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "Convocation",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "a26e-8657-1dcd-1cf5",
+   "name": "DOMINO",
+   "alterEgo": "Neena Thurman",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Uncanny X-Men",
+    "X-Force",
+    "Weapon X"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "df71-1740-1b8c-6e4e",
+   "name": "DORMAMMU",
+   "alterEgo": "Dormammu",
+   "threat": 8,
+   "affiliations": [
+    "Dark Dimension"
+   ],
+   "stamina": {
+    "healthy": 10,
+    "injured": 12
+   },
+   "movement": "M",
+   "size": 5,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "FLAMES OF THE FALTINE (AFFILIATION: DARK DIMENSION)"
+   ]
+  },
+  {
+   "id": "7021-b0e1-ca3b-0063",
+   "name": "DRACULA",
+   "alterEgo": "Vlad Dracula",
+   "threat": 5,
+   "affiliations": [
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "006d-16d1-d214-3650",
+   "name": "DRAX THE DESTROYER",
+   "alterEgo": "Drax",
+   "threat": 3,
+   "affiliations": [
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5355-e2dc-6981-e54b",
+   "name": "EBONY MAW",
+   "alterEgo": "Ebony Maw",
+   "threat": 5,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 4,
+    "mystic": 6
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "4670-91ba-a41b-4866",
+   "name": "ELECTRO",
+   "alterEgo": "Max Dillon",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b805-8cf9-625c-3b1a",
+   "name": "ELEKTRA",
+   "alterEgo": "Elektra Natchios",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0978-a44e-0694-0152",
+   "name": "ELSA BLOODSTONE (Elsa Bloodstone)",
+   "alterEgo": null,
+   "threat": 4,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "LEGION OF MONSTERS (AFFILIATION: MIDNIGHT SONS)"
+   ]
+  },
+  {
+   "id": "822f-dc23-c5d4-5018",
+   "name": "EMMA FROST",
+   "alterEgo": "Emma Frost",
+   "threat": 4,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Uncanny X-Men",
+    "Hellfire Club",
+    "New Mutants"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 3,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "fba2-eb28-2620-dbfc",
+   "name": "ENCHANTRESS",
+   "alterEgo": "Amora",
+   "threat": 4,
+   "affiliations": [
+    "Asgard",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9f7f-75e0-3efd-93ba",
+   "name": "FRANKENSTEIN'S MONSTER",
+   "alterEgo": "Adam",
+   "threat": 4,
+   "affiliations": [
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2645-5373-1001-2277",
+   "name": "GAMBIT",
+   "alterEgo": "Remy LeBeau",
+   "threat": 3,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Uncanny X-Men",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - Famine"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "c35e-63a8-bd39-2b39",
+   "name": "GAMORA",
+   "alterEgo": "Gamora",
+   "threat": 4,
+   "affiliations": [
+    "A-Force",
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5ebd-4a0e-1aae-6417",
+   "name": "GHOST RIDER",
+   "alterEgo": "Johnathon Blaze",
+   "threat": 5,
+   "affiliations": [
+    "Defenders",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 8,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6d73-e789-c898-fae7",
+   "name": "GHOST-SPIDER",
+   "alterEgo": "Gwen Stacy",
+   "threat": 3,
+   "affiliations": [
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "58a1-4978-5fe6-5ade",
+   "name": "GREEN GOBLIN",
+   "alterEgo": "Norman Osborn",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "OSCORP WEAPONRY (AFFILIATION: SPIDER-FOES)"
+   ]
+  },
+  {
+   "id": "7d56-dfe1-2ee1-1af8",
+   "name": "GROOT",
+   "alterEgo": "I Am Groot",
+   "threat": 3,
+   "affiliations": [
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0f1c-ef30-7ade-bef2",
+   "name": "GWENOM",
+   "alterEgo": "Gwen Stacy",
+   "threat": 4,
+   "affiliations": [
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 7
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "214b-99c7-b4ac-a607",
+   "name": "GWENPOOL",
+   "alterEgo": "Gwendolyn Poole",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Avengers",
+    "A-Force"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0036-82f8-1c18-a61d",
+   "name": "HAND NINJAS [ELEKTRA, SHADOWLAND DAREDEVIL]",
+   "alterEgo": null,
+   "threat": 0,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 2,
+    "injured": null
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 1,
+    "energy": 1,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": true,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b13b-4a21-5270-4c44",
+   "name": "HAWKEYE",
+   "alterEgo": "Clint Barton",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Defenders",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6b9f-d96e-a477-5609",
+   "name": "HEIMDALL, THE ALL-SEEING",
+   "alterEgo": "Heimdall",
+   "threat": 3,
+   "affiliations": [
+    "Asgard"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "f53f-79d4-bab3-d91e",
+   "name": "HELA, QUEEN OF HEL",
+   "alterEgo": "Hela",
+   "threat": 4,
+   "affiliations": [
+    "Asgard"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 4
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "cc53-00a0-f123-9546",
+   "name": "HONEY BADGER",
+   "alterEgo": "Gabrielle Kinney",
+   "threat": 2,
+   "affiliations": [
+    "Uncanny X-Men",
+    "X-Force",
+    "Weapon X",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 4
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "f61e-dfb1-ea28-2a83",
+   "name": "HOOD",
+   "alterEgo": "Parker Robbins",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "c468-8b88-0138-81b1",
+   "name": "HULK",
+   "alterEgo": "Bruce Banner",
+   "threat": 6,
+   "affiliations": [
+    "Avengers",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 20,
+    "injured": null
+   },
+   "movement": "S",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9165-1f37-a131-641e",
+   "name": "HULKBUSTER",
+   "alterEgo": "Tony Stark",
+   "threat": 6,
+   "affiliations": [
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 13,
+    "injured": null
+   },
+   "movement": "M",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "HULKBUSTERS (AFFILIATION: AVENGERS)"
+   ]
+  },
+  {
+   "id": "598d-0b00-4567-ccae",
+   "name": "HYDRA TROOPERS [RED SKULL, MASTER OF HYDRA]",
+   "alterEgo": null,
+   "threat": 0,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 3,
+    "injured": null
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 1,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": true,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6f85-4f70-8697-514e",
+   "name": "ICEMAN",
+   "alterEgo": "Bobby Drake",
+   "threat": 3,
+   "affiliations": [
+    "Uncanny X-Men",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - Famine"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "14a8-ca9e-816b-963c",
+   "name": "IRON FIST",
+   "alterEgo": "Danny Rand",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Defenders",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "98cf-c00b-554d-ee41",
+   "name": "IRON MAN",
+   "alterEgo": "Tony Stark",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "ca3a-1d3c-01a4-a95e",
+   "name": "JEAN GREY",
+   "alterEgo": "Jean Grey",
+   "threat": 5,
+   "affiliations": [
+    "Uncanny X-Men"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "a2dc-ea59-38da-b3c4",
+   "name": "JUGGERNAUT",
+   "alterEgo": "Cain Marko",
+   "threat": 5,
+   "affiliations": [
+    "Brotherhood of Mutants"
+   ],
+   "stamina": {
+    "healthy": 8,
+    "injured": 8
+   },
+   "movement": "S",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6d60-8229-e4e7-6d74",
+   "name": "KILLMONGER",
+   "alterEgo": "N'Jadaka",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "daf1-1136-f2e1-8431",
+   "name": "KILLMONGER, USURPER",
+   "alterEgo": "N'Jadaka",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "STRENGTH OF THE NEW GENERATION (AFFILIATION: WAKANDA)"
+   ]
+  },
+  {
+   "id": "762a-1976-31dc-559d",
+   "name": "KING T'CHALLA",
+   "alterEgo": "T'Challa",
+   "threat": 5,
+   "affiliations": [
+    "Avengers",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "STRENGTH OF THE ANCESTORS (AFFILIATION: WAKANDA)"
+   ]
+  },
+  {
+   "id": "ada9-220c-702d-f94b",
+   "name": "KINGPIN",
+   "alterEgo": "Wilson Fisk",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "ILLICIT NETWORK (AFFILIATION: CRIMINAL SYNDICATE)"
+   ]
+  },
+  {
+   "id": "0970-5061-1712-06c8",
+   "name": "KLAW",
+   "alterEgo": "Ulysses Klaw",
+   "threat": 5,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 5,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "BLACK MARKET ENTREPRENEUR (AFFILIATION: CRIMINAL SYNDICATE)"
+   ]
+  },
+  {
+   "id": "a116-e5dd-e68a-6ae7",
+   "name": "KRAVEN THE HUNTER",
+   "alterEgo": "Sergei Nikolaevich Kravinoff",
+   "threat": 3,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6c71-2be5-ed62-01b1",
+   "name": "LADY SIF",
+   "alterEgo": "Sif",
+   "threat": 4,
+   "affiliations": [
+    "Asgard"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d1b0-658d-1733-e8a6",
+   "name": "LIZARD",
+   "alterEgo": "Curtis Connors",
+   "threat": 3,
+   "affiliations": [
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "4904-fe33-8932-ee7e",
+   "name": "LOCKJAW",
+   "alterEgo": "Lockjaw",
+   "threat": 3,
+   "affiliations": [
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "94c4-14c6-4121-81cd",
+   "name": "LOGAN, THE WOLVERINE",
+   "alterEgo": "James Logan Howlett",
+   "threat": 4,
+   "affiliations": [
+    "Uncanny X-Men",
+    "Weapon X"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "79f4-2491-4378-baf8",
+   "name": "LOKI, GOD OF MISCHIEF",
+   "alterEgo": "Loki Laufeyson",
+   "threat": 4,
+   "affiliations": [
+    "Asgard",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "e5bc-c287-198c-f802",
+   "name": "LOKI, PRINCE OF LIES",
+   "alterEgo": "Loki Laufeyson",
+   "threat": 5,
+   "affiliations": [
+    "Asgard",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "I COME BEARING GIFTS (AFFILIATION: ASGARD)"
+   ]
+  },
+  {
+   "id": "8a22-710a-5c72-007e",
+   "name": "LUKE CAGE",
+   "alterEgo": "Carl Lucas",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9464-ae85-e2e1-5d7b",
+   "name": "M.O.D.O.K.",
+   "alterEgo": "George Tarleton",
+   "threat": 5,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 10,
+    "injured": 4
+   },
+   "movement": "S",
+   "size": 4,
+   "defenses": {
+    "physical": 2,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b186-91ba-0005-3b2e",
+   "name": "M.O.D.O.K. SCIENTIST SUPREME",
+   "alterEgo": "George Tarleton",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "ADVANCED IDEA MECHANICS (AFFILIATION: CRIMINAL SYNDICATE)"
+   ]
+  },
+  {
+   "id": "f5a0-1ef9-8dbf-52bc",
+   "name": "M'BAKU",
+   "alterEgo": "M'Baku",
+   "threat": 4,
+   "affiliations": [
+    "Wakanda",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "BLESSED BY GHEKRE (AFFILIATION: WAKANDA)"
+   ]
+  },
+  {
+   "id": "2a33-a95b-077e-ca00",
+   "name": "MAGIK",
+   "alterEgo": "Illyana Rasputin",
+   "threat": 3,
+   "affiliations": [
+    "Convocation",
+    "Defenders",
+    "Uncanny X-Men",
+    "New Mutants",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Famine",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "fd32-f9ad-b81c-b8c5",
+   "name": "MAGNETO",
+   "alterEgo": "Max Eisenhardt",
+   "threat": 6,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 8
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 6
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "FROM THE RUINS... (AFFILIATION: BROTHERHOOD OF MUTANTS)"
+   ]
+  },
+  {
+   "id": "b81f-bec9-4452-0b2e",
+   "name": "MALEKITH THE ACCURSED",
+   "alterEgo": "Malekith",
+   "threat": 7,
+   "affiliations": [
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 9,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "THE DARK COUNCIL (AFFILIATION: CABAL)"
+   ]
+  },
+  {
+   "id": "0f7c-1aeb-9200-5733",
+   "name": "MAN-THING (Theodore Sallis)",
+   "alterEgo": null,
+   "threat": 3,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "beda-54d9-e71e-5059",
+   "name": "MAVERICK",
+   "alterEgo": "Christoph Nord",
+   "threat": 3,
+   "affiliations": [
+    "Weapon X"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "c80e-29f4-3ac1-7e9a",
+   "name": "MEDUSA",
+   "alterEgo": "Medusalith Amaquelin-Boltagon",
+   "threat": 4,
+   "affiliations": [
+    "A-Force",
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7ff8-73c3-7348-d1a3",
+   "name": "MEPHISTO, LORD OF TEMPTATION",
+   "alterEgo": "Mephisto",
+   "threat": 5,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Legion of the Lost"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "4d53-e576-df66-61fe",
+   "name": "MISTER SINISTER",
+   "alterEgo": "Nathaniel Essex",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Famine",
+    "Servants of the Apocalypse - Pestilence"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "e8d5-ed12-3251-6a68",
+   "name": "MOON KNIGHT",
+   "alterEgo": "Marc Spector",
+   "threat": 3,
+   "affiliations": [
+    "Defenders",
+    "Midnight Sons",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "933c-3e2a-3132-11db",
+   "name": "MS. MARVEL",
+   "alterEgo": "Kamala Khan",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b4d0-c2a8-489a-04b2",
+   "name": "MYSTERIO",
+   "alterEgo": "Quentin Beck",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 1,
+    "energy": 1,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1621-592b-31e3-8c1d",
+   "name": "MYSTIQUE",
+   "alterEgo": "Raven Darkholme",
+   "threat": 3,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "FREEDOM FORCE (AFFILIATION: BROTHERHOOD OF MUTANTS)"
+   ]
+  },
+  {
+   "id": "eace-93e5-6216-bcda",
+   "name": "N'KANTU, THE LIVING MUMMY",
+   "alterEgo": "N'Kantu",
+   "threat": 3,
+   "affiliations": [
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9b1b-889f-2118-c88b",
+   "name": "NAMOR, THE SUB-MARINER",
+   "alterEgo": "Namor McKenzie",
+   "threat": 5,
+   "affiliations": [
+    "Defenders",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1d08-12b2-4be8-8c24",
+   "name": "NEBULA",
+   "alterEgo": "Nebula",
+   "threat": 2,
+   "affiliations": [
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6e4f-99c9-feb5-cdae",
+   "name": "NICK FURY",
+   "alterEgo": "Nicholas J. Fury, Jr.",
+   "threat": 4,
+   "affiliations": [
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "LAST LINE OF DEFENSE (AFFILIATION: S.H.I.E.L.D.)"
+   ]
+  },
+  {
+   "id": "e80b-298b-60eb-bf2f",
+   "name": "NICK FURY & THE HOWLING COMMANDOS",
+   "alterEgo": "Nicholas Fury, Sr., Timothy \"Dum Dum\" Dugan, Gabriel Jones",
+   "threat": 3,
+   "affiliations": [
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5d5e-a242-1dbc-07ae",
+   "name": "NIGHTCRAWLER",
+   "alterEgo": "Kurt Wagner",
+   "threat": 4,
+   "affiliations": [
+    "Uncanny X-Men"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d17f-b821-3a20-6cfe",
+   "name": "NOVA (Richard Rider)",
+   "alterEgo": null,
+   "threat": 5,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7fb4-8fe8-33a3-9c9c",
+   "name": "OKOYE",
+   "alterEgo": "Okoye",
+   "threat": 2,
+   "affiliations": [
+    "A-Force",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 4
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1e19-2e04-14db-ec3e",
+   "name": "OMEGA RED",
+   "alterEgo": "Arkady Gregorivich Rossovich",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "8362-a91d-52f5-f375",
+   "name": "PROFESSOR X",
+   "alterEgo": "Charles Xavier",
+   "threat": 4,
+   "affiliations": [
+    "Uncanny X-Men"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 6
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "XAVIER'S SCHOOL FOR GIFTED YOUNGSTERS (AFFILIATION: UNCANNY X-MEN)"
+   ]
+  },
+  {
+   "id": "5e5d-bb7a-efd1-f888",
+   "name": "PROXIMA MIDNIGHT",
+   "alterEgo": "Proxima Midnight",
+   "threat": 3,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "f97a-c96a-6aa9-27eb",
+   "name": "PSYLOCKE",
+   "alterEgo": "Elizabeth Braddock",
+   "threat": 4,
+   "affiliations": [
+    "Uncanny X-Men",
+    "X-Force",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - Famine"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "bb43-c215-bea5-9e05",
+   "name": "PUNISHER",
+   "alterEgo": "Frank Castle",
+   "threat": 3,
+   "affiliations": [
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0e55-46a4-99de-3b3f",
+   "name": "PYRO",
+   "alterEgo": "St. John Allerdyce",
+   "threat": 3,
+   "affiliations": [
+    "Brotherhood of Mutants"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2ecc-b108-a933-1383",
+   "name": "QUICKSILVER",
+   "alterEgo": "Pietro Maximoff",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "Brotherhood of Mutants",
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "3b89-bf58-86cb-6202",
+   "name": "RED GUARDIAN",
+   "alterEgo": "Nikolai Krylenko",
+   "threat": 3,
+   "affiliations": [
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7b32-d59c-acbb-50d6",
+   "name": "RED SKULL",
+   "alterEgo": "Johann Schmidt",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "MASTER OF EVIL (AFFILIATION: CABAL)"
+   ]
+  },
+  {
+   "id": "a2c9-bb78-7ce9-7e97",
+   "name": "RED SKULL, MASTER OF HYDRA",
+   "alterEgo": "Johann Schmidt",
+   "threat": 5,
+   "affiliations": [
+    "Hydra",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "WORLD DOMINATION (AFFILIATION: HYDRA)"
+   ]
+  },
+  {
+   "id": "f0a2-6ed0-7e49-7609",
+   "name": "RED SKULL, MASTER OF THE WORLD",
+   "alterEgo": "Johann Schmidt",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "MY CABAL IS ONLY FOR THE STRONG (AFFILIATION: CABAL)"
+   ]
+  },
+  {
+   "id": "5c99-3463-6cd6-b8f2",
+   "name": "RHINO",
+   "alterEgo": "Aleksei Sytsevich",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 4,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1e85-c3b6-04db-a2f2",
+   "name": "ROCKET RACCOON",
+   "alterEgo": "Rocket Raccoon",
+   "threat": 2,
+   "affiliations": [
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 3,
+    "injured": 3
+   },
+   "movement": "M",
+   "size": 1,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "515b-1edf-0e1e-97b1",
+   "name": "ROGUE",
+   "alterEgo": "Anna Marie LeBeau",
+   "threat": 4,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Uncanny X-Men"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b39f-f4e0-db5f-2832",
+   "name": "RONAN THE ACCUSER",
+   "alterEgo": "Ronan the Accuser",
+   "threat": 4,
+   "affiliations": [
+    "Guardians of the Galaxy",
+    "Inhumans"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "fed0-8226-baec-5073",
+   "name": "S.H.I.E.L.D. AGENTS [NICK FURY]",
+   "alterEgo": null,
+   "threat": 0,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 2,
+    "injured": null
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 1,
+    "energy": 1,
+    "mystic": 1
+   },
+   "unique": true,
+   "grunt": true,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "c20e-27fc-5125-7597",
+   "name": "SABRETOOTH",
+   "alterEgo": "Victor Creed",
+   "threat": 4,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Cabal",
+    "X-Force",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Pestilence",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "L",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7eb4-4340-36f6-d152",
+   "name": "SABRETOOTH, APEX PREDATOR",
+   "alterEgo": "Victor Creed",
+   "threat": 4,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Weapon X"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "909a-c717-ae94-2e17",
+   "name": "SAND CONSTRUCT [SANDMAN]",
+   "alterEgo": null,
+   "threat": 0,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 2,
+    "injured": null
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 1,
+    "energy": 1,
+    "mystic": 1
+   },
+   "unique": true,
+   "grunt": true,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "10dc-fb81-746d-f315",
+   "name": "SANDMAN",
+   "alterEgo": "Flint Marko",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 7
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2d6f-081d-a3e5-37a4",
+   "name": "SCARLET SPIDER",
+   "alterEgo": "Ben Reilly",
+   "threat": 4,
+   "affiliations": [
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "497f-8ccc-a720-d7c6",
+   "name": "SCARLET WITCH",
+   "alterEgo": "Wanda Maximoff",
+   "threat": 5,
+   "affiliations": [
+    "A-Force",
+    "Avengers",
+    "Brotherhood of Mutants",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "604e-a788-a944-9993",
+   "name": "SENTINEL MK4",
+   "alterEgo": "Sentinel MK4",
+   "threat": 4,
+   "affiliations": [
+    "Sentinels"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 5,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": false,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "b3d3-e360-9c32-fe45",
+   "name": "SENTINEL PRIME MK4",
+   "alterEgo": "Sentinel Prime MK4",
+   "threat": 5,
+   "affiliations": [
+    "Sentinels"
+   ],
+   "stamina": {
+    "healthy": 10,
+    "injured": 8
+   },
+   "movement": "S",
+   "size": 5,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "MUTANT HUNTERS (AFFILIATION: SENTINELS)"
+   ]
+  },
+  {
+   "id": "70f0-5acb-6711-5010",
+   "name": "SHADOW KING",
+   "alterEgo": "Amahl Farouk",
+   "threat": 5,
+   "affiliations": [
+    "Brotherhood of Mutants"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "4261-4522-23f1-6523",
+   "name": "SHADOWCAT",
+   "alterEgo": "Katherine \"Kitty\" Pryde",
+   "threat": 3,
+   "affiliations": [
+    "Uncanny X-Men",
+    "New Mutants"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "6474-0172-5646-8388",
+   "name": "SHADOWLAND DAREDEVIL",
+   "alterEgo": "Matt Murdock",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "SHADOW WAR (AFFILIATION: CRIMINAL SYNDICATE)"
+   ]
+  },
+  {
+   "id": "ae16-93bc-5674-6b50",
+   "name": "SHANG-CHI",
+   "alterEgo": "Zheng Shang-Chi",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d846-ff11-c193-7fa9",
+   "name": "SHE-HULK",
+   "alterEgo": "Jennifer Walters",
+   "threat": 6,
+   "affiliations": [
+    "A-Force",
+    "Avengers",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 20,
+    "injured": null
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "DEFENDERS OF ARCADIA (AFFILIATION: A-FORCE)"
+   ]
+  },
+  {
+   "id": "7b11-22ef-2273-40ca",
+   "name": "SHOCKER",
+   "alterEgo": "Herman Schultz",
+   "threat": 3,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9171-df7a-8885-f92e",
+   "name": "SHURI",
+   "alterEgo": "Shuri",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0bb3-c283-7ac3-4ab5",
+   "name": "SILVER SABLE",
+   "alterEgo": "Silvija Sablinova",
+   "threat": 4,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Defenders",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "62bb-303e-6a3b-4a49",
+   "name": "SIN",
+   "alterEgo": "Sinthea Schmidt",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "RED MAYHEM (AFFILIATION: CABAL)"
+   ]
+  },
+  {
+   "id": "ce87-940d-e58a-5d98",
+   "name": "SKURGE, THE EXECUTIONER",
+   "alterEgo": "Skurge",
+   "threat": 3,
+   "affiliations": [
+    "Asgard",
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d7a2-7d67-17e1-f0c6",
+   "name": "SPECTACULAR SPIDER-MAN",
+   "alterEgo": "Peter Parker",
+   "threat": 3,
+   "affiliations": [
+    "S.H.I.E.L.D.",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d581-f6da-ba25-1af7",
+   "name": "SPIDER-MAN",
+   "alterEgo": "Miles Morales",
+   "threat": 3,
+   "affiliations": [
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "GREAT RESPONSIBILITY (AFFILIATION: WEB WARRIORS)"
+   ]
+  },
+  {
+   "id": "f17b-1995-5420-41a3",
+   "name": "SPIDER-MAN",
+   "alterEgo": "Peter Parker",
+   "threat": 4,
+   "affiliations": [
+    "Defenders",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "55c2-ad56-c7a1-3d76",
+   "name": "SPIDER-WOMAN",
+   "alterEgo": "Jessica Drew",
+   "threat": 4,
+   "affiliations": [
+    "A-Force",
+    "Avengers",
+    "Hydra",
+    "S.H.I.E.L.D.",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "62fa-03fc-e2bb-748f",
+   "name": "SQUIRREL GIRL",
+   "alterEgo": "Doreen Greene",
+   "threat": 4,
+   "affiliations": [
+    "A-Force",
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2a8c-8430-ec88-e1c9",
+   "name": "STAR-LORD",
+   "alterEgo": "Peter Quill",
+   "threat": 3,
+   "affiliations": [
+    "Guardians of the Galaxy"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "WINGING IT (AFFILIATION: GUARDIANS OF THE GALAXY)"
+   ]
+  },
+  {
+   "id": "4745-6f0e-59f6-1b58",
+   "name": "STEVE ROGERS, CAPTAIN AMERICA",
+   "alterEgo": "Steve Rogers",
+   "threat": 4,
+   "affiliations": [
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1bc7-460c-8391-d8bd",
+   "name": "STORM",
+   "alterEgo": "Ororo Munroe",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Uncanny X-Men",
+    "Wakanda"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "X-MEN GOLD (AFFILIATION: UNCANNY X-MEN)"
+   ]
+  },
+  {
+   "id": "3ec8-dea0-c003-724a",
+   "name": "SUNSPOT",
+   "alterEgo": "Roberto Da Costa",
+   "threat": 4,
+   "affiliations": [
+    "New Mutants",
+    "X-Force"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "d457-508d-3c3c-c7b1",
+   "name": "SUPERGIANT",
+   "alterEgo": "Supergiant",
+   "threat": 3,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 1,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "2e17-06e6-a851-f5c9",
+   "name": "TASKMASTER",
+   "alterEgo": "Anthony Masters",
+   "threat": 3,
+   "affiliations": [
+    "Criminal Syndicate",
+    "S.H.I.E.L.D.",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "54fe-5b4a-d7dd-e1dc",
+   "name": "THANOS, THE MAD TITAN",
+   "alterEgo": "Thanos",
+   "threat": 6,
+   "affiliations": [
+    "Black Order"
+   ],
+   "stamina": {
+    "healthy": 8,
+    "injured": 9
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "DEATH'S AGENDA (AFFILIATION: BLACK ORDER)"
+   ]
+  },
+  {
+   "id": "57f0-af97-6526-0ed3",
+   "name": "THE BLACK WIDOW",
+   "alterEgo": "Natasha Romanoff",
+   "threat": 4,
+   "affiliations": [
+    "A-Force",
+    "Avengers",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "a150-fab7-f4b9-f8f3",
+   "name": "THE BLOB",
+   "alterEgo": "Fred Dukes",
+   "threat": 3,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Famine",
+    "Servants of the Apocalypse - Pestilence"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "4e28-8815-2e78-2fbe",
+   "name": "THE IMMORTAL HULK",
+   "alterEgo": "Bruce Banner",
+   "threat": 7,
+   "affiliations": [
+    "Defenders",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 15,
+    "injured": null
+   },
+   "movement": "S",
+   "size": 4,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "dfad-0821-04ab-5ee5",
+   "name": "THE MIGHTY THOR",
+   "alterEgo": "Jane Foster",
+   "threat": 5,
+   "affiliations": [
+    "A-Force",
+    "Asgard"
+   ],
+   "stamina": {
+    "healthy": 8,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "RENEGADE THOR OF ASGARDIA (AFFILIATION: ASGARD)"
+   ]
+  },
+  {
+   "id": "7dce-e382-7bd9-a029",
+   "name": "THE ORIGINAL HUMAN TORCH",
+   "alterEgo": "Jim Hammond",
+   "threat": 3,
+   "affiliations": [
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0b4c-2606-0902-7e3b",
+   "name": "THE WRECKING CREW",
+   "alterEgo": "Brian Calusky, Dirk Garthwaite, Eliot Franklin, Henry Camp",
+   "threat": 4,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "97d1-c56b-2d41-ffe3",
+   "name": "THOR, HERO OF MIDGARD",
+   "alterEgo": "Thor Odinson",
+   "threat": 6,
+   "affiliations": [
+    "Asgard"
+   ],
+   "stamina": {
+    "healthy": 9,
+    "injured": 8
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5ae4-e576-3443-589c",
+   "name": "THOR, PRINCE OF ASGARD",
+   "alterEgo": "Thor Odinson",
+   "threat": 5,
+   "affiliations": [
+    "Asgard",
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 8
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": true,
+   "leadership": [
+    "PRINCE OF ASGARD (AFFILIATION: ASGARD)"
+   ]
+  },
+  {
+   "id": "f77c-9c67-c5ca-1394",
+   "name": "TOAD",
+   "alterEgo": "Mortimer Toynbee",
+   "threat": 2,
+   "affiliations": [
+    "Brotherhood of Mutants",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - Pestilence"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 3
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9375-8d8e-02c9-3b11",
+   "name": "ULIK",
+   "alterEgo": "Ulik",
+   "threat": 5,
+   "affiliations": [
+    "Cabal",
+    "Criminal Syndicate"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "ab3f-b441-1534-1a2a",
+   "name": "ULTRON",
+   "alterEgo": "Ultron",
+   "threat": 4,
+   "affiliations": [
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "0196-a6d7-ceb0-1145",
+   "name": "ULTRON DRONES [ULTRON, METAL TYRANT]",
+   "alterEgo": null,
+   "threat": 0,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 3,
+    "injured": null
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": true,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1ea6-2fec-7692-5a9e",
+   "name": "ULTRON, METAL TYRANT",
+   "alterEgo": "Ultron",
+   "threat": 5,
+   "affiliations": [
+    "Cabal"
+   ],
+   "stamina": {
+    "healthy": 8,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 5
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "bbb4-c58b-f0da-0fc5",
+   "name": "URSA MAJOR",
+   "alterEgo": "Mikhail Ursus",
+   "threat": 4,
+   "affiliations": [
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "44a1-7f5c-670a-e26c",
+   "name": "VALKYRIE",
+   "alterEgo": "Brunhilde",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Asgard",
+    "Defenders"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "dd21-b365-f2c8-b06a",
+   "name": "VENOM",
+   "alterEgo": "Eddie Brock",
+   "threat": 4,
+   "affiliations": [
+    "Spider-Foes",
+    "Web Warriors"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "S",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "00a5-f75b-9877-4eb6",
+   "name": "VIPER",
+   "alterEgo": "Ophelia Sarkissian",
+   "threat": 3,
+   "affiliations": [
+    "Cabal",
+    "Hydra"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "L",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "5065-0feb-ae7b-aebf",
+   "name": "VISION",
+   "alterEgo": "Victor Shade",
+   "threat": 4,
+   "affiliations": [
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 2,
+    "energy": 2,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "deaa-2d25-c9d9-6a14",
+   "name": "VULTURE",
+   "alterEgo": "Adrian Toomes",
+   "threat": 3,
+   "affiliations": [
+    "Criminal Syndicate",
+    "Spider-Foes"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "ae4b-da5e-3b3f-fd0d",
+   "name": "WAR MACHINE",
+   "alterEgo": "James Rhodes",
+   "threat": 3,
+   "affiliations": [
+    "Avengers",
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "ecf7-2177-dce5-5958",
+   "name": "WARLOCK",
+   "alterEgo": "Warlock",
+   "threat": 3,
+   "affiliations": [
+    "New Mutants",
+    "X-Force"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "966a-244e-e306-b1ff",
+   "name": "WASP",
+   "alterEgo": "Janet Van Dyne",
+   "threat": 3,
+   "affiliations": [
+    "A-Force",
+    "Avengers"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "9560-fc66-5d91-202e",
+   "name": "WEAPON X",
+   "alterEgo": "James Logan Howlett",
+   "threat": 3,
+   "affiliations": [
+    "Weapon X"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 2,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "e3d8-7a4d-53a1-6a2d",
+   "name": "WEREWOLF BY NIGHT",
+   "alterEgo": "Jack Russell",
+   "threat": 5,
+   "affiliations": [
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 7
+   },
+   "movement": "M",
+   "size": 3,
+   "defenses": {
+    "physical": 4,
+    "energy": 4,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "fe0a-abba-e1c4-7964",
+   "name": "WINTER SOLDIER",
+   "alterEgo": "James \"Bucky\" Barnes",
+   "threat": 3,
+   "affiliations": [
+    "S.H.I.E.L.D."
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "79c7-157b-ff46-2e0b",
+   "name": "WINTER SOLDIER, OPERATIVE",
+   "alterEgo": "James \"Bucky\" Barnes",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "Cabal",
+    "Hydra",
+    "S.H.I.E.L.D.",
+    "Winter Guard"
+   ],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 4
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "1db3-2b38-08a7-03dc",
+   "name": "WOLVERINE",
+   "alterEgo": "James Logan Howlett",
+   "threat": 4,
+   "affiliations": [
+    "Avengers",
+    "Defenders",
+    "Uncanny X-Men",
+    "X-Force",
+    "Servants of the Apocalypse",
+    "Servants of the Apocalypse - Death",
+    "Servants of the Apocalypse - War"
+   ],
+   "stamina": {
+    "healthy": 7,
+    "injured": 6
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 4,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "78ba-07c3-ea5a-e71f",
+   "name": "WONG",
+   "alterEgo": "Wong",
+   "threat": 2,
+   "affiliations": [
+    "Convocation",
+    "Defenders",
+    "Midnight Sons"
+   ],
+   "stamina": {
+    "healthy": 4,
+    "injured": 4
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7dd0-e00b-4f36-2c83",
+   "name": "X-23",
+   "alterEgo": "Laura Kinney",
+   "threat": 3,
+   "affiliations": [
+    "Uncanny X-Men",
+    "X-Force",
+    "Weapon X",
+    "New Mutants"
+   ],
+   "stamina": {
+    "healthy": 5,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 3,
+    "mystic": 2
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  },
+  {
+   "id": "7afc-632d-a6c5-5584",
+   "name": "YONDU (Yondu Udonta)",
+   "alterEgo": null,
+   "threat": 4,
+   "affiliations": [],
+   "stamina": {
+    "healthy": 6,
+    "injured": 5
+   },
+   "movement": "M",
+   "size": 2,
+   "defenses": {
+    "physical": 3,
+    "energy": 4,
+    "mystic": 3
+   },
+   "unique": true,
+   "grunt": false,
+   "leader": false,
+   "leadership": []
+  }
+ ],
+ "tactics": [
+  {
+   "name": "A BETTER TOMORROW",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "A NEW AGE",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "A-FORCE ASSEMBLE!",
+   "affiliation": "A-Force",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "A.I.M. LACKEYS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ACUTE SENSES",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ADVANCED R&D",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "AGENTS OF S.M.A.S.H.",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ALL ACCORDING TO PLAN",
+   "affiliation": "Criminal Syndicate",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ALL WEBBED UP",
+   "affiliation": "Web Warriors",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ALL YOU'VE GOT",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ANGER MANAGEMENT",
+   "affiliation": "Avengers",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ARE YOU SURE YOU WANT TO REMEMBER?",
+   "affiliation": "Weapon X",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ASTEROID M",
+   "affiliation": "Brotherhood of Mutants",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ASTRAL PLANE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ASTRAL RING",
+   "affiliation": "Convocation",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ATTILAN RISING",
+   "affiliation": "Inhumans",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "AUNT MAY'S WHEAT CAKES",
+   "affiliation": "Web Warriors",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "AVENGERS ASSEMBLE",
+   "affiliation": "Avengers",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "BANE OF DAMBALLAH",
+   "affiliation": "Convocation",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BANISHMENT",
+   "affiliation": "Midnight Sons",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BAST'S BLESSING",
+   "affiliation": "Wakanda",
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "BATS THE GHOST HOUND",
+   "affiliation": "Midnight Sons",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BATTLE BOUND",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "BATTLE LUST",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BATTLE PLAN",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "BATTLEFIELD MEDICINE",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "BEAR HUG",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BIRD OF PREY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BITTER RIVALS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "BLACK ONSLAUGHT",
+   "affiliation": "Black Order",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BLIND OBSESSION",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BLOOD RED AND PERSONAL",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BLOOD TO SPARE",
+   "affiliation": "Black Order",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BOOK OF CAGLIOSTRO",
+   "affiliation": "Convocation",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "BOUNTY HUNTERS",
+   "affiliation": "Criminal Syndicate",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BRACE FOR IMPACT",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BRAND NEW DAY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "BROTHERS IN ARMS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CALL THE PACK",
+   "affiliation": "Weapon X",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CAN I BORROW THAT?",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CARBONADIUM SYNTHESIZER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CARNAGE RULES",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CAT AND MOUSE",
+   "affiliation": "X-Force",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CEREBRO",
+   "affiliation": "Uncanny X-Men",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CHARMING THIEF",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CHI MASTERY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CHILDREN OF THE ATOM",
+   "affiliation": "Uncanny X-Men",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CHIMICHANGAS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CLEAN UP",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CLIMBING GEAR",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CLONE SAGA",
+   "affiliation": "Web Warriors",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CLONING BANKS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "COMRADE'S KEEPER",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "COSMIC INVIGORATION",
+   "affiliation": "Cabal",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "COSMIC OBLITERATION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "COVER ME",
+   "affiliation": "Defenders",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CREW OF THE MILANO",
+   "affiliation": "Guardians of the Galaxy",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CRIMSON DAWN",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CRUEL TUTELAGE",
+   "affiliation": "Criminal Syndicate",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "CRUELTY",
+   "affiliation": "Criminal Syndicate",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "CUSTOM UPGRADES",
+   "affiliation": "Spider-Foes",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DARK AURA MANIFESTATION",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DARK EMPOWERMENT",
+   "affiliation": "Dark Dimension",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DARK PAST",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DARK REIGN",
+   "affiliation": "Cabal",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DARK RESTORATION",
+   "affiliation": "Dark Dimension",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DAUGHTERS OF THANOS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DEADLY DUO",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DEAL WITH THE DEVIL",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DEATH FROM ABOVE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DECEPTION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DEFENSIVE PROTOTYPE",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DEVIL'S RECKONING",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DIFFICULT TO PLEASE",
+   "affiliation": "Brotherhood of Mutants",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DIG IN",
+   "affiliation": "Cabal",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DIRECTIVE ONE",
+   "affiliation": "Sentinels",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DIRTY WORK",
+   "affiliation": "X-Force",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DISARM",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DO YOU KNOW WHO I AM?",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "DOOMED PROPHECY",
+   "affiliation": "Asgard",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DOSSIER",
+   "affiliation": "Weapon X",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DOUBLE AGENT",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "DROP OFF",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "EFFICIENT MACHINES",
+   "affiliation": "Sentinels",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ELEMENTAL INFUSION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "EMBRACE THE INFERNO",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ENDLESS LEGIONS",
+   "affiliation": "Hydra",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ESCORT TO SAFETY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "EXECUTE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "EXTREME CONDITIONING",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "EYE IN THE SKY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "EYES ON THE PRIZE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FACE ME",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FAITHFUL COMPANION",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FALL BACK",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FALLEN",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FAN CLUB",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FASTBALL SPECIAL!",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FEARFUL SYMMETRY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FIELD DRESSING",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FIRST CLASS",
+   "affiliation": "Uncanny X-Men",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FIRST OF THE BLACK ORDER",
+   "affiliation": "Black Order",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FOLLOW ME",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FOR A LIMITED TIME ONLY",
+   "affiliation": "Asgard",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FORCED EXTRACTION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FOREIGN ASSIGNMENT",
+   "affiliation": "Guardians of the Galaxy",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "FOUNDING MEMBERS",
+   "affiliation": "Spider-Foes",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FREYJA'S BLESSING",
+   "affiliation": "Asgard",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "FUSION CASTER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "GALAXY'S GREATEST",
+   "affiliation": "Guardians of the Galaxy",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "GAMMA BURST",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "GAMMA DRAIN",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "GAMMA LAUNCH",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "GIANT'S BLOOD",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "GLORY OF ULTRON",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "GO GET 'EM TIGER",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "GOTTA GET SOME AIR",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "GRIEVOUS WOUNDS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "HAPPY BIRTHDAY, RUNT!",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HARD RESET",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "HEADMISTRESS",
+   "affiliation": "Uncanny X-Men",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HEART OF THE WORTHY",
+   "affiliation": "Asgard",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "HEAVE HO",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HEAVY FIREPOWER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HEAVY ORDNANCE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HELICARRIER STRIKE",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HELIOS LASER BOMBARDMENT",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HEROES FOR HIRE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "HIDEOUS MONSTER",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "HIGHWAY TO HELL",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "HIRED MUSCLE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HOLD STILL",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "HOOD'S GANG",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "HUMAN WEAPON",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "I AM A BARON, AFTER ALL",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ILLICIT TECH",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "IMMORTAL SERVANTS",
+   "affiliation": "Servants of the Apocalypse",
+   "type": "Active / Reactive",
+   "banned": false
+  },
+  {
+   "name": "IMPLANTED MEMORIES",
+   "affiliation": "Weapon X",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "INDOMITABLE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "INEVITABLE BETRAYAL",
+   "affiliation": "Hydra",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "INEXPLICABLE DEMISE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "INFILTRATION",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "INHUMAN ROYAL FAMILY",
+   "affiliation": "Inhumans",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "INSPIRING MONOLOGUE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "INSTANT RECOVERY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "IRON-BOUND BOOKS OF SHUMA-GORATH",
+   "affiliation": "Convocation",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "IT'S TIME TRAVEL... DON'T ASK",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "JABARI CHIEFTAIN",
+   "affiliation": "Wakanda",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "JEAN!!!",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "JOINT EFFORT",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "JONATHAN THE UNSTOPPABLE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "JOURNEY THROUGH LIMBO",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "K'LILUNA'S GLORY",
+   "affiliation": "Wakanda",
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "K'UN-LUN TRAINING",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "KICK 'EM WHILE THEY'RE DOWN",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "KING'S COMMAND",
+   "affiliation": "Wakanda",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "LAST-MINUTE SAVE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "LEAPFROG",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "LETHAL PROTECTOR",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "LIFE MODEL DECOY",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "LOVABLE MISFITS",
+   "affiliation": "Guardians of the Galaxy",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MAGNETIC CRUSH",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MAGNETIC REFRACTION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MAKIN' A RUCKUS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "MARKED FOR DEATH",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MASKED MENACE",
+   "affiliation": "Web Warriors",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "MASS TRANSIT",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "MEDPACK",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MEET MY EXECUTIONER",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "MENTAL DOMINATION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MIDNIGHT PHANTASMAGORIA",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MIND GAMES",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MIND IF I CUT IN?",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MIND TRANSFER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MIND WIPE",
+   "affiliation": "Uncanny X-Men",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "MISSION OBJECTIVE",
+   "affiliation": null,
+   "type": "Active / Reactive",
+   "banned": false
+  },
+  {
+   "name": "MONKEY BRAIN IS LIZARD HOME",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MOTHERSHIP",
+   "affiliation": "Black Order",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "MUTANT TRAITOR",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "MY HELLFIRE CLUB",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "MYSTIC MENACE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "MYSTIC WARD",
+   "affiliation": "Defenders",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "NEOGENETIC RECOMBINATOR",
+   "affiliation": "Spider-Foes",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "NEW MUTANTS",
+   "affiliation": "New Mutants",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "NO ESCAPE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "NO MATTER THE COST",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "NO MERCY",
+   "affiliation": "Criminal Syndicate",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "NO MORE MUTANTS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "NO, TRY THIS ONE!",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "OCCULT RESEARCH",
+   "affiliation": "Hydra",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ODIN'S BLESSING",
+   "affiliation": "Asgard",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ON PATROL",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ONE BELOW ALL",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ONE-TWO PUNCH",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ONLINE AND OPERATIONAL",
+   "affiliation": "Sentinels",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ORB OF AGAMOTTO",
+   "affiliation": "Convocation",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "OVER THE TOP",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "OVERCHARGE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PARDON ME, SUGAH",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PATCH UP",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PENTAGRAM OF FARALLAH",
+   "affiliation": "Defenders",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PHASES OF THE MOON",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PLANE OF POHLDAHK",
+   "affiliation": "Convocation",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "POWER OF THE COSMOS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PRACTICE ROUND",
+   "affiliation": "New Mutants",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PRESERVE THE DREAM",
+   "affiliation": "X-Force",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PRETTY SNEAKY, SIS",
+   "affiliation": "X-Force",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PRICE OF FAILURE",
+   "affiliation": "Black Order",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PRINCE'S PROTECTION",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PROFESSIONALS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PSIONIC CONSTRUCTS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "PSYCHIC FORTRESS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PSYCHIC SHIELDING DEVICE (P.S.D.)",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PSYCHIC SHOCKWAVE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PYM PARTICLES",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "PYROTECHNICS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "RAINBOW BRIDGE",
+   "affiliation": "Asgard",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "RECALIBRATION MATRIX",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "RED ROOM TRAINING",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "REJUVENATION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "REPOSITION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "REPULSOR REFRACTION",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "RESERVE MEMBERS",
+   "affiliation": "Avengers",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "REVERSAL",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "RHINO IN A CHINA SHOP",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "RICOCHET BLAST",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ROCK AND TROLL",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "ROCKET BOOTS?!",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SABLE INTERNATIONAL",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SACRIFICE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SCIENTIFIC METHOD",
+   "affiliation": "Hydra",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SCRAP METAL",
+   "affiliation": "Sentinels",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SEANCE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SECOND WIND",
+   "affiliation": "Avengers",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SEEING RED",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SELF-HELP",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SERVANTS OF THE TITAN",
+   "affiliation": "Black Order",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SERVICE TO ANUBIS",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "SEVEN SUNS OF CINNIBUS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SHADOW ORGANIZATION",
+   "affiliation": "Criminal Syndicate",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SHHH...",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SHURIKEN ARASHI",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SIBLING RIVALRY",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SIEGE OF DARKNESS",
+   "affiliation": "Midnight Sons",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SIMPLETON! I'LL DO IT MYSELF!",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SINISTER TRAPS",
+   "affiliation": "Spider-Foes",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SITREP",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SKUTTLEBUTT, ON ME!",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SLEEPER AGENT",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SMASH",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SOLDAT ACTIVATED",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SOVEREIGN STRIKE",
+   "affiliation": "Winter Guard",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SPECIAL DELIVERY",
+   "affiliation": "A-Force",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SPIDER-TRACKER",
+   "affiliation": "Web Warriors",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SPIRIT OF WAKANDA",
+   "affiliation": "Wakanda",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "STALWART DETERMINATION",
+   "affiliation": "A-Force",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "STARK ARMORY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "STATIC ARC",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "STOLEN IDENTITY",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "STRATEGIC RETREAT",
+   "affiliation": "Spider-Foes",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "STREET SMARTS",
+   "affiliation": "Defenders",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "STRENGTH AND CUNNING",
+   "affiliation": "Wakanda",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "STRONGER TOGETHER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SUCKER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SUPERSONIC ANNIHILATOR",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SURPRISE, WEBHEAD",
+   "affiliation": "Spider-Foes",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "SURVIVAL",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SURVIVE THE NIGHT",
+   "affiliation": "New Mutants",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "SYNTHETIC HEART-SHAPED HERBS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TACTICAL ANALYSIS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TACTICAL MANEUVERS",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "TERRIGENESIS",
+   "affiliation": "Inhumans",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THE AGE OF ULTRON",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE AIR FORCE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE BAR WITH NO DOORS",
+   "affiliation": "Convocation",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE BLACK BIFROST",
+   "affiliation": "Cabal",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE BOOKS OF TRUTH",
+   "affiliation": "Brotherhood of Mutants",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE CAT AND THE SPIDER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THE FIRST ONE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THE GRAND ILLUSION",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THE HIGH COUNCIL",
+   "affiliation": "Hydra",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THE INITIATIVE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE INVADERS",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THE SHIELDMOBILE",
+   "affiliation": "S.H.I.E.L.D.",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THE WHIMS OF CHAOS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THERE WILL BE CARNAGE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THEY SAY KEEP YOUR ENEMIES CLOSE...",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THIS IS A ROBBERY",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "THIS IS OUR DAY",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THRALLS OF DRACULA",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "THUNDERWAVE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TILL THE END OF THE LINE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TO ASH AND CINDER",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "TO ME, MY X-MEN!",
+   "affiliation": "Uncanny X-Men",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TOAD (Mortimer Toynbee)",
+   "affiliation": null,
+   "type": "-",
+   "banned": false
+  },
+  {
+   "name": "TOMORROW'S SOLDIERS",
+   "affiliation": "New Mutants",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "TRIAL BY COMBAT",
+   "affiliation": "Wakanda",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TRICKSTER'S BOON",
+   "affiliation": "Asgard",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "TRIP UP",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "TWO MORE SHALL RISE",
+   "affiliation": "Hydra",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "ULTIMATE SACRIFICE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "UNDER YOUR SKIN",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "UNEARTHLY RAGE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "UNEASY ALLIES",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "UNTAPPED POTENTIAL",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "UP THE ANTE",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "USURP THE THRONE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "VAPORS OF VALTORR",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "VENDETTA",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "VENOMIZED",
+   "affiliation": null,
+   "type": "Active: Action",
+   "banned": false
+  },
+  {
+   "name": "VERSATILE STRATEGY",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "VERTICAL ASSISTANCE",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "VIBRANIUM SHIELDING",
+   "affiliation": "Wakanda",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "VICTORY ASSURED",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WAKANDA FOREVER",
+   "affiliation": "Wakanda",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WAND OF WATOOMB",
+   "affiliation": "Convocation",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WARPATH",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "WE ARE GROOT",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WEAPON X PROGRAM",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WEAPONS OF MIDGARD",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WEAPONS STASH",
+   "affiliation": "Weapon X",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WEB BARRIER",
+   "affiliation": "Web Warriors",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WELL-LAID PLANS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WINTER RUSH",
+   "affiliation": "Winter Guard",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "WISDOM OF THE ANCESTORS",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WOLVERINES",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "WORLD DOMINATION",
+   "affiliation": "Hydra",
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "X-CEPTIONAL HEALING",
+   "affiliation": null,
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "XAVIER'S DREAM",
+   "affiliation": "Uncanny X-Men",
+   "type": "Reactive",
+   "banned": false
+  },
+  {
+   "name": "YOINK",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  },
+  {
+   "name": "YOU WILL DO AS I SAY, MONSTER",
+   "affiliation": null,
+   "type": "Active",
+   "banned": false
+  }
+ ],
+ "crises": [
+  {
+   "name": "ALIEN SHIP CRASHES IN DOWNTOWN!",
+   "type": "extract",
+   "threats": [
+    17
+   ],
+   "banned": false
+  },
+  {
+   "name": "COSMIC INVASION! BLACK ORDER DESCENDS ON EARTH",
+   "type": "secure",
+   "threats": [
+    16
+   ],
+   "banned": false
+  },
+  {
+   "name": "DEADLY LEGACY VIRUS CURED?",
+   "type": "extract",
+   "threats": [
+    19
+   ],
+   "banned": false
+  },
+  {
+   "name": "DEADLY METEORS MUTATE CIVILIANS",
+   "type": "secure",
+   "threats": [
+    17
+   ],
+   "banned": false
+  },
+  {
+   "name": "DEMONS DOWNTOWN! HAS OUR COMEUPPANCE COME DUE?",
+   "type": "secure",
+   "threats": [
+    19
+   ],
+   "banned": false
+  },
+  {
+   "name": "FEAR GRIPS WORLD AS \"WORTHY\" TERRORIZE CITIES",
+   "type": "extract",
+   "threats": [
+    18
+   ],
+   "banned": false
+  },
+  {
+   "name": "GAMMA WAVE SWEEPS ACROSS MIDWEST",
+   "type": "secure",
+   "threats": [
+    15
+   ],
+   "banned": false
+  },
+  {
+   "name": "INFINITY FORMULA GOES MISSING",
+   "type": "secure",
+   "threats": [
+    17
+   ],
+   "banned": false
+  },
+  {
+   "name": "INTRUSIONS OPEN ACROSS CITY AS SEALS COLLAPSE",
+   "type": "secure",
+   "threats": [
+    19
+   ],
+   "banned": false
+  },
+  {
+   "name": "MAYOR FISK VOWS TO FIND MISSING WITNESSES",
+   "type": "secure",
+   "threats": [
+    16
+   ],
+   "banned": false
+  },
+  {
+   "name": "MUTANT EXTREMISTS TARGET U.S. SENATORS!",
+   "type": "extract",
+   "threats": [
+    19
+   ],
+   "banned": false
+  },
+  {
+   "name": "MUTANT MADMAN TURNS CITY CENTER INTO LETHAL AMUSEMENT PARK",
+   "type": "secure",
+   "threats": [
+    18
+   ],
+   "banned": false
+  },
+  {
+   "name": "MYSTIC WAKANDAN HERBS: FACT OR FICTION?",
+   "type": "extract",
+   "threats": [
+    15
+   ],
+   "banned": true
+  },
+  {
+   "name": "PANIC GRIPS CITY AS EVACUATION EFFORTS CONTINUE!",
+   "type": "extract",
+   "threats": [
+    19
+   ],
+   "banned": true
+  },
+  {
+   "name": "PARANOIA PUMMELS POPULACE!",
+   "type": "extract",
+   "threats": [
+    16
+   ],
+   "banned": false
+  },
+  {
+   "name": "PORTALS OVERRUN CITY WITH SPIDER-PEOPLE",
+   "type": "secure",
+   "threats": [
+    18
+   ],
+   "banned": false
+  },
+  {
+   "name": "RESEARCH STATION ATTACKED!",
+   "type": "extract",
+   "threats": [
+    15
+   ],
+   "banned": false
+  },
+  {
+   "name": "RIOTS SPARK OVER EXTREMIS 3.0",
+   "type": "secure",
+   "threats": [
+    17
+   ],
+   "banned": false
+  },
+  {
+   "name": "S.W.O.R.D. ESTABLISHES BASE ON MOON'S BLUE AREA",
+   "type": "secure",
+   "threats": [
+    15
+   ],
+   "banned": false
+  },
+  {
+   "name": "SKRULLS INFILTRATE WORLD LEADERSHIP",
+   "type": "extract",
+   "threats": [
+    20
+   ],
+   "banned": false
+  },
+  {
+   "name": "SPIDER-INFECTED INVADE MANHATTAN",
+   "type": "extract",
+   "threats": [
+    17
+   ],
+   "banned": false
+  },
+  {
+   "name": "STRUGGLE FOR THE CUBE CONTINUES",
+   "type": "extract",
+   "threats": [
+    17
+   ],
+   "banned": false
+  },
+  {
+   "name": "SUPER-POWERED SCOUNDRELS FORM SINISTER SYNDICATE",
+   "type": "secure",
+   "threats": [
+    20
+   ],
+   "banned": false
+  },
+  {
+   "name": "TERRIGEN CLOUDS SWEEP OVER CITY",
+   "type": "secure",
+   "threats": [
+    20
+   ],
+   "banned": false
+  },
+  {
+   "name": "THE MONTESI FORMULA FOUND",
+   "type": "extract",
+   "threats": [
+    18
+   ],
+   "banned": false
+  }
+ ]
+}

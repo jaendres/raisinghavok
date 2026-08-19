@@ -1,0 +1,80 @@
+/* Marvel Crisis Protocol roster builder.
+   Inherits the club look from builders.css (which imports league.css) and
+   adds only what the MCP screens need. Touch targets stay >= 40px so the
+   whole thing works on the club iPads. */
+
+/* ---- view / tab switches ---- */
+
+.mcp-tabs { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.mcp-tabs .btn { padding: 7px 16px; }
+
+/* ---- threat + counts headline ---- */
+
+.mcp-meter {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  border-top: 2px solid #2b221b; margin-top: 10px; padding-top: 10px; flex-wrap: wrap;
+}
+.mcp-meter b { font-family: 'Black Ops One'; color: var(--rust); font-size: 22px; }
+.mcp-meter b.over { color: #ff7b6b; }
+.mcp-counts { color: var(--dust); font-size: 13.5px; letter-spacing: .05em; text-transform: uppercase; }
+.mcp-counts .full { color: var(--ok); }
+
+/* ---- character rows ---- */
+
+.mcp-table td { padding: 9px 6px; }              /* roomier rows for fingers */
+.mcp-table .addbtn, .mcp-table .rmbtn,
+.mcp-roster-list .rmbtn {
+  min-width: 38px; min-height: 38px; font-size: 17px;
+}
+.mcp-table .c-add { width: 46px; }
+.c-threat { width: 44px; }
+.c-stam   { width: 58px; }
+.c-mvsz   { width: 60px; }
+.stam-inj { color: var(--dust); }
+
+.lead-star { color: var(--rust); cursor: help; }
+.aff-tags { margin-top: 2px; }
+.aff-tags .tag { margin: 1px 3px 1px 0; }
+.tag.on { border-color: var(--rust); color: var(--rust); }
+
+/* tactics / crisis rows */
+.c-type { width: 90px; }
+.restr { color: var(--dust); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+.banned { color: #ff7b6b; font-size: 12px; }
+
+/* ---- roster pane ---- */
+
+.mcp-roster-list { margin: 4px 0 12px; }
+.mcp-roster-list .rrow {
+  display: flex; align-items: center; gap: 8px; padding: 6px 0;
+  border-bottom: 1px dashed #2b221b; min-height: 40px;
+}
+.rrow .rname { flex: 1; min-width: 0; line-height: 1.2; word-break: break-word; }
+.rrow .rname .sub { display: block; color: var(--dust); font-size: 12.5px; }
+.rrow .rthreat { font-family: 'Black Ops One'; color: var(--rust); white-space: nowrap; }
+.rrow.leadrow .rname { color: var(--bone); }
+.rrow .lead-star { font-size: 15px; }
+
+.mcp-roster-list h3 {
+  font-size: 13px; color: var(--rust); margin: 14px 0 2px;
+  letter-spacing: .1em;
+}
+
+/* squad checkboxes: big enough to hit with a thumb */
+.rrow input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--rust); }
+.rrow.benched { opacity: .45; }
+
+/* ---- data-lag warning in the footer ---- */
+
+.datawarn { margin-top: 6px; color: #d8b46a; font-size: 13px; }
+
+/* ---- text export modal reuses .modal; the textarea gets room ---- */
+
+.export-text {
+  width: 100%; min-height: 300px; font-family: 'Consolas', monospace;
+  font-size: 13px; white-space: pre; margin-top: 10px;
+}
+
+@media (max-width: 1200px) {
+  .mcp-tabs { position: sticky; top: 0; background: var(--ink); z-index: 5; padding: 6px 0; }
+}

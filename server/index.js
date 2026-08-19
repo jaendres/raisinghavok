@@ -762,6 +762,9 @@ app.delete('/api/builders/forces/:name', (req, res) => {
 const wh40k = require('./wh40k');
 wh40k.mount(app, { memberReader });
 
+// ---- Marvel Crisis Protocol catalog (BSData community files) ----
+require('./mcp').mount(app, { memberReader });
+
 // ---- Game Night: live at-the-table play tracking ----
 // Tables persist in DATA_DIR/tables.json; live sync runs on its own
 // socket.io namespace (/table) so it stays clear of the Mad Ork Lands queue.
