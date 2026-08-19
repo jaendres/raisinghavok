@@ -9,10 +9,16 @@
 (function () {
   'use strict';
 
+  // Escapes for attribute context too: notes are rendered into value="..."
+  // and a bare quote would break out of the attribute. textContent/innerHTML
+  // leaves " alone, so the replacements are spelled out.
   function esc(s) {
-    const d = document.createElement('div');
-    d.textContent = s == null ? '' : String(s);
-    return d.innerHTML;
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   // Ability descriptions carry Wahapedia HTML verbatim. Render them inside a

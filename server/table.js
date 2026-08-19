@@ -54,10 +54,20 @@ const CLASSIC_PILOT_MAX = 6;   // pilot hits: 6th = dead
 const MAX_ARMY_UNITS = 40;     // per side, wh40k
 const MAX_40K_MODELS = 30;     // per unit
 
-const toInt = (v) => (Number.isFinite(Number(v)) ? Math.round(Number(v)) : NaN);
+// Number() says null and '' are 0 and true is 1, which would let a client
+// post null at a bounded field and have it silently accepted as zero. Only
+// real numbers and numeric strings are values here.
+const toInt = (v) => {
+  if (typeof v === 'number') return Number.isFinite(v) ? Math.round(v) : NaN;
+  if (typeof v === 'string' && v.trim() !== '') {
+    const n = Number(v);
+    return Number.isFinite(n) ? Math.round(n) : NaN;
+  }
+  return NaN;
+};
 const clampSkill = (v, dflt) => {
-  const n = Number(v);
-  return Number.isFinite(n) ? Math.min(Math.max(Math.round(n), 0), 8) : dflt;
+  const n = toInt(v);
+  return Number.isFinite(n) ? Math.min(Math.max(n, 0), 8) : dflt;
 };
 
 // ---------------------------------------------------------------------------
