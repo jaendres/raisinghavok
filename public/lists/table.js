@@ -499,7 +499,37 @@ async function viewNewList() {
     const paste = `
       <textarea id="nl-paste" rows="8" class="claim-army" placeholder="${esc(PASTE_HINTS[game] || 'paste yer list here')}"></textarea>
       <div style="margin-top:10px"><button class="btn" id="nl-check">Check da List</button></div>`;
-    if (isBattletech(game)) {
+    if (game === 'bloodbowl') {
+      // A Blood Bowl team is drafted in the league, so pick it rather than
+      // retyping it; a pasted roster still works for a team kept off-site.
+      $src.innerHTML = `
+        <h3 class="nl-h3">From a league team</h3>
+        <div class="join-row">
+          <select id="nl-bbteam" style="min-width:260px"><option value="">— loading league teams —</option></select>
+          <button class="btn" id="nl-frombb">Save List</button>
+        </div>
+        <h3 class="nl-h3">…or paste a roster</h3>
+        ${paste}`;
+      fillBbTeamSelects([$src.querySelector('#nl-bbteam')]);
+      $src.querySelector('#nl-bbteam').onchange = (ev) => {
+        const label = ev.target.selectedOptions[0]?.textContent || '';
+        suggestName(label.split(' — ')[0]);
+      };
+      $src.querySelector('#nl-frombb').onclick = async () => {
+        $err.textContent = '';
+        const picked = $src.querySelector('#nl-bbteam').value;
+        if (!picked) { $err.textContent = 'Pick a league team first.'; return; }
+        const [leagueId, teamId] = picked.split(':');
+        suggestName(($src.querySelector('#nl-bbteam').selectedOptions[0]?.textContent || '').split(' — ')[0]);
+        try {
+          const l = await api('/lists', {
+            method: 'POST',
+            body: JSON.stringify({ game, name: listName(), leagueId, teamId }),
+          });
+          location.hash = '#/l/' + l.id;
+        } catch (e) { $err.textContent = e.message; }
+      };
+    } else if (isBattletech(game)) {
       $src.innerHTML = `
         <h3 class="nl-h3">From a saved force</h3>
         <div class="join-row">

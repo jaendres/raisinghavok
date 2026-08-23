@@ -1369,7 +1369,7 @@ function mount(app, io, deps) {
   app.post('/api/lists', memberReader, async (req, res) => {
     const user = needUser(req, res);
     if (!user) return;
-    const { game, forceName, army: armyEntries, detachmentId, detachmentName, text } = req.body || {};
+    const { game, forceName, army: armyEntries, detachmentId, detachmentName, text, leagueId, teamId } = req.body || {};
     if (!LIST_GAMES[game]) return res.status(400).json({ error: 'unknown game' });
     const name = String(req.body?.name || '').trim().slice(0, 60);
     if (!name) return res.status(400).json({ error: 'Give da list a name first.' });
@@ -1404,6 +1404,17 @@ function mount(app, io, deps) {
         // list MUST snapshot through the same tracker a table does. The paste
         // parser is kept only for the header / reference sections / honest
         // unparsed report that ride along in `army`.
+        // Blood Bowl rosters are drafted in the league, not pasted, so a list
+        // can name the team instead. Same builder the tables use.
+        if (game === 'bloodbowl' && leagueId && teamId) {
+          const r = buildTrackerUnits(game, { leagueId, teamId });
+          if (r.error) return res.status(r.status).json({ error: r.error });
+          units = r.units.slice(0, MAX_LIST_UNITS);
+          if (!units.length) return res.status(400).json({ error: 'No players on dat roster.' });
+          const made0 = lists.create({ owner: user.name, game, name, units, army: null });
+          if (made0.error) return res.status(400).json({ error: made0.error });
+          return res.json(made0.list);
+        }
         if (typeof text !== 'string' || !text.trim()) {
           return res.status(400).json({ error: 'Paste yer builder\'s text export.' });
         }

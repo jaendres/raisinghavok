@@ -144,7 +144,7 @@ function makeUnit({ number, name, position, statline, skills }) {
   const num = number === null || number === undefined || number === '' ? NaN : toInt(number);
   return {
     uid: crypto.randomBytes(4).toString('hex'),
-    number: num >= 0 && num <= 99 ? num : null,
+    number: num >= bb.JERSEY_MIN && num <= bb.JERSEY_MAX ? num : null,
     name: clip(name, 40) || 'Player',
     position: clip(position, 40),
     statline: {
