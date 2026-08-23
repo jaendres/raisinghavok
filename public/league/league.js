@@ -604,7 +604,15 @@ async function viewBBTeam(l, tid, editMode = false) {
       <td style="font-size:13px">${p.skills.map(s => `<span class="${p.advancements.some(a => a.skill === s) ? 'win' : 'muted'}">${esc(s)}</span>`).join(', ') || '—'}</td>
       <td class="muted" style="font-size:13px">${esc(p.level)}</td>
       <td class="num">${p.counters.ko || 0}</td>
-      <td class="num" title="earned ${p.sppEarned}, spent ${p.sppSpent}"><b>${p.sppAvailable}</b><span class="muted">/${p.sppEarned}</span></td>
+      <td class="num" title="earned ${p.sppEarned}, spent ${p.sppSpent}${p.sppExtra ? `, includin' ${p.sppExtra > 0 ? '+' : ''}${p.sppExtra} by hand` : ''}">
+        <span class="spp-cell">
+          ${canEdit && !p.injuries.dead && !p.retired
+            ? `<button class="sppbtn" data-spp="${p.id}" data-d="-1" title="take one SPP off ${esc(p.name)}">&minus;</button>` : ''}
+          <span class="spp-val"><b>${p.sppAvailable}</b><span class="muted">/${p.sppEarned}</span></span>
+          ${canEdit && !p.injuries.dead && !p.retired
+            ? `<button class="sppbtn" data-spp="${p.id}" data-d="1" title="give ${esc(p.name)} one SPP">+</button>` : ''}
+        </span>
+      </td>
       <td class="num">${gold(p.value)}</td>
       ${canEdit ? `<td class="rowbtns">${!p.injuries.dead && !p.retired && p.nextCosts
         ? `<button class="btn small ${p.sppAvailable >= p.nextCosts.randomPrimary ? '' : 'ghost'}" data-adv="${p.id}">Advance</button>` : ''}</td>` : ''}
@@ -657,7 +665,7 @@ async function viewBBTeam(l, tid, editMode = false) {
       </table>
       <p class="muted" style="margin-top:6px">${editMode
         ? 'Change anything across da whole roster, then hit Save All once. Nothing is saved until you do.'
-        : 'SPP shown as available/earned — earned comes from named scorers an’ MVPs in match reports (nicknames count too). Green stats/skills = advancements.'}</p>
+        : 'SPP shown as available/earned — earned comes from named scorers an’ MVPs in match reports (nicknames count too), an’ da +/- buttons for anyfing played off-app. Green stats/skills = advancements.'}</p>
     </div>
 
     ${!editMode && sheet.players.some(p => p.injuries.dead) ? `
@@ -741,6 +749,26 @@ async function viewBBTeam(l, tid, editMode = false) {
   });
 
   // ---- view mode wiring ----
+  // SPP straight off the roster. The server already had this action; it just
+  // had no button. Awarding for a game played off-app, or fixing a slip, is
+  // one tap instead of a trip through roster edit mode.
+  $app.querySelectorAll('[data-spp]').forEach((btn) => {
+    btn.onclick = async (ev) => {
+      ev.stopPropagation();
+      btn.disabled = true;
+      try {
+        await api(`/league/${l.id}/team/${tid}/bb/spp`, {
+          method: 'POST',
+          body: JSON.stringify({ playerId: btn.dataset.spp, delta: +btn.dataset.d }),
+        });
+        await refresh();
+      } catch (e) {
+        btn.disabled = false;
+        alert(e.message);
+      }
+    };
+  });
+
   $app.querySelectorAll('[data-adv]').forEach(b => b.onclick = () => {
     const p = sheet.players.find(x => x.id === b.dataset.adv);
     const pos = race.positions.find(x => x.name === p.position);

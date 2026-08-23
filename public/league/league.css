@@ -134,3 +134,17 @@ tr.detail.hidden { display: none; }
   .printsheet { box-shadow: none; padding: 0; max-width: none; }
 }
 @media (max-width: 800px) { .ps-rules { column-count: 1; } }
+
+/* Award or claw back a single SPP from the roster itself. Quiet until
+   pointed at, so a read-only glance at the table stays clean. */
+.spp-cell { display: inline-flex; align-items: center; gap: 4px; justify-content: flex-end; }
+.spp-cell .spp-val { min-width: 44px; text-align: right; }
+.sppbtn {
+  width: 26px; height: 26px; padding: 0; line-height: 1;
+  background: var(--panel2); color: var(--dust);
+  border: 1px solid #3a2f26; cursor: pointer;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 15px;
+}
+.sppbtn:hover:not(:disabled), .sppbtn:focus-visible { border-color: var(--rust); color: var(--rust); }
+.sppbtn:disabled { opacity: .4; cursor: default; }
+@media (max-width: 900px) { .sppbtn { width: 34px; height: 34px; font-size: 17px; } }
