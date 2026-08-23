@@ -397,7 +397,7 @@ async function viewDraft(id) {
           <div class="card" id="d-players">
             ${draftPlayers(race).map((p, i) => `
               <div class="scorer-row" style="grid-template-columns:60px 2fr 34px 1fr">
-                <input value="${p.num}" data-i="${i}" class="d-num" type="number" min="1" max="16">
+                <input value="${p.num}" data-i="${i}" class="d-num" type="number" min="0" max="999">
                 <input placeholder="${esc(p.position)}" value="${esc(state.names[i] || '')}" data-i="${i}" class="d-pname" maxlength="24">
                 <button class="cbtn d-genname" data-i="${i}" title="roll a name">🎲</button>
                 <span class="muted" style="line-height:34px">${esc(p.position)}</span>
@@ -621,7 +621,7 @@ async function viewBBTeam(l, tid, editMode = false) {
 
   const editRows = players.map(p => `
     <tr class="editrow ${p.injuries.dead || p.retired ? 'gone' : ''}" data-pid="${p.id}">
-      <td class="num"><input class="e-num" type="number" min="1" max="16" value="${p.num}" style="width:52px" title="jersey number"></td>
+      <td class="num"><input class="e-num" type="number" min="0" max="999" value="${p.num}" style="width:52px" title="jersey number"></td>
       <td><b>${esc(p.name)}</b><br><span style="display:inline-flex;gap:4px;margin-top:3px">
         <input class="e-nick" placeholder="nickname" maxlength="20" value="${esc(p.nickname)}" style="width:130px">
         <button class="cbtn e-nickgen" title="roll a nickname">🎲</button></span></td>
@@ -703,7 +703,7 @@ async function viewBBTeam(l, tid, editMode = false) {
           <div class="stafrow">
             <select id="h-pos">${race.positions.map(p => `<option value="${esc(p.name)}">${esc(p.name)} (${gold(p.cost)})</option>`).join('')}</select>
             <input id="h-name" placeholder="name" maxlength="24" style="width:110px">
-            <input id="h-num" type="number" min="1" max="16" placeholder="#" style="width:52px">
+            <input id="h-num" type="number" min="0" max="999" placeholder="#" style="width:52px">
             <button class="btn small" id="h-hire">hire</button>
           </div>` : ''}
         </div>

@@ -10,6 +10,13 @@ const CATALOG = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'data', 'bb-catalog.json'), 'utf-8'));
 const R = CATALOG.rules;
 
+// Jersey numbers are cosmetic. The rules cap a roster at 16 players, which is
+// why they were once capped at 16 too, but nothing depends on the value -- a
+// player is identified by id, and two ACTIVE players still can't share one.
+// So the club can put whatever it likes on the shirt.
+const JERSEY_MIN = 0;
+const JERSEY_MAX = 999;
+
 const id = () => crypto.randomBytes(5).toString('hex');
 const clampName = (s, n = 24) => String(s || '').replace(/[<>]/g, '').trim().slice(0, n);
 
@@ -112,7 +119,9 @@ function validateDraft(raceKey, draft) {
     counts[p.position] = (counts[p.position] || 0) + 1;
     if (counts[p.position] > pos.max) return { error: `too many ${p.position} (max ${pos.max})` };
     const num = parseInt(p.num, 10);
-    if (!(num >= 1 && num <= 16)) return { error: 'player numbers must be 1-16' };
+    if (!(num >= JERSEY_MIN && num <= JERSEY_MAX)) {
+      return { error: `player numbers must be ${JERSEY_MIN}-${JERSEY_MAX}` };
+    }
     if (nums.has(num)) return { error: `duplicate player number ${num}` };
     nums.add(num);
     cost += pos.cost;
@@ -246,7 +255,7 @@ function serializeTeam(team, sppEarnedFor) {
 }
 
 module.exports = {
-  CATALOG, RULES: R,
+  CATALOG, RULES: R, JERSEY_MIN, JERSEY_MAX,
   validateDraft, applyAdvancement, serializeTeam,
   playerValue, teamValue, currentTeamValue, positionOf, clampName, id,
 };

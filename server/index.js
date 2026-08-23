@@ -435,8 +435,8 @@ app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
       }
       if (t.bb.treasury < pos.cost) return res.status(400).json({ error: `not enough gold (${pos.cost / 1000}k needed)` });
       const num = parseInt(body.num, 10);
-      if (!(num >= 1 && num <= 16) || alive.some(p => p.num === num)) {
-        return res.status(400).json({ error: 'pick a free number 1-16' });
+      if (!(num >= bb.JERSEY_MIN && num <= bb.JERSEY_MAX) || alive.some(p => p.num === num)) {
+        return res.status(400).json({ error: `pick a free number ${bb.JERSEY_MIN}-${bb.JERSEY_MAX}` });
       }
       t.bb.treasury -= pos.cost;
       t.bb.players.push({
@@ -530,8 +530,8 @@ app.post('/api/league/:id/team/:tid/bb/:action', leagueWriter, (req, res) => {
       for (const e of edits) {
         if (!finalNum.has(e.playerId)) continue;
         if (e.num !== undefined) {
-          if (!Number.isInteger(e.num) || e.num < 1 || e.num > 16) {
-            return res.status(400).json({ error: 'player numbers must be 1-16' });
+          if (!Number.isInteger(e.num) || e.num < bb.JERSEY_MIN || e.num > bb.JERSEY_MAX) {
+            return res.status(400).json({ error: `player numbers must be ${bb.JERSEY_MIN}-${bb.JERSEY_MAX}` });
           }
           finalNum.set(e.playerId, e.num);
         }
