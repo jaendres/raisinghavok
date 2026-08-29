@@ -94,6 +94,11 @@ const daysSince = (date) => (date ? Math.floor((Date.now() - date.getTime()) / D
 // months old there is normal, not alarming.
 const NIGHTLY = { aging: 3, stale: 14 };
 const SLOW = { aging: 183, stale: 365 };
+// Blood Bowl moves on its own, slower clock: GW puts out roughly one FAQ or
+// season a year, so a six-month-old capture is simply current and flagging it
+// would be noise. A year means a release has probably landed; eighteen months
+// means one definitely has.
+const ANNUAL = { aging: 365, stale: 545 };
 
 function ageStatus(date, thresholds) {
   const days = daysSince(date);
@@ -501,10 +506,8 @@ function bloodBowlSource() {
   // published openly, so there is nothing to poll and nothing to schedule.
   // It ages until someone re-captures it by hand, and the page says so rather
   // than implying an automation exists.
-  // Same slow clock the other hand-compiled catalogs use: these track
-  // rulebooks that move once or twice a year, not a nightly feed.
   const captured = parseDate(meta.capturedDate);
-  const status = ageStatus(captured, SLOW);
+  const status = ageStatus(captured, ANNUAL);
 
   return {
     ...base,
