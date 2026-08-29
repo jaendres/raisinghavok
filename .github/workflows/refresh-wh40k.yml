@@ -56,7 +56,7 @@ jobs:
           IP=$(curl -fsS --retry 3 https://api.ipify.org)
           echo "Runner address: $IP"
           az postgres flexible-server firewall-rule create \
-            --resource-group "$RESOURCE_GROUP" --name "$PG_SERVER" \
+            --resource-group "$RESOURCE_GROUP" --server-name "$PG_SERVER" \
             --rule-name "$FIREWALL_RULE" \
             --start-ip-address "$IP" --end-ip-address "$IP" >/dev/null
           echo "opened=true" >> "$GITHUB_OUTPUT"
@@ -79,7 +79,7 @@ jobs:
         if: always() && steps.fw.outputs.opened == 'true'
         run: |
           az postgres flexible-server firewall-rule delete \
-            --resource-group "$RESOURCE_GROUP" --name "$PG_SERVER" \
+            --resource-group "$RESOURCE_GROUP" --server-name "$PG_SERVER" \
             --rule-name "$FIREWALL_RULE" --yes || \
             echo "::warning::Could not remove the temporary firewall rule; the next run overwrites it."
 
