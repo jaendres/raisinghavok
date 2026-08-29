@@ -1,4 +1,15 @@
 {
+ "meta": {
+  "game": "Blood Bowl",
+  "edition": "BB2025",
+  "capturedFrom": [
+   "bloodbowlbase.ru"
+  ],
+  "capturedDate": "2026-07-09",
+  "generated": "2026-08-29",
+  "pipeline": "bloodbowl-discord-bot/build_bb_catalog.py from data/rules/*.md",
+  "note": "Blood Bowl's rules are not freely published, so this is a capture of a community reference, not an official source -- there is no feed to follow and nothing refreshes it automatically. Check the rulebook before a cost or statline decides a game, and re-run this by hand after a new FAQ."
+ },
  "rules": {
   "draftBudget": 1000000,
   "minPlayers": 11,

@@ -473,25 +473,57 @@ function bloodBowlSource() {
   const positions = Object.values(teams).reduce((n, t) => n + countOf(t?.positions), 0);
   const skills = Object.values(cat.skills?.byCategory || {}).reduce((n, l) => n + countOf(l), 0);
 
+  const counts = {
+    teams: countOf(teams),
+    positions,
+    skills,
+    'rules text entries': countOf(cat.descriptions),
+  };
+
+  const meta = cat.meta;
+
+  // Older copies of this catalog predate the generator recording anything.
+  // Rather than guess an age from the file's timestamp, say it is unrecorded.
+  if (!meta || !meta.capturedDate) {
+    return {
+      ...base,
+      counts,
+      status: 'unknown',
+      statusReason: 'This copy of the catalog carries no provenance — no capture date, no source. Its age genuinely is not recorded, so we do not claim one.',
+      note: 'Rebuilding it with the current build_bb_catalog.py would stamp where and when it came from.',
+      warnings: [
+        'Treat costs and statlines as needing a look at the rulebook if a game hinges on them.',
+      ],
+    };
+  }
+
+  // Blood Bowl is the one game here with no feed to follow: the rules are not
+  // published openly, so there is nothing to poll and nothing to schedule.
+  // It ages until someone re-captures it by hand, and the page says so rather
+  // than implying an automation exists.
+  // Same slow clock the other hand-compiled catalogs use: these track
+  // rulebooks that move once or twice a year, not a nightly feed.
+  const captured = parseDate(meta.capturedDate);
+  const status = ageStatus(captured, SLOW);
+
   return {
     ...base,
-    counts: {
-      teams: countOf(teams),
-      positions,
-      skills,
-      'rules text entries': countOf(cat.descriptions),
-    },
-    status: 'unknown',
-    // Reporting this honestly is the whole exercise. Every other catalog on
-    // this page carries a meta block; this one does not, and inventing a date
-    // from the file's timestamp would be a guess dressed as a fact.
-    statusReason: 'This catalog carries no meta block at all — no generated date, no source URL, no version. Its age genuinely is not recorded, so we do not claim one.',
-    note: 'Generated offline from the BB2025 rulebook by the club\'s Blood Bowl Discord bot (build_bb_catalog.py) and committed as JSON. It matches the current edition as far as anyone has noticed, but "as far as anyone has noticed" is not a provenance record.',
+    counts,
+    source: `Community reference for ${meta.edition || 'BB2025'}, captured by hand`,
+    sourceUrl: null,
+    lastRefreshed: null,
+    upstreamDate: meta.capturedDate,
+    status,
+    statusReason: captured
+      ? `Captured ${agePhrase(captured)}. Nothing refreshes this on a schedule.`
+      : 'Capture date could not be read.',
+    note: meta.note || '',
     warnings: [
-      'Unlike every other catalog here, this file records nothing about where or when it came from. Treat costs and statlines as needing a look at the rulebook if a game hinges on them.',
+      'Blood Bowl is the only game here that nothing keeps current automatically — its rules are not published openly, so there is no feed to follow. It goes out of date quietly after an FAQ.',
     ],
     caveats: [
-      'Adding a meta block to build_bb_catalog.py (in the bloodbowl-discord-bot repo, not this one) on the next rebuild would let this card say something useful.',
+      `Captured from ${(meta.capturedFrom || []).join(', ') || 'a community reference'} on ${meta.capturedDate}, built by ${meta.pipeline || 'the club bot'}.`,
+      'Re-capturing after a new FAQ is a manual job, on purpose.',
     ],
   };
 }
