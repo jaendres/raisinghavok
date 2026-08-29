@@ -1,0 +1,138 @@
+# Watches the community data the Necromunda and Marvel Crisis Protocol
+# catalogs are built from, and offers an update when it moves.
+#
+# These two catalogs are files in the repo rather than rows in a database,
+# so refreshing one means regenerating JSON and shipping it. That is exactly
+# why this opens a pull request instead of committing to main: the sources
+# are volunteer-maintained and can regress -- a gang losing half its weapons
+# upstream should be a diff someone looks at, not a silent deploy the club
+# discovers mid-game.
+#
+# Trench Crusade is deliberately absent. Its catalog was transcribed from the
+# official PDFs by hand, so there is nothing to regenerate; the validator
+# runs to catch a catalog that has been corrupted, and a new rules version is
+# a job for a person.
+#
+# BattleTech is absent for a happier reason: masterunitlist.info is gone, so
+# that data is final and can never need refreshing.
+name: Check community catalogs
+
+on:
+  schedule:
+    - cron: '0 10 * * 1' # Mondays, 05:00 America/Chicago
+  workflow_dispatch:
+
+permissions:
+  contents: write # to push the update branch
+  pull-requests: write # to open the PR
+  issues: write # to report a failure
+
+concurrency: refresh-catalogs
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch the upstream data
+        run: |
+          # Shallow clones: only the current state matters.
+          git clone --depth 1 https://github.com/BSData/marvel-crisis-protocol.git /tmp/bsdata-mcp
+          git clone --depth 1 https://github.com/BSData/necromunda-gang-war.git /tmp/bsdata-gangwar
+          git clone --depth 1 https://github.com/gyrinx-app/gyrinx.git /tmp/gyrinx
+          {
+            echo "MCP      $(git -C /tmp/bsdata-mcp rev-parse --short HEAD)  $(git -C /tmp/bsdata-mcp log -1 --format=%cs)"
+            echo "GangWar  $(git -C /tmp/bsdata-gangwar rev-parse --short HEAD)  $(git -C /tmp/bsdata-gangwar log -1 --format=%cs)"
+            echo "Gyrinx   $(git -C /tmp/gyrinx rev-parse --short HEAD)  $(git -C /tmp/gyrinx log -1 --format=%cs)"
+          } | tee /tmp/upstream.txt
+
+      - name: Rebuild Marvel Crisis Protocol
+        run: node scripts/mcp-build-catalog.mjs /tmp/bsdata-mcp
+
+      - name: Rebuild Necromunda
+        run: node scripts/necromunda-build-catalog.mjs --bsdata /tmp/bsdata-gangwar --gyrinx /tmp/gyrinx
+
+      - name: Check Trench Crusade is still intact
+        run: node scripts/trenchcrusade-validate.mjs
+
+      - name: Anything actually change?
+        id: diff
+        run: |
+          # `generated` is a timestamp the build stamps every run, so a rebuild
+          # always differs by at least that line. Compare with it stripped, or
+          # this opens an identical PR every Monday forever.
+          changed=no
+          for f in server/data/mcp-catalog.json server/data/necromunda-catalog.json; do
+            if ! git diff --quiet -- "$f"; then
+              before=$(git show "HEAD:$f" | grep -v '"generated"' | sha256sum | cut -d' ' -f1)
+              after=$(grep -v '"generated"' "$f" | sha256sum | cut -d' ' -f1)
+              if [ "$before" != "$after" ]; then
+                echo "$f has real changes"
+                changed=yes
+              else
+                echo "$f only restamped; reverting"
+                git checkout -- "$f"
+              fi
+            fi
+          done
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+
+      - name: Summarise what moved
+        if: steps.diff.outputs.changed == 'yes'
+        run: node scripts/catalog-diff-summary.mjs | tee /tmp/summary.md
+
+      - name: Open a pull request
+        if: steps.diff.outputs.changed == 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          BRANCH="data/catalog-refresh-$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add server/data/mcp-catalog.json server/data/necromunda-catalog.json
+          git commit -m "$(printf '%s\n' \
+            'Refresh the Necromunda and MCP catalogs from upstream' \
+            '' \
+            'Rebuilt from the community sources by the weekly check. Look at the' \
+            'counts below before merging: these are volunteer datasets, and a' \
+            'sharp drop usually means something broke upstream rather than a' \
+            'real change to the game.')"
+          git push -f origin "$BRANCH"
+          body=$(printf '%s\n\n%s\n\n```\n%s\n```\n\n%s\n' \
+            "The weekly check found the upstream community data has moved." \
+            "$(cat /tmp/summary.md)" \
+            "$(cat /tmp/upstream.txt)" \
+            "Merging deploys it. Worth a glance at the counts first — a big drop is usually upstream breakage, not the game changing.")
+          gh pr create --title "Refresh Necromunda + MCP catalogs" \
+            --body "$body" --head "$BRANCH" --base main || \
+            gh pr edit "$BRANCH" --body "$body"
+
+      - name: Nothing to do
+        if: steps.diff.outputs.changed != 'yes'
+        run: echo "Upstream data has not moved since the last build."
+
+      - name: Say so if it broke
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --state open --search "catalog check in:title" \
+            --json number --jq '.[0].number' || true)
+          body=$(printf '%s\n' \
+            "The weekly community catalog check failed." \
+            "" \
+            "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            "" \
+            "Nothing shipped, so the site is still serving the catalogs it had." \
+            "Usually this is an upstream repo moving or renaming its data files.")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "Weekly catalog check is failing" --body "$body"
+          fi

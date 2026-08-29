@@ -1,0 +1,112 @@
+# Keeps our copy of the Warhammer 40k data current.
+#
+# Wahapedia republishes its export within minutes of an errata, so a copy
+# taken once drifts quietly: points change, stratagems get reworded, and a
+# card read at the table is wrong without anyone noticing. This reloads the
+# wh40k_* tables nightly from the same script the repo ships and the admin
+# button runs.
+#
+# The database only admits Azure services and Jason's home address, and a
+# GitHub runner is neither, so the job opens a firewall rule for its own
+# address and removes it afterwards. The rule name is fixed, so a cancelled
+# run leaves at most one stale entry that the next run overwrites -- and an
+# allowed address still needs the password, which never leaves Azure.
+name: Refresh 40k data
+
+on:
+  schedule:
+    - cron: '0 9 * * *' # 04:00 America/Chicago
+  workflow_dispatch:
+
+permissions:
+  id-token: write # OIDC federated login -- no stored Azure credentials
+  contents: read
+  issues: write # so a failed run says so somewhere visible
+
+concurrency: refresh-wh40k
+
+env:
+  RESOURCE_GROUP: tcg-business-rg
+  APP_NAME: raisinghavok
+  PG_SERVER: raisinghavok-pg
+  FIREWALL_RULE: github-actions-refresh
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20 # matches the Azure host
+
+      - run: npm ci --omit=dev
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Let this runner reach Postgres
+        id: fw
+        run: |
+          IP=$(curl -fsS --retry 3 https://api.ipify.org)
+          echo "Runner address: $IP"
+          az postgres flexible-server firewall-rule create \
+            --resource-group "$RESOURCE_GROUP" --name "$PG_SERVER" \
+            --rule-name "$FIREWALL_RULE" \
+            --start-ip-address "$IP" --end-ip-address "$IP" >/dev/null
+          echo "opened=true" >> "$GITHUB_OUTPUT"
+
+      - name: Reload the 40k tables
+        run: |
+          # Read at run time so the connection string is never stored in CI.
+          # The script rewrites every wh40k_* table in one transaction and
+          # touches nothing else in the database.
+          export MUL_DATABASE_URL="$(az webapp config appsettings list \
+            --resource-group "$RESOURCE_GROUP" --name "$APP_NAME" \
+            --query "[?name=='MUL_DATABASE_URL'].value" -o tsv)"
+          if [ -z "$MUL_DATABASE_URL" ]; then
+            echo "::error::MUL_DATABASE_URL is not set on the web app."
+            exit 1
+          fi
+          node scripts/wh40k-import.mjs
+
+      - name: Close the firewall again
+        if: always() && steps.fw.outputs.opened == 'true'
+        run: |
+          az postgres flexible-server firewall-rule delete \
+            --resource-group "$RESOURCE_GROUP" --name "$PG_SERVER" \
+            --rule-name "$FIREWALL_RULE" --yes || \
+            echo "::warning::Could not remove the temporary firewall rule; the next run overwrites it."
+
+      - name: Check the site still answers
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 25 https://raisinghavok.com/)
+          echo "raisinghavok.com -> $code"
+          [ "$code" = "200" ] || { echo "::error::Site is not answering after the refresh."; exit 1; }
+
+      - name: Say so if it broke
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # One open issue at a time -- a source that stays down shouldn't
+          # file a new report every night.
+          existing=$(gh issue list --state open --search "40k data refresh in:title" \
+            --json number --jq '.[0].number' || true)
+          body=$(printf '%s\n' \
+            "The nightly 40k refresh failed." \
+            "" \
+            "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            "" \
+            "The site keeps serving the copy it already had, so nothing is down --" \
+            "the 40k data just stops getting newer until this is sorted.")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+          else
+            gh issue create --title "40k data refresh is failing" --body "$body"
+          fi
