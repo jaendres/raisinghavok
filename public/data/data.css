@@ -1,0 +1,108 @@
+/* Data provenance page — where every game's reference data came from.
+   Inherits the club look from the league stylesheet, then adds the status
+   chips and source cards. iPad-first like the rest: nothing needs hover,
+   every control clears 34px, and the grid collapses to one column early
+   because these cards are text-heavy. */
+@import url('/league/league.css');
+
+main { width: min(1180px, 96vw); }
+
+/* grit overlay, same as the club front page */
+body::before {
+  content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+}
+
+/* ---- intro ---- */
+
+.intro {
+  background: var(--panel); border: 1px solid #2b221b; border-left: 3px solid var(--rust);
+  border-top: none; padding: 14px 18px; margin-bottom: 22px; font-size: 16px; line-height: 1.5;
+}
+.intro b { color: var(--bone); font-weight: 600; }
+.intro .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; align-items: center; }
+.intro .legend span.txt { color: var(--dust); font-size: 14px; }
+
+/* ---- status chips ---- */
+
+.chip {
+  display: inline-block; font-family: 'Black Ops One'; font-size: 11.5px;
+  letter-spacing: .12em; text-transform: uppercase; padding: 4px 10px;
+  border: 2px solid; box-shadow: 3px 3px 0 #000; white-space: nowrap; line-height: 1.2;
+}
+/* final reads as neutral-good: this data is finished, not broken. */
+.chip.fresh   { color: #0c0a08; background: var(--ok);     border-color: #a5e87e; }
+.chip.final   { color: #0c0a08; background: #6fa8c8;       border-color: #a8d2e8; }
+.chip.aging   { color: #0c0a08; background: #d8b46a;       border-color: #ffd23f; }
+.chip.stale   { color: #fff;    background: var(--blood);  border-color: #ff8b4a; }
+.chip.unknown { color: var(--dust); background: var(--panel2); border-color: #4a3d31; }
+
+/* ---- source cards ---- */
+
+.src-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .src-grid { grid-template-columns: 1fr; } }
+
+.src {
+  background: var(--panel); border: 1px solid #2b221b; border-top: 3px solid var(--rust-dk);
+  padding: 16px 18px 18px;
+}
+.src.is-stale { border-top-color: var(--blood); }
+.src.is-aging { border-top-color: #b8860b; }
+.src.is-final { border-top-color: #4a7f9c; }
+.src.is-unknown { border-top-color: #4a3d31; }
+
+.src-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.src-head h2 { margin: 0; font-size: 20px; flex: 1; min-width: 0; color: var(--rust); }
+.src-kind {
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--dust);
+  border: 1px solid #3a2f26; padding: 2px 7px; background: var(--panel2);
+}
+.src-label { color: var(--bone); font-size: 15px; margin-top: 6px; }
+.src-why { color: var(--dust); font-size: 14.5px; margin-top: 6px; line-height: 1.45; }
+
+/* dates + source, as a plain definition list */
+.src-facts { margin-top: 14px; border-top: 1px dashed #2b221b; padding-top: 10px; }
+.fact { display: flex; gap: 10px; padding: 4px 0; font-size: 15px; align-items: baseline; }
+.fact .k {
+  flex: none; width: 132px; color: var(--dust); font-size: 11.5px; letter-spacing: .1em;
+  text-transform: uppercase; font-family: 'Black Ops One'; line-height: 1.5;
+}
+.fact .v { flex: 1; min-width: 0; color: var(--bone); overflow-wrap: anywhere; }
+.fact .v .ago { color: var(--dust); }
+.fact .v.none { color: var(--dust); font-style: italic; }
+
+/* counts */
+.counts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.count {
+  background: var(--panel2); border: 1px solid #3a2f26; padding: 5px 10px; line-height: 1.25;
+}
+.count b { font-family: 'Black Ops One'; font-size: 15px; color: var(--bone); display: block; }
+.count span { font-size: 12px; color: var(--dust); text-transform: uppercase; letter-spacing: .08em; }
+
+/* the honest bits: warnings, gaps, caveats */
+.notes { margin-top: 14px; }
+.notes h3 {
+  font-size: 12px; letter-spacing: .14em; color: var(--dust); margin: 12px 0 6px;
+  font-family: 'Black Ops One'; text-transform: uppercase;
+}
+.notes ul { list-style: none; }
+.notes li {
+  font-size: 14.5px; line-height: 1.45; color: var(--bone); padding: 5px 0 5px 14px;
+  border-left: 2px solid #2b221b; margin-bottom: 3px; overflow-wrap: anywhere;
+}
+.notes.warn h3 { color: #ff7b6b; }
+.notes.warn li { border-left-color: var(--blood); background: #a3231f14; }
+.notes.gap h3 { color: #ffd23f; }
+.notes.gap li { border-left-color: #b8860b; }
+.notes.caveat li { color: var(--dust); }
+
+.notes .more {
+  cursor: pointer; background: var(--panel2); color: var(--bone); border: 2px solid #4a3d31;
+  font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 0 12px; min-height: 34px; box-shadow: 2px 2px 0 #000; margin-top: 6px;
+}
+.notes .more:active { background: var(--rust-dk); }
+.notes li.hidden { display: none; }
+
+.src-foot { margin-top: 14px; font-size: 14px; color: var(--dust); }
+.stamp { text-align: right; color: var(--dust); font-size: 13px; margin-top: 18px; }
