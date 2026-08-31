@@ -2,14 +2,14 @@
  "meta": {
   "game": "Necromunda",
   "edition": "2018 ruleset, House of X era gang lists",
-  "generated": "2026-08-19",
+  "generated": "2026-08-31",
   "source": "hand-assembled from the sources below (no single clean machine source exists)",
   "sources": [
    {
     "role": "fighters (types, costs, statlines) + trading-post prices + skill lists",
     "repo": "github.com/gyrinx-app/gyrinx",
     "license": "Apache-2.0",
-    "commit": "ba96ba467f2902d58255df1919a8a4705357993d",
+    "commit": "d7b530fd1674bc576ee2022c12369a184a73d673",
     "files": "content/necromunda-2018/data/{fighter/*,equipment.yaml,skill.yaml}"
    },
    {
