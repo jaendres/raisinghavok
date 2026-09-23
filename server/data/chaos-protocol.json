@@ -1,0 +1,401 @@
+{
+  "id": "chaos-protocol",
+  "title": "Chaos Protocol",
+  "system": "Marvel: Crisis Protocol",
+  "tagline": "A one-night campaign layer. Regular Crisis Protocol underneath. On top: one character each, a Watcher who plays nobody and ruins everyone, and a stack of tables that decide who gets gamma-irradiated and whose aunt gets kidnapped. The dice decide whether good or evil prevails. You just make it dramatic.",
+  "credit": "Fan-made club rules for Marvel: Crisis Protocol by Atomic Mass Games. Nothing here is official, balanced, or the Watcher's fault.",
+  "meta": [
+    { "k": "You need", "v": "MCP dice, a d6, a d8, a d20, or the Roll buttons on this page" },
+    { "k": "Players", "v": "4 to 8, plus the Watcher" },
+    { "k": "Runtime", "v": "About five and a half hours with food" },
+    { "k": "Shape", "v": "3 acts, 2 downtimes, one Reckoning" }
+  ],
+  "panelOne": {
+    "note": "Face spread below is what the Roll button simulates. Edit dieFaces here if the real die differs; nothing else depends on it.",
+    "dieFaces": ["crit", "wild", "hit", "hit", "block", "block", "skull", "blank"],
+    "faceOrder": ["crit", "wild", "hit", "block", "skull", "blank"],
+    "faces": {
+      "crit":  { "name": "Crit",  "minor": "Gain 1 Power.", "major": "+2 dice on your first attack this activation." },
+      "wild":  { "name": "Wild",  "minor": "Reroll any one die once this activation, yours or a defense roll made against you.", "major": "Once this activation, after any roll, turn one die to any face you like." },
+      "hit":   { "name": "Hit",   "minor": "+1 die on your first attack this activation.", "major": "After your action, make a free 3-dice Physical attack against a character within Range 2." },
+      "block": { "name": "Block", "minor": "+1 die on the next defense roll you make.", "major": "Heal 1, and +1 die on every defense roll until your next activation." },
+      "skull": { "name": "Skull", "minor": "Lose 1 Power. Today is not your day.", "major": "Something gives. Roll on the Bad Luck table." },
+      "blank": { "name": "Blank", "minor": "Gain 1 Power. Nothing happened, but you looked good doing it.", "major": "Nothing happens, magnificently. Gain 3 Power, and you may reroll your next roll entirely." }
+    },
+    "special": {
+      "blank": { "title": "The Quiet Issue", "lines": ["<b>Five Blanks.</b> Ignore the Blank Major entirely.", "Heal to full, gain 3 Power, and the Watcher skips the next Whim roll. The universe had nothing whatsoever to say about you."] },
+      "skull": { "title": "The Cursed Issue", "lines": ["<b>Five Skulls.</b> Roll on the Bad Luck table twice.", "Then mark a star. You have earned one free Advancement roll, because nobody should survive that."] }
+    }
+  },
+  "sections": [
+    {
+      "id": "pitch",
+      "nav": "How it works",
+      "heading": "How it works",
+      "eyebrow": "Read this one aloud, two minutes",
+      "blocks": [
+        { "type": "panels", "items": [
+          { "label": "1", "title": "Your Icon", "body": "One MCP character card, yours for the whole campaign. Threat 3 to 6 recommended. It collects advancements, loot, injuries and a family. Nobody else may play it." },
+          { "label": "2", "title": "The Watcher", "body": "One person does not play. They roll the Whim each round, drop tokens, adjudicate whimsy and keep the Cosmic Scale. Final say on everything. Expected to be a little unfair, evenly." },
+          { "label": "3", "title": "Two sides", "body": "Heroes against Villains. Each side fields its Icons. From Act II every player adds one <b>Backup</b> (threat 4 or less, no story, swappable each act). The Watcher tops up the smaller side." },
+          { "label": "4", "title": "Three acts", "body": "Between acts is <b>Downtime</b>: Aftermath, Advancement, Civilians, Discovery, Scale. That is also when you eat." },
+          { "label": "5", "title": "Dice", "body": "MCP dice fight the game and open every activation with <a href=\"#panel\">Panel One</a>. A d6, two d6, a d8 and a d20 roll the tables. <b>Crit/Wild</b> means either face. Every table here has a Roll button." },
+          { "label": "6", "title": "The Golden Rule", "body": "If a result makes no sense, the Watcher rerolls or invents something dumber. Any argument longer than a monologue is settled by one MCP die: Crit, Wild or Hit says yes." }
+        ] },
+        { "type": "caption", "label": "The Watcher says", "paras": ["Nothing here is balanced. It is <em>fair</em>, which is different: everybody is exposed to the same nonsense. If somebody's Icon becomes a symbiote-wearing Hulk with an Infinity Stone by Act III, congratulations, they are now the plot."] }
+      ]
+    },
+    {
+      "id": "icon",
+      "nav": "Make your Icon",
+      "heading": "Make your Icon",
+      "eyebrow": "Setup, before Act I, twenty minutes",
+      "blocks": [
+        { "type": "list", "ordered": true, "items": [
+          "<b>Pick a side, pick a card.</b> Hero or Villain. Whatever the card's affiliation says, you decide which side they are on tonight.",
+          "<b>Underdog rule.</b> For every threat point your Icon is below the highest-threat Icon at the table, take one free Advancement roll now. Yes, the threat-2 player will be a mutant abomination by Act III. That is the point.",
+          "<b>Roll a Secret Origin</b> (d8). Show the Watcher, hide it from everyone else. Reveal it when it triggers, or never.",
+          "<b>Roll two civilians.</b> For each, d8 for <em>Who</em> and d8 for <em>Their Deal</em>. Name them. Both start Safe. The campaign will happen to them."
+        ] },
+        { "type": "table", "roll": "d8", "title": "Secret Origin", "dice": "d8", "nHead": "d8", "columns": ["Origin", "What it does"], "rows": [
+          { "n": "1", "cells": ["Secret Skrull", "The first time you are KO'd this campaign, it was a Skrull duplicate. Return next round at your deployment edge on your Injured side with 0 Power. Act surprised."] },
+          { "n": "2", "cells": ["Sleeper Agent", "At the start of Act II and Act III the Watcher rolls a d6. On a 6 you fight for the other side that act. Your civilians find out at the next Downtime."] },
+          { "n": "3", "cells": ["Foretold", "Once per campaign, reroll any table result at the table, yours or anyone's. Say \"it was written.\""] },
+          { "n": "4", "cells": ["Fourth-Wall Aware", "Once per act, ask the Watcher one yes or no question about what is coming. They must answer honestly. Then they usually change it."] },
+          { "n": "5", "cells": ["Legacy", "Start with one Discovery roll: it belonged to your predecessor. If you ever lose it, one of your civilians goes In Peril immediately."] },
+          { "n": "6", "cells": ["Cursed", "Start with one extra Advancement roll. Whenever you roll doubles on Advancement, also roll a Civilian Event for a random civilian of yours."] },
+          { "n": "7", "cells": ["Multiverse Refugee", "Once per campaign, when you would be KO'd, a variant of you arrives instead: flip to your Healthy side with 0 Power. Your items stay with the old body, so drop a Discovery token where you fell."] },
+          { "n": "8", "cells": ["Media Darling", "At the start of each act, deliver an entrance line. If the table cheers, +1 Power. If the Watcher cheers, +2, because that never happens."] }
+        ] },
+        { "type": "columns", "blocks": [
+          { "type": "table", "roll": "d8", "title": "Civilian: Who", "dice": "d8", "nHead": "d8", "columns": ["Who they are"], "rows": [
+            { "n": "1", "cells": ["The aunt or uncle who raised you"] },
+            { "n": "2", "cells": ["Kid sibling who thinks you are cool"] },
+            { "n": "3", "cells": ["Older sibling who is doing better than you"] },
+            { "n": "4", "cells": ["Best friend from before all this"] },
+            { "n": "5", "cells": ["Ex who knows too much"] },
+            { "n": "6", "cells": ["Roommate or landlord, and rent is late"] },
+            { "n": "7", "cells": ["Boss, editor or handler"] },
+            { "n": "8", "cells": ["A pet of suspicious intelligence"] }
+          ] },
+          { "type": "table", "roll": "d8", "title": "Civilian: Their Deal", "dice": "d8", "nHead": "d8", "columns": ["Their complication"], "rows": [
+            { "n": "1", "cells": ["Does not know your secret. Yet."] },
+            { "n": "2", "cells": ["Knows, and disapproves loudly"] },
+            { "n": "3", "cells": ["Works for the wrong company: Oscorp, Roxxon, AIM or Damage Control"] },
+            { "n": "4", "cells": ["Sick, and the treatment costs money you do not have"] },
+            { "n": "5", "cells": ["Dating another player's Icon. The Watcher assigns which one"] },
+            { "n": "6", "cells": ["Has a \"harmless\" hobby involving radiation"] },
+            { "n": "7", "cells": ["Owes money to a supervillain, and the Watcher picks one at the table"] },
+            { "n": "8", "cells": ["Wants to be a hero or villain themselves. Badly."] }
+          ] }
+        ] },
+        { "type": "caption", "label": "The Watcher says", "paras": ["Civilians never fight. They are leverage. Their states are explained in the <a href=\"#civilians\">Civilians</a> chapter, and while both of yours are Safe you get one reroll per act. Guard them."] }
+      ]
+    },
+    {
+      "id": "night",
+      "nav": "The night",
+      "heading": "The night",
+      "eyebrow": "Structure, the whole evening",
+      "lede": "Three fights of increasing size, food in between. Times assume six players. Shave a round off each act for eight.",
+      "blocks": [
+        { "type": "schedule", "rows": [
+          { "t": "5:30", "act": "Doors.", "body": "Build Icons, roll civilians, Underdog rolls. Potluck lands on the side table." },
+          { "t": "6:00", "act": "Act I: First Contact.", "body": "Icons only, no Backups. 3 rounds, one Secure crisis card. Panel One from the very first activation. No Whim rolls yet, the world does not know you." },
+          { "t": "7:00", "act": "Downtime I.", "body": "Eat. Run the five Downtime steps while everyone has a plate." },
+          { "t": "7:45", "act": "Act II: Escalation.", "body": "Icons plus one Backup each. 5 rounds, Secure and Extract. The Watcher rolls the Whim at the start of every round." },
+          { "t": "9:15", "act": "Downtime II.", "body": "Dessert. Five steps again. Everyone is now weird." },
+          { "t": "9:45", "act": "Act III: Final Crisis.", "body": "Icons plus Backups. 6 rounds. Whim every round. Every civilian In Peril is a token on the table. The winner moves the Scale two steps, not one." },
+          { "t": "11:15", "act": "The Reckoning.", "body": "The dice decide. Read the epilogue. Argue about next time." }
+        ] },
+        { "type": "h3", "text": "Downtime, in order" },
+        { "type": "list", "ordered": true, "items": [
+          "<b>Aftermath.</b> Every Icon that was KO'd, not merely Dazed, rolls on the Aftermath table.",
+          "<b>Advancement.</b> Every Icon rolls once on their side's chart. Each side votes an MVP, not yourself; the MVP rolls twice and keeps both. Cash in any star earned from Chaos dice or Panel One.",
+          "<b>Civilians.</b> Each player rolls a d20 Civilian Event for one of their civilians. Odd on the d20 means the first on your card, even means the second. Captives roll too, and their captor reads the result aloud.",
+          "<b>Discovery.</b> Each Icon rolls a d6. On 5 or 6, roll on the Discovery table. Tokens picked up during the act were already rolled on the spot.",
+          "<b>Scale.</b> The act's winner moves the Cosmic Scale one step their way, two after Act III. The Watcher announces a \"Meanwhile\" headline for the world."
+        ] },
+        { "type": "table", "roll": "d6", "title": "Aftermath", "dice": "d6, per KO'd Icon", "nHead": "d6", "columns": ["Result", "Effect"], "rows": [
+          { "n": "1", "cells": ["Lasting injury", "Roll a d6. <b>1</b> Lost an eye: −1 die on attacks at Range 3 or more. <b>2</b> Broken arm: −1 die on Physical attacks. <b>3</b> Concussion: start each act with −1 Power. <b>4</b> Cybernetic replacement: +1 Stamina, but Shock also Stuns you. <b>5</b> Scarred: +1 die on attacks against the Icon that did this, forever. <b>6</b> Presumed dead: the Watcher places you anywhere next act, Injured side. Everyone was very sad for about a week."] },
+          { "n": "2-3", "cells": ["Shaken", "Start the next act with 0 Power and one condition of the Watcher's choosing. It wears off when you first Daze an enemy."] },
+          { "n": "4-5", "cells": ["Walked it off", "No effect. You have had worse. Say so."] },
+          { "n": "6", "cells": ["Came back stronger", "Take an extra Advancement roll right now. Describe the training montage."] }
+        ] }
+      ]
+    },
+    {
+      "id": "whim",
+      "nav": "Watcher's Whim",
+      "heading": "The Watcher's Whim",
+      "eyebrow": "During play, start of each round, Acts II and III",
+      "lede": "After priority is decided, the Watcher rolls a d20 and reads the result aloud in their best narrator voice. Effects last one round unless stated. If a result names \"a character,\" the Watcher picks and does not have to justify it.",
+      "blocks": [
+        { "type": "table", "roll": "d20", "title": "Watcher's Whim", "dice": "d20", "nHead": "d20", "columns": ["Meanwhile", "Effect"], "rows": [
+          { "n": "1", "cells": ["Meanwhile, in space", "Nothing on the table changes. But Galactus is hungry: move the Cosmic Scale one step toward whichever side currently has fewer VPs."] },
+          { "n": "2", "cells": ["Raining Pym Particles", "Every character is Size 1 this round. Everything can be thrown at everyone. Enjoy."] },
+          { "n": "3", "cells": ["Crossover", "The Watcher grabs any character from the collection, threat 4 or less, and places it in the centre. It activates last each round, controlled by the Watcher, and attacks the nearest character. It leaves when Dazed."] },
+          { "n": "4", "cells": ["Editorial mandate", "The Watcher names a character. Before it activates, its player must monologue for ten seconds. Cheers: +1 Power. Groans: −1 Power. Silence: the Watcher decides, which is worse."] },
+          { "n": "5", "cells": ["Retcon", "The last completed action did not happen. Rewind it. If this comes up a second time in the same act it is a Reboot instead: every character heals 1."] },
+          { "n": "6", "cells": ["Sentinels", "Targeting the two highest-threat characters on the table: each takes 1 damage and gains Slow. If tied, the Watcher chooses whoever looks smuggest."] },
+          { "n": "7", "cells": ["Deadpool wandered in", "Not a game piece. Every attack this round must be declared in a Deadpool voice. Refuse and roll one fewer die."] },
+          { "n": "8", "cells": ["The ground is lava", "Any character that ends its activation on the ground, not on terrain and not Flying, takes 1 damage."] },
+          { "n": "9", "cells": ["Marvel Zombies", "Every Dazed character shambles up: it makes one 3-dice Physical attack against an enemy within Range 1, if any, then lies back down. Groaning is mandatory."] },
+          { "n": "10", "cells": ["Skrull reveal", "The Watcher points at a Backup on the table. It was a Skrull. It swaps sides now. No Backups? Point at a civilian token instead: it vanishes, and the real one is Safe at home, confused."] },
+          { "n": "11", "cells": ["Ad page", "Nothing happens this round. Pass the snacks. Everyone gains 1 Power for resting."] },
+          { "n": "12", "cells": ["Cosmic Cube flicker", "Every player rolls one MCP die. Crit: +2 Power. Wild: heal 1. Hit or Block: nothing. Skull: −1 Power. Blank: swap places with the nearest enemy."] },
+          { "n": "13", "cells": ["Something in the rubble", "The Watcher drops a Discovery token somewhere inconvenient. The first character to end an activation in contact rolls on the Discovery table immediately."] },
+          { "n": "14", "cells": ["Storm is in a mood", "Rain: Energy attacks roll one fewer die this round. Lightning: Mystic attacks roll one more."] },
+          { "n": "15", "cells": ["Breaking news", "J. Jonah Jameson names a character a menace. Everyone attacking it this round adds a die. It gains 2 Power out of spite."] },
+          { "n": "16", "cells": ["Civilian in danger", "A random civilian, the Watcher rolls for whose, appears as a token in the centre of the table, rules as In Peril. If none are eligible, the Watcher invents a bystander who is now everybody's problem."] },
+          { "n": "17", "cells": ["Time loop", "Whoever has priority this round has it next round too, no roll. They must say \"again?\" every time they activate."] },
+          { "n": "18", "cells": ["Gamma leak", "Every character with damage on it gets angry: +1 die on Physical attacks this round, but it must attack the nearest character if it attacks at all. Friend or foe."] },
+          { "n": "19", "cells": ["Fury calls in a favour", "The side with fewer VPs takes any Team Tactic card from the collection and may play it this act, ignoring affiliation. Nick Fury is not on either side. Nick Fury is on Nick Fury's side."] },
+          { "n": "20", "cells": ["Galactus", "Put something enormous in the centre; a mug will do. The world ends in three rounds. Any character ending an activation in contact may spend 2 Power to roll 5 MCP dice: two or more Crit/Wild and he leaves. If nobody manages it, the act ends now and the Scale moves two steps toward Evil, because that is what happens when nobody does anything."] }
+        ] }
+      ]
+    },
+    {
+      "id": "chaos",
+      "nav": "Chaos dice",
+      "heading": "Chaos dice",
+      "eyebrow": "During play, any attack or defense roll",
+      "lede": "After rerolls and modifiers, look at the final faces. If they match a trigger, resolve the attack as normal, then the trigger. Crits and Wilds count together. Only the biggest trigger applies.",
+      "blocks": [
+        { "type": "table", "strongFirst": true, "columns": ["Final faces", "Called", "What happens"], "rows": [
+          { "cells": ["4 Crit/Wild", "Marvelous", "Gain 2 Power and roll on the Ridiculous table."] },
+          { "cells": ["5 Crit/Wild", "Legendary", "As Marvelous, and mark a star on your card: one free Advancement roll at the next Downtime."] },
+          { "cells": ["6 or more Crit/Wild", "Assemble", "As Legendary, plus every ally on your side gains 2 Power, and you may take one extra action right now. Someone photographs the table. This goes on the cover."] },
+          { "cells": ["4 or more Skulls", "Cursed", "Roll on the Bad Luck table. The dice have opinions about you."] },
+          { "cells": ["All Blanks, 5+ dice", "Whiff of Destiny", "The universe noticed. Gain 3 Power, and you may reroll your next roll entirely. Comeback pending."] },
+          { "cells": ["One of every face, 6+ dice", "The Full Bullpen", "Crit, Wild, Hit, Block, Skull and Blank all showing. Excelsior: the Cosmic Scale moves one step toward your side, immediately."] },
+          { "cells": ["Attacker and defender both roll zero successes", "Awkward silence", "Nobody saw that. Both characters gain 1 Power and may be placed within Range 1 of where they stand, facing away from each other."] }
+        ] },
+        { "type": "columns", "blocks": [
+          { "type": "table", "roll": "d8", "title": "Ridiculous", "dice": "d8", "nHead": "d8", "columns": ["Result"], "rows": [
+            { "n": "1", "cells": ["<b>Splash page.</b> Every enemy within Range 2 of your target is Pushed S away from it. Sound effect mandatory."] },
+            { "n": "2", "cells": ["<b>One-liner.</b> Deliver one. Anyone laughs: +2 more Power. Nobody laughs: the Watcher gives you 1 for trying."] },
+            { "n": "3", "cells": ["<b>Found something.</b> A Discovery token appears in contact with you. Roll on it at the end of this activation."] },
+            { "n": "4", "cells": ["<b>Second wind.</b> Heal 2 and remove all your conditions."] },
+            { "n": "5", "cells": ["<b>Cameo.</b> One of your Safe civilians shows up to cheer: +1 die on your next attack. They are now In Peril. Worth it?"] },
+            { "n": "6", "cells": ["<b>Iconic.</b> Mark it: your next Advancement roll is 3d6, drop the lowest."] },
+            { "n": "7", "cells": ["<b>Collateral.</b> Remove the nearest terrain piece. Every character in contact with it takes 1 damage. Damage Control invoices you. Nothing happens, but everyone brings it up."] },
+            { "n": "8", "cells": ["<b>Uatu breaks his oath.</b> Roll on the Watcher's Whim right now. It happens immediately, and where it is ambiguous, <em>you</em> decide who it hits."] }
+          ] },
+          { "type": "table", "roll": "d6", "title": "Bad Luck", "dice": "d6", "nHead": "d6", "columns": ["Result"], "rows": [
+            { "n": "1", "cells": ["<b>Phone buzzes.</b> A random civilian of yours goes In Peril."] },
+            { "n": "2", "cells": ["<b>Butterfingers.</b> Drop one item of your choice as a Discovery token in contact with you. Anyone can take it."] },
+            { "n": "3", "cells": ["<b>Drained.</b> Lose all your Power."] },
+            { "n": "4", "cells": ["<b>Roasted.</b> Everyone at the table gets one joke at your expense. You may not respond."] },
+            { "n": "5", "cells": ["<b>Embarrassed.</b> Take 1 damage. It is psychological, but it counts."] },
+            { "n": "6", "cells": ["<b>Actually fine.</b> But the Watcher writes it down."] }
+          ] }
+        ] }
+      ]
+    },
+    {
+      "id": "panel",
+      "nav": "Panel One",
+      "heading": "Panel One",
+      "eyebrow": "During play, start of every Icon activation, all three acts",
+      "lede": "Every issue opens with a panel before anyone throws a punch. Before you spend a single Power, roll five MCP dice and read the hand like poker. The <em>shape</em> of the hand says how big it is. The <em>face</em> says what it is. Free, no action, no cost, every single activation.",
+      "blocks": [
+        { "type": "list", "ordered": false, "items": [
+          "<b>Icons only</b> by default. Backups do not get a Panel One; they are extras, not characters. If your table is fast, let Backups roll too and expect to lose a round to it.",
+          "<b>Read the shape first</b> on the Hands table, then look up the face on the Faces table. A Full House does both: Major of the three, Minor of the two.",
+          "Effects last <b>until the end of your activation</b> unless the wording says otherwise.",
+          "Panel One resolves <b>before</b> anything else, and it stacks with <a href=\"#chaos\">Chaos dice</a> later in the same activation. Yes, both can fire. That is a good round."
+        ] },
+        { "type": "columns", "blocks": [
+          { "type": "table", "strongFirst": true, "title": "The Hands", "dice": "shape = how big", "columns": ["Hand", "What it does"], "rows": [
+            { "cells": ["One pair", "Minor of the paired face."] },
+            { "cells": ["Two pair", "Minor of <em>both</em> faces, in either order."] },
+            { "cells": ["Three of a kind", "Major of that face."] },
+            { "cells": ["Full spread", "All five dice showing different faces. Roll on the <a href=\"#whim\">Watcher's Whim</a> immediately, and where the result is ambiguous, <em>you</em> choose who it hits."] },
+            { "cells": ["Full house", "Major of the three, plus Minor of the two."] },
+            { "cells": ["Four of a kind", "Major of that face, and double every number it names."] },
+            { "cells": ["Five of a kind", "<b>Cover Story.</b> Major doubled, gain 3 Power, and the Cosmic Scale moves one step toward your side. Somebody photograph this."] }
+          ] },
+          { "type": "faces", "title": "The Faces", "dice": "face = what" }
+        ] },
+        { "type": "caption", "label": "The two exceptions", "paras": [
+          "<b>Five Blanks is the Quiet Issue.</b> Ignore the Blank Major. Five blanks is not a disaster, it is the universe having nothing whatsoever to say about you: heal to full, gain 3 Power, and the Watcher skips the next Whim roll.",
+          "<b>Five Skulls is the Cursed Issue.</b> Roll Bad Luck twice, then mark a star anyway. Nobody should survive that, and you did."
+        ] },
+        { "type": "hand" }
+      ]
+    },
+    {
+      "id": "advance",
+      "nav": "Advancement",
+      "heading": "Advancement",
+      "eyebrow": "Downtime step 2, every Icon, every act",
+      "lede": "Roll 2d6 on your side's chart. If you roll something you already have, take the neighboring result of your choice instead. 2 and 12 always fire. Write it on the Icon card in pen. A pen is more permanent than a Marvel death.",
+      "blocks": [
+        { "type": "columns", "blocks": [
+          { "type": "table", "roll": "2d6", "title": "Heroes", "dice": "2d6", "nHead": "2d6", "accent": "hero", "columns": ["Hero advancement"], "rows": [
+            { "n": "2", "cells": ["<b>Dark turn.</b> You crossed a line. Roll on the Villain chart instead and keep it. Your civilians are worried."] },
+            { "n": "3", "cells": ["<b>Training montage.</b> +1 Stamina on both sides of your card."] },
+            { "n": "4", "cells": ["<b>Iron will.</b> Once per act, ignore one condition as it is applied to you."] },
+            { "n": "5", "cells": ["<b>Stronger together.</b> +1 die on attacks while within Range 2 of an allied character."] },
+            { "n": "6", "cells": ["<b>Second chance.</b> Once per round, reroll one die of a defense roll."] },
+            { "n": "7", "cells": ["<b>Fan favorite.</b> Pick one attack on your card. It rolls +1 die, permanently."] },
+            { "n": "8", "cells": ["<b>Quippy.</b> Once per round, when an enemy attacks you, quip before they roll. Table laughs: +1 Power. Attacker laughs: they lose 1."] },
+            { "n": "9", "cells": ["<b>Someone to protect.</b> Pick a civilian. While they are Safe, start each act with +2 Power. If they are ever Gone, take a Villain-chart roll."] },
+            { "n": "10", "cells": ["<b>New costume.</b> +1 to one Defense stat: Physical, Energy or Mystic. Describe it. Someone will hate it."] },
+            { "n": "11", "cells": ["<b>Power surge.</b> Roll on the Discovery table. It is yours."] },
+            { "n": "12", "cells": ["<b>Avengers-level.</b> You have arrived. Choose any result on this chart, and your Icon's threat goes up by 1 for balancing."] }
+          ] },
+          { "type": "table", "roll": "2d6", "title": "Villains", "dice": "2d6", "nHead": "2d6", "accent": "villain", "columns": ["Villain advancement"], "rows": [
+            { "n": "2", "cells": ["<b>Redemption arc.</b> Roll on the Hero chart instead and keep it. Your henchmen are confused."] },
+            { "n": "3", "cells": ["<b>Henchmen.</b> Once per act, when you activate, place one Size 2 terrain piece within Range 2 of you: a van, a Doombot, a crate of something."] },
+            { "n": "4", "cells": ["<b>Monologue.</b> Once per act, before an attack, monologue for at least ten seconds: +2 dice. If a player interrupts you with a joke, only +1."] },
+            { "n": "5", "cells": ["<b>Contingency plan.</b> Once per act, when you are Dazed, immediately gain 3 Power. \"I planned for this.\""] },
+            { "n": "6", "cells": ["<b>Escape artist.</b> Once per round, after an enemy attack against you resolves, you may be placed S in any direction."] },
+            { "n": "7", "cells": ["<b>Dreadful.</b> Pick one attack. +1 die, permanently. Give it a name. Use the name every time."] },
+            { "n": "8", "cells": ["<b>Nemesis.</b> Name an enemy Icon. +1 die on attacks against them, always. First to claim a nemesis wins, and they may not claim you back."] },
+            { "n": "9", "cells": ["<b>Bought the building.</b> Pick an enemy Icon's civilian. You own their landlord or employer: at the next Downtime <em>you</em> roll their Civilian Event twice and choose."] },
+            { "n": "10", "cells": ["<b>Upgraded armor.</b> +1 to one Defense stat. Describe the spikes."] },
+            { "n": "11", "cells": ["<b>Stolen tech.</b> Roll on the Discovery table. You stole it from someone at the table. They lose nothing, it is just a rumour now."] },
+            { "n": "12", "cells": ["<b>Mastermind.</b> Choose any result on this chart, and move the Cosmic Scale one step toward Evil. Cackling required."] }
+          ] }
+        ] }
+      ]
+    },
+    {
+      "id": "loot",
+      "nav": "Discovery",
+      "heading": "Discovery",
+      "eyebrow": "During play or Downtime, when you find something",
+      "lede": "Roll a d20 when you pick up a Discovery token, when a table sends you here, or at Downtime on a d6 of 5 or more. Items stay with your Icon between acts. You can hold three; give extras to a teammate.",
+      "blocks": [
+        { "type": "prose", "html": "<b>Looting:</b> when an Icon is KO'd, the Icon that did it rolls one MCP die. On a Crit they take one item of their choice from the body. Infinity Stones do not need the roll. They just change hands." },
+        { "type": "table", "roll": "d20", "title": "Discovery", "dice": "d20", "nHead": "d20", "columns": ["You found", "Effect"], "rows": [
+          { "n": "1", "cells": ["Gamma exposure", "Roll a d6. <b>1-2</b> Radiation sickness: −1 Power at the start of each round for the next act. <b>3-5</b> Hulk-ish: +1 Stamina and +1 die on Physical attacks, but at the start of each of your activations roll an MCP die; on a Skull you must attack the nearest character, friend or foe. <b>6</b> You are the new Hulk: both bonuses, no drawback, and the Watcher hates you."] },
+          { "n": "2", "cells": ["A symbiote", "+1 die on all attacks, +1 Stamina. Whenever you roll 4 or more Skulls it takes over: your next attack must target the nearest character. At each Downtime roll a d6; on a 1 it leaves you for someone else at the table, the Watcher picks. It likes them now."] },
+          { "n": "3", "cells": ["Pym Particle disc", "Once per act, become Size 1 or Size 5 until the end of the round."] },
+          { "n": "4", "cells": ["Spare web-shooters", "Once per act, an enemy within Range 3 is Pushed S toward you. \"Get over here\" is technically the wrong franchise, but allowed."] },
+          { "n": "5", "cells": ["A dented vibranium shield", "+1 Physical defense. Once per act, throw it: a Range 3, 5-dice Physical attack. It comes back. Mostly."] },
+          { "n": "6", "cells": ["An Infinity Stone", "Roll a d6 on the Stones table below. Everyone at the table now wants you dead, which changes nothing for the villains."] },
+          { "n": "7", "cells": ["A Doombot", "A free Backup for next act: any threat-3 card, called Doombot regardless of what it is. When it is KO'd it explodes, dealing 1 damage to everything within Range 1."] },
+          { "n": "8", "cells": ["Mjolnir, apparently", "Roll 3 MCP dice. Any Crit: you are worthy. Gain Flight and +2 dice on one Physical attack per round. No Crit: it is very heavy. It stays where you found it as a Size 3 terrain piece, and you have to explain that."] },
+          { "n": "9", "cells": ["Stark's credit card", "Once per act, take any Team Tactic card from the collection and play it, ignoring affiliation. Then it is spent. Tony's accountant already knows."] },
+          { "n": "10", "cells": ["Extremis injection", "Heal 1 at the start of each of your activations. Whenever you take 3 or more damage from one attack, roll an MCP die: on a Skull you go critical. KO'd immediately, 2 damage to everything within Range 1."] },
+          { "n": "11", "cells": ["Terrigen mist", "Roll twice on your Advancement chart and keep both. You are cocooned for round 1 of the next act: cannot activate, cannot be targeted, cannot stop people drawing on the cocoon."] },
+          { "n": "12", "cells": ["A page of the Darkhold", "Once per act, apply any condition to any character within Range 4. Each use, roll an MCP die: on a Skull you get the condition too, and the page whispers a name. One of your civilians is In Peril."] },
+          { "n": "13", "cells": ["A cracked Cosmic Cube", "Once per campaign, rewrite one thing: any table result, any die roll, any civilian state. Then it shatters. Or never use it, and at the Reckoning your side rolls 2 extra dice."] },
+          { "n": "14", "cells": ["Lockjaw", "Once per act, you and any allies within Range 1 are placed anywhere on the table. He then wanders off to find snacks. If there is a dog at the potluck, it is him."] },
+          { "n": "15", "cells": ["Kimoyo beads", "Once per round, after an ally within Range 3 is attacked, they gain 1 Power. You must say \"Wakanda forever\" or it does not work."] },
+          { "n": "16", "cells": ["The Ultimate Nullifier", "Once per campaign, remove any one character from the game. Roll an MCP die first: on a Skull, the character is you. If Galactus is on the table, it just works and he leaves."] },
+          { "n": "17", "cells": ["Adamantium bonding", "+2 Stamina on both sides. Your Move speed drops one step, L to M, M to S. You set off every metal detector for the rest of your life."] },
+          { "n": "18", "cells": ["A radioactive something", "It bites you. Roll a d6. <b>1-2</b> Nothing yet; roll here again at the next Downtime. <b>3-4</b> Sixth sense: once per round, reroll all Blanks on a defense roll. <b>5-6</b> Full mutation: +1 Stamina, +1 die on Physical attacks. Describe what you look like now. Your civilians have questions."] },
+          { "n": "19", "cells": ["The Watcher's notebook", "Uatu dropped it. Once per act, see the Whim result before it is announced and choose whether it happens. Then hand the notebook to any other player."] },
+          { "n": "20", "cells": ["A plate from the potluck", "Somebody's homemade dish, made with love. Heal to full, remove all conditions, gain 3 Power. Also, go and actually get a plate."] }
+        ] },
+        { "type": "table", "roll": "d6", "title": "The Stones", "dice": "d6", "nHead": "d6", "columns": ["Stone", "Power"], "note": "Whoever holds a stone: at the Reckoning, each stone is +1 die for its side. Three or more on one side and the Watcher plays the snap sound.", "rows": [
+          { "n": "1", "cells": ["Space", "Once per act, place yourself anywhere on the table."] },
+          { "n": "2", "cells": ["Mind", "Once per act, at the start of an enemy Backup's activation, you choose its first action and its target."] },
+          { "n": "3", "cells": ["Reality", "Once per round, after any roll, turn one die to any face."] },
+          { "n": "4", "cells": ["Power", "+2 dice on every attack. Every attack costs you 1 damage. It is a lot of stone for one person."] },
+          { "n": "5", "cells": ["Time", "Once per act, take a second activation immediately after your first."] },
+          { "n": "6", "cells": ["Soul", "Whenever you Daze or KO an enemy, heal 1. At each Downtime, one of your civilians goes In Peril. The stone wants a trade."] }
+        ] }
+      ]
+    },
+    {
+      "id": "civilians",
+      "nav": "Civilians",
+      "heading": "Civilians",
+      "eyebrow": "Downtime step 3, one civilian per player",
+      "lede": "Every civilian is in one state. The state changes at Downtime, when the Whim says so, and when the dice pick on you. The Watcher tracks who is where; the Icon card has room.",
+      "blocks": [
+        { "type": "table", "strongFirst": true, "columns": ["State", "What it means for your Icon"], "rows": [
+          { "cells": ["Safe", "Nothing. While <em>both</em> your civilians are Safe, once per act you may reroll one die of any roll. \"I'm doing this for you, Aunt May.\""] },
+          { "cells": ["In Peril", "Next act the Watcher places them as a token near the centre. Any character may end an activation in contact to pick them up, carried like an Extract. Carry them to your own edge for <b>Rescued</b>: Safe, +1 VP. The other side carries them off for <b>Captive</b>. Their Icon rolls +1 die on attacks against anyone within Range 3 of the token. Desperation helps."] },
+          { "cells": ["Captive", "Held by an enemy Icon. Your Icon starts each act with −1 Power. At Downtime the captor chooses: <b>ransom</b>, taking a Discovery roll and sending the civilian home Safe, or <b>keep</b>, leaving them In Peril next act, placed at the captor's edge."] },
+          { "cells": ["Changed", "They got powers. They are a free Backup for you next act: any threat-2 card, named after them. If they are KO'd the powers wear off. Safe again, and a bit disappointed."] },
+          { "cells": ["Gone", "Dead, moved to Canada, ascended. Your Icon gains <b>Vengeance</b>: +1 die on attacks against the Icon responsible, forever. If nobody was responsible, +1 Power at the start of every act instead. Nothing left to lose."] }
+        ] },
+        { "type": "table", "roll": "d20", "title": "Civilian Events", "dice": "d20", "nHead": "d20", "columns": ["This week", "Effect"], "rows": [
+          { "n": "1", "cells": ["Tragedy", "Gone. The Watcher decides whether anyone at the table was responsible. Play the sad piano."] },
+          { "n": "2", "cells": ["Kidnapped", "In Peril. The highest-threat enemy Icon did it, and starts next act with +1 Power for smugness."] },
+          { "n": "3", "cells": ["Wrong place, wrong time", "In Peril. Their token goes in the exact centre of the table next act."] },
+          { "n": "4", "cells": ["Lab accident", "Roll on the Discovery table for <em>them</em>. An item goes in your inventory. A mutation, results 1, 2, 10, 17 or 18, makes them Changed."] },
+          { "n": "5", "cells": ["They found out", "They know your secret now. Reroll Their Deal; the new one replaces the old."] },
+          { "n": "6", "cells": ["Moved in", "Your two civilians now live together. The Safe reroll works twice per act until either of them leaves Safe."] },
+          { "n": "7", "cells": ["Bad date", "They are dating an enemy Icon, the Watcher picks. You may not attack that Icon in round 1 of next act. It is complicated."] },
+          { "n": "8", "cells": ["New job", "At Oscorp, Roxxon, AIM or Damage Control. At the start of every act from now on the Watcher rolls a d6; on a 1 they are In Peril."] },
+          { "n": "9", "cells": ["Started a podcast about you", "Fame: +1 Power at the start of next act. Also the other side knows where you live, so your next Civilian Event is rolled twice and the Watcher picks."] },
+          { "n": "10", "cells": ["They baked", "They brought a dish to the potluck, which is to say you did. Table votes: best dish means +1 to your next Advancement roll."] },
+          { "n": "11", "cells": ["A genuinely nice week", "Nothing happens. Safe. Once next act you may reroll an entire defense roll because you slept well."] },
+          { "n": "12", "cells": ["Saw something", "They witnessed the other side up to something. The Watcher tells you one enemy Icon's Secret Origin."] },
+          { "n": "13", "cells": ["Lawsuit", "Damage Control is suing over collateral. Give up one item as legal fees, or start next act with −2 Power."] },
+          { "n": "14", "cells": ["Radicalized", "They joined the other lot, Hydra or SHIELD, whichever you are not. Next act they are a threat-2 Backup on the enemy side, controlled by the enemy. If KO'd they come home Safe and embarrassed."] },
+          { "n": "15", "cells": ["Won the lottery", "Stark money. Buy one: a Discovery roll, a Cosmic Scale step your way, or bring back a Gone civilian of anyone's. Turns out they were in Canada."] },
+          { "n": "16", "cells": ["Mysterious package", "Roll on the Discovery table. They give it to you. It is definitely not a trap."] },
+          { "n": "17", "cells": ["Internet detective", "They doxxed an enemy Icon of your choice. That Icon's civilian goes In Peril instead of yours."] },
+          { "n": "18", "cells": ["Abducted by aliens", "Missing for one act: no token, no reroll. They return at the following Downtime Changed, carrying a Discovery roll."] },
+          { "n": "19", "cells": ["Said the right thing", "Whatever it was, it landed. Take an Advancement roll on the <em>other</em> side's chart. That is called growth."] },
+          { "n": "20", "cells": ["Was a Skrull the whole time", "The real one is In Peril somewhere. The Skrull, though, is loyal to you: Changed, and fights as your Backup next act."] }
+        ] }
+      ]
+    },
+    {
+      "id": "reckoning",
+      "nav": "The Reckoning",
+      "heading": "The Cosmic Scale and the Reckoning",
+      "eyebrow": "Endgame, after Act III",
+      "lede": "The Scale runs five steps each way from Balance. Put a token on it and move it when an act is won, when the Full Bullpen shows up, when the lottery hits, when Galactus eats. The Scale does not decide the ending. It loads the dice.",
+      "blocks": [
+        { "type": "scale" },
+        { "type": "h3", "text": "The Reckoning" },
+        { "type": "prose", "html": "Each side rolls a pool of MCP dice and counts Crits, Wilds and Hits. Higher total prevails. On a tie the Watcher rolls one die: Crit, Wild or Hit means Good, and Block, Skull or Blank means Evil." },
+        { "type": "table", "strongFirst": true, "narrow": true, "columns": ["Dice in the pool", "For"], "note": "Both sides roll in front of everyone. Whoever rolls, the Watcher narrates. Then read the epilogue.", "rows": [
+          { "cells": ["5", "Just for showing up"] },
+          { "cells": ["+1 each", "Every step of the Cosmic Scale on your side"] },
+          { "cells": ["+1 each", "Every Infinity Stone held by your side"] },
+          { "cells": ["+2", "An unspent Cosmic Cube on your side"] },
+          { "cells": ["+1", "Every enemy Icon KO'd in Act III and still down at the end"] },
+          { "cells": ["−1 each", "Every one of your side's civilians who ended the campaign Captive or Gone"] }
+        ] },
+        { "type": "columns", "blocks": [
+          { "type": "table", "roll": "d6", "title": "Good prevails", "dice": "d6", "nHead": "d6", "accent": "hero", "columns": ["Epilogue and next time"], "rows": [
+            { "n": "1", "cells": ["<b>Ticker-tape parade.</b> Every hero civilian is Safe. Next session the villains start Act I with +2 Power each. Being hated is motivating."] },
+            { "n": "2", "cells": ["<b>The Raft.</b> The villains are locked up. Next session opens with a prison break: villains deploy in the centre, heroes on all four edges."] },
+            { "n": "3", "cells": ["<b>Secret Invasion.</b> It was Skrulls the whole time. Next session everyone rerolls Secret Origins and one civilian each."] },
+            { "n": "4", "cells": ["<b>Registration Act.</b> Heroes must register. Next session any hero who refuses loses their Safe reroll but gains Fan Favorite. Any villain who registers switches sides."] },
+            { "n": "5", "cells": ["<b>Heroes Reborn.</b> Everyone keeps everything. The Scale resets to Balance. Next session begins with a wedding. Someone's civilian. The villains are invited."] },
+            { "n": "6", "cells": ["<b>Cosmic promotion.</b> The MVP hero is summoned to space. Next session they start with the Space Stone, and their civilians are on their own."] }
+          ] },
+          { "type": "table", "roll": "d6", "title": "Evil prevails", "dice": "d6", "nHead": "d6", "accent": "villain", "columns": ["Epilogue and next time"], "rows": [
+            { "n": "1", "cells": ["<b>Doomworld.</b> The highest-threat villain rules the planet. Next session they start every act with +3 Power, and every other villain secretly wants the job."] },
+            { "n": "2", "cells": ["<b>Dark Reign.</b> Villains are the official heroes now. Next session the sides swap charts: villains roll Hero advancement, heroes roll Villain."] },
+            { "n": "3", "cells": ["<b>The Snap.</b> Each hero player rolls a d6 per civilian; evens are Gone. Next session opens five years later. Everyone has a beard."] },
+            { "n": "4", "cells": ["<b>Underground.</b> The heroes are outlaws. Next session heroes deploy from one edge only, but start with one Discovery roll each. Resistance has perks."] },
+            { "n": "5", "cells": ["<b>Age of Ultron.</b> The winning villain's plan goes wrong. Next session Act I is everyone against a Watcher-run Crossover of threat 6 or more."] },
+            { "n": "6", "cells": ["<b>Incursion.</b> Another Earth is coming. Next session every Icon may swap to any other card of the same threat, a variant of themselves. Advancements carry over. The face does not."] }
+          ] }
+        ] },
+        { "type": "caption", "label": "The Watcher says", "paras": ["Everything carries forward: advancements, items, injuries, civilians and their states. The epilogue is the first line of the next session. Write it on the back of the Scale so nobody \"forgets\" who won."] }
+      ]
+    },
+    {
+      "id": "sheet",
+      "nav": "Icon card",
+      "heading": "Icon card",
+      "eyebrow": "Print one per player, plus notes for the Watcher",
+      "blocks": [
+        { "type": "sheet" },
+        { "type": "h3", "text": "Notes for the Watcher" },
+        { "type": "list", "ordered": false, "items": [
+          "<b>Pace, do not referee.</b> If a Whim result stalls the game, it happens to the person who is taking longest.",
+          "<b>Keep a \"Meanwhile\" log.</b> One line per Downtime about the wider world. It becomes the next session's opening crawl for free.",
+          "<b>Uneven sides:</b> the smaller side gets Watcher-supplied Backups until threat totals are within 1. Nobody's Icon is ever benched.",
+          "<b>A player cannot make it:</b> their Icon is off-world. Their civilians are still on the table and still fair game. This is a strong incentive to show up.",
+          "<b>The potluck rule:</b> the table votes a best dish at Downtime II. Its cook picks the crisis cards for Act III. Bribery via dessert is legal and encouraged.",
+          "<b>When to fudge:</b> never on the Reckoning. Anywhere else, if it is funnier, it is correct."
+        ] }
+      ]
+    }
+  ]
+}

@@ -47,7 +47,7 @@ app.get('/api/config', (req, res) => {
 // and hands the session token to the client in the URL fragment (fragments
 // never reach servers or logs).
 const ssoStates = new Map(); // state -> { exp, ret }, CSRF protection + return target
-const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/lists/', '/table/', '/data/', '/'];
+const SSO_RETURNS = ['/play/', '/league/', '/builders/', '/lists/', '/table/', '/data/', '/campaign/', '/'];
 
 app.get('/api/auth/discord', (req, res) => {
   if (!process.env.DISCORD_CLIENT_ID) return res.status(404).send('Discord SSO not configured');
@@ -782,6 +782,9 @@ require('./trenchcrusade').mount(app, { memberReader });
 
 // ---- Data provenance report (/data/) — where every game's data came from ----
 require('./freshness').mount(app, { memberReader });
+
+// ---- Campaign layers (/campaign/) — club-written rules, ours for once ----
+require('./campaign').mount(app, { memberReader });
 
 // ---- Admin data-refresh jobs (keeps our 40k copy current, no redeploy) ----
 require('./admin').mount(app, { authed, isAdmin });
