@@ -152,6 +152,49 @@ function renderDealer() {
     <b>panelOne.dieFaces</b> in the campaign JSON and nothing else changes.</p>`;
 }
 
+// The three parties, as stacked briefs. Each carries its side's color so a
+// player can find their own paragraph without reading the other two.
+function renderParties(b) {
+  return `${b.intro ? `<p class="prose">${b.intro}</p>` : ''}
+    <div class="parties">${b.items.map((p) => `
+      <div class="party ${esc(p.cls)}">
+        <div class="who">${esc(p.who)}</div>
+        <div class="want">${esc(p.want)}</div>
+        <p>${p.body}</p>
+      </div>`).join('')}</div>`;
+}
+
+// One brief per act: the situation, then what each party is trying to do in it.
+function renderActBriefs(b) {
+  return `<div class="briefs">${b.items.map((a) => `
+    <div class="brief">
+      <div class="bhead">
+        <span class="bn">${esc(a.n)}</span>
+        <h4>${esc(a.title)}</h4>
+        <span class="bwhen">${esc(a.when)}</span>
+      </div>
+      <p class="bsit">${a.situation}</p>
+      <div class="bsides">${a.sides.map(([who, want]) => `
+        <div class="bside">
+          <span class="bwho">${esc(who)}</span>
+          <span class="bwant">${want}</span>
+        </div>`).join('')}</div>
+    </div>`).join('')}</div>`;
+}
+
+// War Clock: 0 to 6, starting at 2. 6 is the invasion, 0 is the climb-down.
+function renderWarClock() {
+  const cells = [];
+  for (let i = 0; i <= 6; i++) {
+    const cls = i === 0 ? 'cold' : i === 6 ? 'hot' : 'mid';
+    const tag = i === 0 ? '<small>Climb-down</small>'
+      : i === 2 ? '<small>Start here</small>'
+      : i === 6 ? '<small>Invasion</small>' : '';
+    cells.push(`<div class="${cls}${i === 2 ? ' start' : ''}">${i}${tag}</div>`);
+  }
+  return `<div class="warclock" aria-label="War Clock, zero to six, starting at two">${cells.join('')}</div>`;
+}
+
 function renderScale() {
   const cells = [];
   for (let i = 5; i >= 1; i--) cells.push(`<div class="evil">${i}${i === 5 ? '<small>Evil</small>' : ''}</div>`);
@@ -221,6 +264,12 @@ function renderBlock(b) {
       return renderFaces(b);
     case 'hand':
       return renderDealer();
+    case 'acts':
+      return renderParties(b);
+    case 'actbriefs':
+      return renderActBriefs(b);
+    case 'warclock':
+      return renderWarClock();
     case 'scale':
       return renderScale();
     case 'sheet':
@@ -248,6 +297,7 @@ function view() {
     <div class="head">
       <h1>${esc(book.title)}</h1>
       <div class="sub">${esc(book.system)}</div>
+      ${book.event ? `<div class="eventline">Tonight: <b>${esc(book.event)}</b></div>` : ''}
       <p class="tagline">${esc(book.tagline)}</p>
       <div class="facts">${facts}</div>
     </div>

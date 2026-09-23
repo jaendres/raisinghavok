@@ -18,6 +18,11 @@ body::before {
 
 .head { border-bottom: 2px solid #2b221b; padding-bottom: 18px; margin-bottom: 4px; }
 .head h1 { margin-bottom: 2px; }
+.head .eventline {
+  font-family: 'Black Ops One'; font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--dust); margin-top: 8px;
+}
+.head .eventline b { color: var(--rust); }
 .head .tagline { font-size: 16.5px; line-height: 1.5; color: var(--bone); max-width: 70ch; margin-top: 10px; }
 .facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 .fact {
@@ -143,6 +148,59 @@ body::before {
 .scale .good { background: #2f5d8c; color: #fff; }
 .scale .bal  { background: #d8b46a; color: #0c0a08; }
 .scale small { display: block; font-size: 9.5px; letter-spacing: .1em; }
+
+/* ---- the three parties ---- */
+
+.parties { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.party { background: var(--panel); border: 1px solid #2b221b; border-top: 3px solid var(--dust); padding: 14px 16px; }
+.party .who {
+  font-family: 'Black Ops One'; font-size: 15px; text-transform: uppercase; letter-spacing: .06em;
+}
+.party .want { display: block; color: var(--bone); font-size: 16px; font-weight: 700; margin: 4px 0 8px; }
+.party p { font-size: 15px; line-height: 1.5; color: var(--dust); }
+.party p b { color: var(--bone); }
+.party.hero    { border-top-color: #6fa8c8; } .party.hero .who    { color: #6fa8c8; }
+.party.villain { border-top-color: #b384d6; } .party.villain .who { color: #b384d6; }
+.party.accord  { border-top-color: var(--ok); } .party.accord .who  { color: var(--ok); }
+
+/* ---- act briefs ---- */
+
+.briefs { display: grid; gap: 14px; margin-bottom: 18px; }
+.brief { background: var(--panel); border: 1px solid #2b221b; border-left: 3px solid var(--rust); padding: 14px 16px; }
+.bhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.bn { font-family: 'Black Ops One'; font-size: 12px; letter-spacing: .12em; color: var(--rust); }
+.bhead h4 {
+  font-family: 'Black Ops One'; font-weight: 400; text-transform: uppercase; letter-spacing: .05em;
+  font-size: 19px; color: var(--bone);
+}
+.bwhen { color: var(--dust); font-size: 13px; text-transform: uppercase; letter-spacing: .07em; margin-left: auto; }
+.bsit { font-size: 15.5px; line-height: 1.5; color: var(--bone); margin: 9px 0 12px; max-width: 80ch; }
+.bsides { display: grid; gap: 7px; }
+.bside { display: flex; gap: 12px; align-items: baseline; border-top: 1px dashed #2b221b; padding-top: 7px; }
+.bwho {
+  flex: none; width: 74px; font-family: 'Black Ops One'; font-size: 11px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--rust); line-height: 1.5;
+}
+.bwant { flex: 1; min-width: 0; font-size: 15px; line-height: 1.45; color: var(--bone); }
+@media (max-width: 620px) {
+  .bwhen { margin-left: 0; width: 100%; }
+  .bside { flex-direction: column; gap: 2px; }
+  .bwho { width: auto; }
+}
+
+/* ---- war clock ---- */
+
+.warclock { display: flex; border: 1px solid #2b221b; max-width: 620px; margin-bottom: 16px; text-align: center; }
+.warclock div {
+  flex: 1; padding: 10px 2px; font-family: 'Black Ops One'; font-size: 16px;
+  border-left: 1px solid #0c0a08; color: #fff;
+}
+.warclock div:first-child { border-left: none; }
+.warclock .cold { background: #2f5d8c; }
+.warclock .mid  { background: #6b4a2a; }
+.warclock .hot  { background: var(--blood); }
+.warclock .start { box-shadow: inset 0 0 0 2px #ffd23f; }
+.warclock small { display: block; font-size: 9px; letter-spacing: .08em; color: #f0e6d2; }
 
 /* ---- Panel One dealer ---- */
 
